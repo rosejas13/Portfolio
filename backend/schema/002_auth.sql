@@ -81,6 +81,7 @@ $$;
 create function api.login_dev()
   returns text
   language plpgsql security definer
+  set search_path to ''
 as $$
 declare
   usr internal.users;
@@ -100,6 +101,7 @@ begin
 
   token := internal.sign_jwt(jsonb_build_object(
     'role', 'web_admin',
+    'user_uuid', usr.uuid,
     'user_id', usr.id,
     'email', usr.email,
     'name', usr.name
@@ -112,9 +114,13 @@ $$;
 create function api.whoami()
   returns jsonb
   language sql stable
+  security definer
+  set search_path to ''
 as $$
   select coalesce(
-    current_setting('request.jwt.claims', true)::jsonb,
+    (select jsonb_object_agg(key, value)
+     from jsonb_each(coalesce(current_setting('request.jwt.claims', true)::jsonb, '{"role":"anon"}'::jsonb))
+     where key = any(array['role', 'user_uuid', 'name', 'email'])),
     '{"role":"anon"}'::jsonb
   );
 $$;

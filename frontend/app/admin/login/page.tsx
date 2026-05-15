@@ -6,19 +6,23 @@ import { useRouter } from 'next/navigation'
 export default function LoginPage() {
   const router = useRouter()
   const [error, setError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setError('')
+    setSubmitting(true)
     try {
-      const res = await fetch('/api/rpc/login_dev', { method: 'POST' })
-      const text = await res.text()
-      const token = JSON.parse(text)
-      if (typeof token !== 'string') throw new Error('Invalid response')
-      localStorage.setItem('token', token)
+      const res = await fetch('/api/auth/login', { method: 'POST' })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data.error || 'Login failed')
+      }
       router.push('/admin')
-    } catch {
-      setError('Login failed. Make sure the backend is running and dev mode is enabled.')
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Login failed')
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -29,8 +33,8 @@ export default function LoginPage() {
         <p style={{ color: '#666', marginBottom: 20 }}>Sign in to manage your portfolio.</p>
         {error && <div className="error">{error}</div>}
         <form onSubmit={handleSubmit}>
-          <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
-            Sign in with Dev Account
+          <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={submitting}>
+            {submitting ? 'Signing in...' : 'Sign in with Dev Account'}
           </button>
         </form>
       </div>

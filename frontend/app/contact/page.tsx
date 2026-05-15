@@ -2,30 +2,59 @@
 
 import { useState, type FormEvent } from 'react'
 
+function sanitize(input: string, maxLen: number): string {
+  return input.trim().slice(0, maxLen)
+}
+
 export default function ContactPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [error, setError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+
+  function csrfToken(): string {
+    let t = sessionStorage.getItem('csrf_token')
+    if (!t) {
+      t = crypto.randomUUID()
+      sessionStorage.setItem('csrf_token', t)
+    }
+    return t
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
+    if (submitting) return
+    setSubmitting(true)
     setStatus('idle')
     try {
       const res = await fetch('/api/leads', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, message }),
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-Token': csrfToken(),
+        },
+        body: JSON.stringify({
+          name: sanitize(name, 200),
+          email: sanitize(email, 320),
+          message: sanitize(message, 5000),
+        }),
       })
-      if (!res.ok) throw new Error('Failed')
+      if (!res.ok) {
+        if (res.status === 429) throw new Error('Too many messages. Please try again later.')
+        throw new Error('Failed to send. Please try again.')
+      }
       setStatus('success')
       setName('')
       setEmail('')
       setMessage('')
-    } catch {
+    } catch (err: unknown) {
       setStatus('error')
-      setError('Failed to send. Please try again.')
+      setError(err instanceof Error ? err.message : 'Failed to send. Please try again.')
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -39,17 +68,19 @@ export default function ContactPage() {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Name</label>
-            <input value={name} onChange={e => setName(e.target.value)} required />
+            <input value={name} onChange={e => setName(e.target.value)} required maxLength={200} />
           </div>
           <div className="form-group">
             <label>Email</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} required maxLength={320} />
           </div>
           <div className="form-group">
             <label>Message</label>
-            <textarea value={message} onChange={e => setMessage(e.target.value)} required />
+            <textarea value={message} onChange={e => setMessage(e.target.value)} required maxLength={5000} />
           </div>
-          <button type="submit" className="btn btn-primary">Send</button>
+          <button type="submit" className="btn btn-primary" disabled={submitting}>
+            {submitting ? 'Sending...' : 'Send'}
+          </button>
         </form>
       </div>
     </div>

@@ -18,24 +18,30 @@ const links = [
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
-  const [authed, setAuthed] = useState(false)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (!token) {
-      router.push('/admin/login')
-    } else {
-      setAuthed(true)
+    // The middleware handles the auth check. If we're here, we're authenticated.
+    // We still do a quick server-side check to confirm.
+    async function check() {
+      try {
+        const res = await fetch('/api/auth/me')
+        if (!res.ok) {
+          router.push('/admin/login')
+        }
+      } catch {
+        router.push('/admin/login')
+      } finally {
+        setLoading(false)
+      }
     }
-    setLoading(false)
+    check()
   }, [router])
 
   if (loading) return null
-  if (!authed) return null
 
-  function logout() {
-    localStorage.removeItem('token')
+  async function logout() {
+    await fetch('/api/auth/logout', { method: 'POST' })
     router.push('/admin/login')
   }
 
