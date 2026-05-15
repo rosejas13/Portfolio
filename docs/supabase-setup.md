@@ -58,13 +58,13 @@ using (status = 'published');
 
 ## Frontend Configuration
 
-Set environment variables in your deployment platform (Vercel/Cloudflare Pages):
+Set environment variables in your deployment platform (Vercel):
 
 ```env
-VITE_API_URL=https://<project>.supabase.co/rest/v1
+API_URL=https://<project>.supabase.co/rest/v1
 ```
 
-The frontend API client (`src/api/client.ts`) uses `VITE_API_URL` to construct all endpoint URLs.
+The Next.js middleware and rewrites use `API_URL` to proxy API requests.
 
 ## Row Level Security
 
@@ -81,6 +81,6 @@ Our current RLS policies already follow this pattern — they just need `auth.ui
 |---|---|---|
 | **Supabase project** | `all-in-pg-dev` | `all-in-pg-prod` |
 | **Branch** | `dev` | `main` |
-| **Frontend URL** | `dev-portfolio.vercel.app` | `portfolio.jcrose.dev` |
+| **Frontend URL** | `dev-portfolio.example.app` | `portfolio.example.com` |
 | **Auth** | Dev login disabled, use Supabase Auth directly | Same |
 | **Data** | Reset periodically with dummy data | Real data, never reset |
