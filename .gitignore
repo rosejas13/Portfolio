@@ -38,3 +38,6 @@ supabase/.temp/
 # Personal checklist
 checklist.md
 .checklist/
+
+# Personal scripts (may contain resume/contact data)
+scripts/seed_resume.sh
