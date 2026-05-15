@@ -73,7 +73,7 @@ Browser                          Next.js Server              PostgREST
 - `Server` header leaked Caddy version
 
 ### After
-- **Origin locked**: CORS allows only `http://localhost:5173` (dev) and `https://jcrose.dev` (prod)
+- **Origin locked**: CORS allows only `http://localhost:5173` (dev) and `https://your-domain.com` (prod)
 - **Credentials**: `Access-Control-Allow-Credentials: true` with CSRF token enforcement
 - **CSP tightened**: Removed `unsafe-inline`, added `script-src 'self'` and `connect-src 'self'`
 - **X-XSS-Protection**: Set to `0` (modern browsers handle this; CSP is the real protection)

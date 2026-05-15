@@ -4,7 +4,7 @@
 
 ### Option 1: Vercel (simplest)
 1. In Vercel dashboard: Project → Settings → Domains
-2. Add your domain (e.g. `portfolio.jcrose.dev` or `jcrose.dev`)
+2. Add your domain (e.g. `portfolio.example.com` or `example.com`)
 3. Vercel provides a CNAME or nameserver config
 4. In Hostinger DNS: point to Vercel's nameservers or add CNAME record
 
@@ -20,8 +20,8 @@
 
 ### Domain structure
 ```
-portfolio.jcrose.dev  →  Vercel/Pages (React frontend)
-<project>.supabase.co →  Supabase API (backend)
+portfolio.example.com    →  Vercel/Pages (React frontend)
+<project>.supabase.co    →  Supabase API (backend)
 ```
 
 ## Sprint Workflow
@@ -40,7 +40,7 @@ GitHub Actions                     GitHub Actions
           │                            │
           ▼                            ▼
     Verify on dev URL              Deploy to PROD
-    (dev-portfolio.vercel.app)     (portfolio.jcrose.dev)
+    (dev-portfolio.example.app)    (portfolio.example.com)
                                         │
                                         ▼
                                   Manual verify
@@ -60,8 +60,8 @@ GitHub Actions                     GitHub Actions
 Set up in GitHub.com → Settings → Environments:
 | Environment | Required reviewers | Branch | URL |
 |-------------|------------------|--------|-----|
-| `development` | None | `dev` | `dev-portfolio.vercel.app` |
-| `production` | You | `main` | `portfolio.jcrose.dev` |
+| `development` | None | `dev` | `dev-portfolio.example.app` |
+| `production` | You | `main` | `portfolio.example.com` |
 
 ### Sprint Cadence
 1. Work on feature branches → PR to `dev`
