@@ -1,0 +1,12 @@
+[workspace]
+provider = "opencode"
+install_agent_hooks = ["opencode"]
+
+[[rigs]]
+name = "frontend"
+
+[[rigs]]
+name = "backend"
+
+[[rigs]]
+name = "docs"

@@ -1,0 +1,56 @@
+# Development (HTTP on localhost)
+http://localhost:3001 {
+  import security-headers
+  reverse_proxy postgrest:3000 {
+    header_up X-Forwarded-For {remote_host}
+    header_up X-Real-IP {remote_host}
+  }
+}
+
+# Production (automatic TLS via Let's Encrypt)
+# Uncomment and replace with your domain:
+# https://api.jcrose.dev {
+#   import security-headers
+#   reverse_proxy postgrest:3000 {
+#     header_up X-Forwarded-For {remote_host}
+#     header_up X-Real-IP {remote_host}
+#   }
+# }
+
+(security-headers) {
+  log {
+    output file /var/log/caddy/api.log
+    format json
+  }
+
+  @cors_preflight {
+    method OPTIONS
+    header Origin *
+  }
+
+  handle @cors_preflight {
+    header {
+      Access-Control-Allow-Origin "{http.request.header.Origin}"
+      Access-Control-Allow-Methods "GET, POST, PATCH, DELETE, OPTIONS"
+      Access-Control-Allow-Headers "Authorization, Content-Type, Prefer"
+      Access-Control-Max-Age 86400
+    }
+    respond 204
+  }
+
+  handle {
+    header {
+      Access-Control-Allow-Origin "{http.request.header.Origin}"
+      Access-Control-Expose-Headers "Content-Range, Content-Location"
+      Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+      X-Content-Type-Options "nosniff"
+      X-Frame-Options "DENY"
+      Referrer-Policy "strict-origin-when-cross-origin"
+      Permissions-Policy "camera=(), microphone=(), geolocation=()"
+      Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'"
+    }
+
+    # TLS 1.2+ only, strong ciphers, HTTP/2
+    # Caddy handles this automatically when using https://
+  }
+}

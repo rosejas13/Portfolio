@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./backend/schema:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data
+
+  postgrest:
+    image: postgrest/postgrest
+    expose:
+      - "3000"
+    environment:
+      PGRST_DB_URI: postgres://app:app@db:5432/app
+      PGRST_DB_SCHEMA: api
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_DB_EXTRA_SEARCH_PATH: internal, public
+      PGRST_OPENAPI_SERVER_PROXY_URI: http://localhost:3001
+      PGRST_JWT_SECRET: dev-secret-change-in-production-this-is-32-chars!!
+    depends_on:
+      - db
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_logs:/var/log/caddy
+    depends_on:
+      - postgrest
+
+volumes:
+  pgdata:
+  caddy_logs:

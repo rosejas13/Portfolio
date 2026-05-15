@@ -1,0 +1,38 @@
+# Gas City runtime
+.gc/
+.beads/
+.runtime/
+**/.beads/
+**/.opencode/
+
+# Node
+node_modules/
+
+# Build output
+dist/
+.next/
+frontend/dist/
+frontend/.next/
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE (keep shared settings, ignore personal)
+.vscode/settings.json
+
+# Test results
+backend/tests/results/
+
+# Supabase local
+supabase/.temp/
+
+# Personal checklist
+checklist.md

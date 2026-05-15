@@ -1,0 +1,51 @@
+name: Deploy
+on:
+  push:
+    branches: [dev, main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'main' && 'production' || 'development' }}
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+      VITE_API_URL: ${{ secrets.SUPABASE_URL }}/rest/v1
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Apply schema migrations
+        run: |
+          for f in backend/schema/*.sql; do
+            psql "$SUPABASE_DB_URL" -f "$f"
+          done
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        # Note: 002_auth.sql and 003_permissions.sql may need
+        # adjustments for Supabase auth (see docs/supabase-setup.md)
+
+      - name: Build frontend
+        working-directory: frontend
+        run: |
+          npm ci
+          VITE_API_URL=${{ env.VITE_API_URL }} npm run build
+
+      - name: Deploy to Cloudflare Pages
+        if: ${{ secrets.CF_API_TOKEN != '' }}
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: pages deploy frontend/dist --project-name=all-in-pg-${{ github.ref_name }}
+          workingDirectory: frontend
+
+      - name: Deploy to Vercel (fallback)
+        if: ${{ secrets.VERCEL_TOKEN != '' }}
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: ${{ github.ref_name == 'main' && '--prod' || '' }}
+          working-directory: frontend
