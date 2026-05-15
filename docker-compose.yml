@@ -22,6 +22,8 @@ services:
       PGRST_DB_EXTRA_SEARCH_PATH: internal, public
       PGRST_OPENAPI_SERVER_PROXY_URI: http://localhost:3001
       PGRST_JWT_SECRET: ${JWT_SECRET:-dev-secret-change-in-production-this-is-32-chars!!}
+      PGRST_DB_PRE_REQUEST: internal.before_request
+      PGRST_SERVER_TIMING_ENABLED: true
     depends_on:
       - db
 

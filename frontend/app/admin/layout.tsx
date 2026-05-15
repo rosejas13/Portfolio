@@ -13,6 +13,7 @@ const links = [
   { to: '/admin/blog', label: 'Blog Posts' },
   { to: '/admin/leads', label: 'Leads' },
   { to: '/admin/config', label: 'Site Config' },
+  { to: '/admin/metrics', label: 'Metrics' },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
