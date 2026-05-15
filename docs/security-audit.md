@@ -1,7 +1,7 @@
 # Security Audit Report
 
 **Date**: 2026-05-15  
-**Scope**: Full-stack security review of `all-in-pg` portfolio project  
+**Scope**: Full-stack security review of `Portfolio` project  
 
 ---
 
