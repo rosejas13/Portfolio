@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import Nav from '@/components/Nav'
-import { ClientShell } from '@/components/ClientShell'
+import Nav from '@/features/nav/nav'
+import { ClientShell } from '@/features/shell/client-shell'
 import './globals.css'
 
 export const metadata = {

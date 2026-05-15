@@ -1,6 +1,6 @@
 'use client'
 
-import { ErrorBoundary } from '@/components/ErrorBoundary'
+import { ErrorBoundary } from './error-boundary'
 import type { ReactNode } from 'react'
 
 export function ClientShell({ children }: { children: ReactNode }) {
