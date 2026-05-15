@@ -12,7 +12,7 @@ create role web_collaborator;
 create role web_agent;
 
 grant usage on schema api to anon, web_admin, web_collaborator, web_agent;
-grant usage on schema internal to web_admin;
+grant usage on schema internal to anon, web_admin, web_collaborator, web_agent;
 
 grant anon to app;
 grant web_admin to app;

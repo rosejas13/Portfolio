@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import Nav from '@/components/Nav'
+import { ClientShell } from '@/components/ClientShell'
 import './globals.css'
 
 export const metadata = {
@@ -16,11 +17,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         }} />
       </head>
       <body>
-        <Nav />
-        {children}
-        <footer>
-          <div className="container">&copy; {new Date().getFullYear()} — Built with Next.js + PostgREST + Supabase</div>
-        </footer>
+        <ClientShell>
+          <Nav />
+          {children}
+          <footer>
+            <div className="container">&copy; {new Date().getFullYear()} — Built with Next.js + PostgREST + Supabase</div>
+          </footer>
+        </ClientShell>
       </body>
     </html>
   )
