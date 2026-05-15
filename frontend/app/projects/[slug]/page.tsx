@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const projects = await fetchJson<any[]>(`/projects?slug=eq.${slug}`)
+  const projects = await fetchJson<any[]>(`/projects?slug=eq.${slug}`, [])
   const project = projects[0]
 
   if (!project) return <div className="page container"><p>Project not found.</p></div>

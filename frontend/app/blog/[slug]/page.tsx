@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const posts = await fetchJson<any[]>(`/posts?slug=eq.${slug}`)
+  const posts = await fetchJson<any[]>(`/posts?slug=eq.${slug}`, [])
   const post = posts[0]
 
   if (!post) return <div className="page container"><p>Post not found.</p></div>

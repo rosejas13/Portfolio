@@ -2,7 +2,7 @@ import { fetchJson } from '@/lib/api-server'
 import Link from 'next/link'
 
 export default async function ProjectsPage() {
-  const projects = await fetchJson<any[]>('/projects?order=sort_order.asc')
+  const projects = await fetchJson<any[]>('/projects?order=sort_order.asc', [])
 
   return (
     <div className="page">

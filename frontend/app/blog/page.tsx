@@ -2,7 +2,7 @@ import { fetchJson } from '@/lib/api-server'
 import Link from 'next/link'
 
 export default async function BlogPage() {
-  const posts = await fetchJson<any[]>('/posts?order=created_at.desc')
+  const posts = await fetchJson<any[]>('/posts?order=created_at.desc', [])
 
   return (
     <div className="page">
