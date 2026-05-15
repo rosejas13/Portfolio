@@ -3,8 +3,8 @@ import Link from 'next/link'
 import HomeClient from './home-client'
 
 export default async function HomePage() {
-  const config = await fetchJson<Record<string, string>>('/rpc/get_site_config')
-  const posts = await fetchJson<any[]>('/posts?order=created_at.desc')
+  const config = await fetchJson<Record<string, string>>('/rpc/get_site_config', {})
+  const posts = await fetchJson<any[]>('/posts?order=created_at.desc', [])
   const published = posts.filter((p: any) => p.status === 'published').slice(0, 2)
 
   return (

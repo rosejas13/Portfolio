@@ -1,10 +1,10 @@
 import { fetchJson } from '@/lib/api-server'
 
 export default async function AboutPage() {
-  const config = await fetchJson<Record<string, string>>('/rpc/get_site_config')
-  const skills = await fetchJson<any[]>('/skills?order=sort_order.asc')
-  const experiences = await fetchJson<any[]>('/experiences?order=sort_order.asc')
-  const education = await fetchJson<any[]>('/education?order=sort_order.asc')
+  const config = await fetchJson<Record<string, string>>('/rpc/get_site_config', {})
+  const skills = await fetchJson<any[]>('/skills?order=sort_order.asc', [])
+  const experiences = await fetchJson<any[]>('/experiences?order=sort_order.asc', [])
+  const education = await fetchJson<any[]>('/education?order=sort_order.asc', [])
 
   const byCategory: Record<string, any[]> = {}
   for (const s of skills) {
