@@ -85,27 +85,22 @@ create function internal.has_permission(resource text, action text)
 as $$
 declare
   claims jsonb;
-  uid int;
+  user_uuid text;
 begin
   claims := current_setting('request.jwt.claims', true)::jsonb;
+  if claims is null then return false; end if;
 
-  if claims is null then
-    return false;
-  end if;
-
-  uid := (claims ->> 'user_id')::int;
-
-  if uid is null then
-    return false;
-  end if;
+  user_uuid := claims ->> 'user_uuid';
+  if user_uuid is null then return false; end if;
 
   return exists (
     select 1
     from internal.user_roles ur
+    join internal.users u on u.id = ur.user_id
     join internal.role_permissions rp on rp.role_id = ur.role_id
     join internal.resources res on res.id = rp.resource_id
     join internal.actions a on a.id = rp.action_id
-    where ur.user_id = uid
+    where u.uuid = user_uuid::uuid
       and res.name = has_permission.resource
       and a.name = has_permission.action
   );

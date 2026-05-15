@@ -13,6 +13,7 @@ dist/
 .next/
 frontend/dist/
 frontend/.next/
+*.tsbuildinfo
 
 # Environment
 .env

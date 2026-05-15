@@ -23,6 +23,32 @@ http://localhost:3001 {
     format json
   }
 
+  # Rate limiting: 60 requests per minute per client IP to /rpc/login_dev
+  @login_dev {
+    path /rpc/login_dev
+  }
+  rate_limit @login_dev 10/m
+
+  # Rate limiting: 5 POSTs per minute to /leads (contact form)
+  @leads_post {
+    path /leads
+    method POST
+  }
+  rate_limit @leads_post 5/m
+
+  # General rate limit: 100 requests per minute
+  rate_limit 100/m
+
+  # Allow only specific origins for CORS
+  @allowed_origin {
+    # Development origins
+    header Origin http://localhost:5173
+  }
+  @allowed_origin_prod {
+    # Production origins (add your domain)
+    header Origin https://jcrose.dev
+  }
+
   @cors_preflight {
     method OPTIONS
     header Origin *
@@ -30,9 +56,10 @@ http://localhost:3001 {
 
   handle @cors_preflight {
     header {
-      Access-Control-Allow-Origin "{http.request.header.Origin}"
+      Access-Control-Allow-Origin "http://localhost:5173"
       Access-Control-Allow-Methods "GET, POST, PATCH, DELETE, OPTIONS"
-      Access-Control-Allow-Headers "Authorization, Content-Type, Prefer"
+      Access-Control-Allow-Headers "Authorization, Content-Type, Prefer, X-Requested-With, X-CSRF-Token"
+      Access-Control-Allow-Credentials "true"
       Access-Control-Max-Age 86400
     }
     respond 204
@@ -40,14 +67,17 @@ http://localhost:3001 {
 
   handle {
     header {
-      Access-Control-Allow-Origin "{http.request.header.Origin}"
-      Access-Control-Expose-Headers "Content-Range, Content-Location"
+      Access-Control-Allow-Origin "http://localhost:5173"
+      Access-Control-Expose-Headers "Content-Range, Content-Location, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset"
+      Access-Control-Allow-Credentials "true"
       Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
       X-Content-Type-Options "nosniff"
       X-Frame-Options "DENY"
       Referrer-Policy "strict-origin-when-cross-origin"
-      Permissions-Policy "camera=(), microphone=(), geolocation=()"
-      Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'"
+      X-XSS-Protection "0"
+      Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+      Content-Security-Policy "default-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; script-src 'self'; connect-src 'self'"
+      -Server
     }
 
     # TLS 1.2+ only, strong ciphers, HTTP/2
