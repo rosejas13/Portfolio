@@ -37,6 +37,16 @@ if (typeof setInterval !== 'undefined') {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const host = request.headers.get('host') || ''
+
+  // Redirect .vercel.app domain to custom domain (disable public Vercel URL)
+  if (host.includes('vercel.app')) {
+    const url = request.nextUrl.clone()
+    url.host = 'jcrose.dev'
+    url.protocol = 'https'
+    return NextResponse.redirect(url, 308)
+  }
+
   const token = request.cookies.get('token')?.value
   const ip = getClientIp(request)
 
@@ -92,5 +102,8 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/api/:path*'],
+  matcher: [
+    // Exclude Next.js internals and static assets from middleware
+    '/((?!_next|static|favicon.ico).*)',
+  ],
 }
