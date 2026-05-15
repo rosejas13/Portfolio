@@ -3,8 +3,8 @@
 ## Project Setup
 
 1. Create two Supabase projects (free tier):
-   - `all-in-pg-dev` — development/staging
-   - `all-in-pg-prod` — production
+   - `portfolio-dev` — development/staging
+   - `portfolio-prod` — production
 
 2. Enable the pgcrypto extension in both projects:
    ```sql
@@ -79,7 +79,7 @@ Our current RLS policies already follow this pattern — they just need `auth.ui
 
 | | Dev | Prod |
 |---|---|---|
-| **Supabase project** | `all-in-pg-dev` | `all-in-pg-prod` |
+| **Supabase project** | `portfolio-dev` | `portfolio-prod` |
 | **Branch** | `dev` | `main` |
 | **Frontend URL** | `dev-portfolio.example.app` | `portfolio.example.com` |
 | **Auth** | Dev login disabled, use Supabase Auth directly | Same |

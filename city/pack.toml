@@ -1,5 +1,5 @@
 [pack]
-name = "all-in-pg"
+name = "Portfolio"
 schema = 2
 
 [[agent]]

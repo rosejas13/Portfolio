@@ -18,8 +18,8 @@ where u.email = 'dev@localhost'
 -- sample project
 insert into api.projects (title, slug, tagline, description, tech_stack, status, sort_order)
 values (
-  'All-in-PG',
-  'all-in-pg',
+  'Portfolio',
+  'portfolio',
   'PostgREST-powered full-stack portfolio',
   'A portfolio site built with React, PostgREST, and PostgreSQL. No traditional backend — the database is the server, and Gas City agents orchestrate the development workflow.',
   array['React', 'TypeScript', 'PostgreSQL', 'PostgREST', 'Gas City'],

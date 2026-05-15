@@ -6,7 +6,7 @@ manage rigs and agents, dispatch tasks, and monitor progress.
 ## Project structure
 
 ```
-~/Projects/all-in-pg/
+~/Projects/Portfolio/
 ├── city/          ← Gas City files (you are here)
 ├── backend/
 │   ├── schema/    ← SQL migrations (run via docker-compose)
@@ -44,7 +44,7 @@ and for mail use `gc mail <subcommand>` where subcommands are `inbox`, `send`,
 5. **Monitor:** `gc bd list` and `gc session peek <name>` to track progress
 
 To run gc commands for this city from anywhere:
-  gc --city ~/Projects/all-in-pg/city <command>
+  gc --city ~/Projects/Portfolio/city <command>
 
 ## Working with rig beads
 

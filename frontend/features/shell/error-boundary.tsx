@@ -31,14 +31,13 @@ export class ErrorBoundary extends Component<Props, State> {
           errorId,
           message: error.message,
           name: error.name,
-          // Never send full stack traces — just the component name
           component: info.componentStack?.split('\n')[1]?.trim()?.split(' ')[0] || 'unknown',
           url: window.location.pathname,
           timestamp: new Date().toISOString(),
         }),
       })
     } catch {
-      // Fail silently — don't compound the error
+      // Fail silently
     }
   }
 

@@ -1,4 +1,4 @@
--- Supabase-compatible schema for all-in-pg portfolio
+-- Supabase-compatible schema for Portfolio
 
 create extension if not exists pgcrypto;
 
