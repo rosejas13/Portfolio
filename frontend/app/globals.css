@@ -503,6 +503,10 @@ footer {
     display: none;
   }
 
+  .theme-toggle-desktop {
+    display: none;
+  }
+
   .hamburger-trigger {
     display: inline-flex !important;
   }

@@ -38,6 +38,7 @@ export function ThemeToggle() {
   return (
     <button
       ref={btnRef}
+      className="theme-toggle-desktop"
       aria-label="Toggle dark mode"
       style={{
         background: 'none',
@@ -62,6 +63,7 @@ export function ThemeToggle() {
 
 export function MobileMenu() {
   const [open, setOpen] = useState(false)
+  const [, setDrawerTick] = useState(0)
 
   useEffect(() => {
     if (!open) return
@@ -135,6 +137,33 @@ export function MobileMenu() {
             {l.label}
           </Link>
         ))}
+        <hr style={{ border: 'none', borderTop: '1px solid var(--color-border)', margin: '0.5rem 0' }} />
+        <button
+          onClick={() => {
+            const added = document.documentElement.classList.toggle('dark')
+            localStorage.setItem('theme', added ? 'dark' : 'light')
+            setDrawerTick(n => n + 1)
+          }}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontFamily: 'var(--font-display)',
+            fontSize: 'var(--fs-base)',
+            fontWeight: 500,
+            color: 'var(--color-text-secondary)',
+            padding: '0.5rem 0',
+            cursor: 'pointer',
+            textAlign: 'left',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+          }}
+        >
+          <span style={{ fontSize: 'var(--fs-h5)', lineHeight: 1 }}>
+            {document.documentElement.classList.contains('dark') ? '\u2600' : '\u263E'}
+          </span>
+          {document.documentElement.classList.contains('dark') ? 'Light mode' : 'Dark mode'}
+        </button>
       </div>
     </>
   )
