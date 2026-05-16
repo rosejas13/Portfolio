@@ -1,42 +1,24 @@
 'use client'
 
-import { useState, useEffect, type FormEvent } from 'react'
-import { get, post, patch, del } from '@/lib/api-client'
+import type { Project } from '@/lib/types'
+import { useCrud } from '@/lib/use-crud'
+import styles from './admin.module.css'
 
 export default function AdminProjects() {
-  type Project = { id: number; title: string; slug: string; tagline: string | null; description: string | null; status: string; sort_order: number }
-  const [items, setItems] = useState<Project[]>([])
-  const [editing, setEditing] = useState<Partial<Project> | null>(null)
-  const [error, setError] = useState('')
-
-  useEffect(() => { get<Project[]>('/projects').then(setItems) }, [])
-
-  async function handleSave(e: FormEvent) {
-    e.preventDefault(); setError('')
-    try {
-      if (editing?.id) { await patch(`/projects?id=eq.${editing.id}`, editing) }
-      else { await post('/projects', editing!) }
-      setEditing(null); setItems(await get('/projects'))
-    } catch (err: unknown) { setError(String(err)) }
-  }
-
-  async function handleDelete(id: number) {
-    if (!confirm('Delete?')) return
-    await del(`/projects?id=eq.${id}`); setItems(await get('/projects'))
-  }
+  const { items, editing, setEditing, error, handleSave, handleDelete } = useCrud<Project>('projects')
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className={styles.crudHeader}>
         <h1>Projects</h1>
         <button className="btn btn-primary" onClick={() => setEditing({ title: '', slug: '', status: 'draft' })}>+ New</button>
       </div>
       {error && <div className="error">{error}</div>}
-      <table style={{ marginTop: 16 }}>
+      <table className={styles.tableWrap}>
         <thead><tr><th>Title</th><th>Status</th><th></th></tr></thead>
         <tbody>{items.map(i => (
           <tr key={i.id}><td>{i.title}</td><td>{i.status}</td>
-            <td style={{ textAlign: 'right' }}>
+            <td className={styles.actionCell}>
               <button className="btn btn-secondary btn-sm" onClick={() => setEditing(i)}>Edit</button>{' '}
               <button className="btn btn-danger btn-sm" onClick={() => handleDelete(i.id)}>Del</button>
             </td>

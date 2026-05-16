@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
+import styles from './admin.module.css'
 
 const links = [
   { to: '/admin', label: 'Dashboard' },
@@ -21,21 +22,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname()
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    async function check() {
-      try {
-        const res = await fetch('/api/auth/me')
-        if (!res.ok) {
-          router.push('/admin/login')
-        }
-      } catch {
+  const checkAuth = useCallback(async () => {
+    try {
+      const res = await fetch('/api/auth/me')
+      if (!res.ok) {
         router.push('/admin/login')
-      } finally {
-        setLoading(false)
       }
+    } catch {
+      router.push('/admin/login')
+    } finally {
+      setLoading(false)
     }
-    check()
   }, [router])
+
+  useEffect(() => {
+    checkAuth()
+    const interval = setInterval(checkAuth, 5 * 60 * 1000)
+    return () => clearInterval(interval)
+  }, [checkAuth])
 
   if (loading) return null
 
@@ -49,13 +53,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="container">
         <div className="sidebar-layout">
           <aside className="sidebar">
-            <h3 style={{ fontSize: 14, marginBottom: 12, padding: '0 12px' }}>Admin Panel</h3>
-            <Link href="/" style={{ fontSize: 12, marginBottom: 8 }}>&larr; Back to site</Link>
+            <h3 className={styles.sidebarTitle}>Admin Panel</h3>
+            <Link href="/" className={styles.backLink}>&larr; Back to site</Link>
             {links.map(l => (
               <Link key={l.to} href={l.to} className={pathname === l.to ? 'active' : ''}>{l.label}</Link>
             ))}
-            <hr style={{ margin: '12px 0', border: 'none', borderTop: '1px solid #e0e0e0' }} />
-            <a href="#" onClick={e => { e.preventDefault(); logout() }} style={{ cursor: 'pointer' }}>Logout</a>
+            <hr className={styles.sidebarDivider} />
+            <a href="#" onClick={e => { e.preventDefault(); logout() }} className={styles.logoutLink}>Logout</a>
           </aside>
           <div>{children}</div>
         </div>

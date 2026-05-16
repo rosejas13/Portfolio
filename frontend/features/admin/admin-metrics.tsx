@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { get } from '@/lib/api-client'
+import styles from './admin.module.css'
 
 type MetricsData = {
   requests: { last_hour: number; last_24h: number; last_7d: number }
@@ -24,18 +25,18 @@ export default function AdminMetrics() {
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <p style={{ color: '#888' }}>Loading metrics...</p>
+  if (loading) return <p className={styles.loadingText}>Loading metrics...</p>
   if (error) return <div className="error">{error}</div>
   if (!metrics) return <p>No data.</p>
 
   return (
     <div>
       <h1>Metrics</h1>
-      <p style={{ color: '#888', fontSize: 13, marginBottom: 24 }}>
+      <p className={styles.metricsSubtitle}>
         Generated: {new Date(metrics.generated_at).toLocaleString()}
       </p>
 
-      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', marginBottom: 32 }}>
+      <div className={`grid ${styles.metricsGrid}`}>
         {[
           ['Requests (1h)', metrics.requests.last_hour],
           ['Requests (24h)', metrics.requests.last_24h],
@@ -43,9 +44,9 @@ export default function AdminMetrics() {
           ['Errors (1h)', metrics.errors.last_hour],
           ['Errors (24h)', metrics.errors.last_24h],
         ].map(([label, val]) => (
-          <div key={label} className="card" style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 28, fontWeight: 700, color: 'var(--primary)' }}>{val}</div>
-            <div style={{ fontSize: 12, color: '#888' }}>{label}</div>
+          <div key={label} className={`card ${styles.metricCard}`}>
+            <div className={styles.metricNumber}>{val}</div>
+            <div className={styles.metricLabel}>{label}</div>
           </div>
         ))}
       </div>
@@ -53,13 +54,13 @@ export default function AdminMetrics() {
       {Object.keys(metrics.roles_breakdown).length > 0 && (
         <>
           <h2>Requests by Role (24h)</h2>
-          <table style={{ marginBottom: 32 }}>
+          <table className={styles.metricsTable}>
             <thead><tr><th>Role</th><th>Requests</th></tr></thead>
             <tbody>
               {Object.entries(metrics.roles_breakdown)
                 .sort(([, a], [, b]) => b - a)
                 .map(([role, count]) => (
-                  <tr key={role}><td style={{ fontWeight: 600 }}>{role}</td><td>{count}</td></tr>
+                  <tr key={role}><td className={styles.cellBold}>{role}</td><td>{count}</td></tr>
                 ))}
             </tbody>
           </table>
@@ -69,11 +70,11 @@ export default function AdminMetrics() {
       {metrics.top_endpoints.length > 0 && (
         <>
           <h2>Top Endpoints (24h)</h2>
-          <table style={{ marginBottom: 32 }}>
+          <table className={styles.metricsTable}>
             <thead><tr><th>Path</th><th>Hits</th></tr></thead>
             <tbody>
               {metrics.top_endpoints.map(e => (
-                <tr key={e.path}><td style={{ fontFamily: 'monospace', fontSize: 13 }}>{e.path}</td><td>{e.count}</td></tr>
+                <tr key={e.path}><td className={styles.cellMono}>{e.path}</td><td>{e.count}</td></tr>
               ))}
             </tbody>
           </table>
@@ -88,10 +89,10 @@ export default function AdminMetrics() {
             <tbody>
               {metrics.recent_errors.map((e, i) => (
                 <tr key={i}>
-                  <td style={{ fontSize: 12, whiteSpace: 'nowrap' }}>{new Date(e.created_at).toLocaleString()}</td>
-                  <td style={{ fontFamily: 'monospace', fontSize: 12 }}>{e.error_code}</td>
-                  <td style={{ fontSize: 13, maxWidth: 300 }}>{e.error_msg}</td>
-                  <td style={{ fontFamily: 'monospace', fontSize: 11 }}>{e.context}</td>
+                  <td className={styles.cellSmall}>{new Date(e.created_at).toLocaleString()}</td>
+                  <td className={styles.cellMonoSmall}>{e.error_code}</td>
+                  <td className={styles.cellMedium}>{e.error_msg}</td>
+                  <td className={styles.cellTiny}>{e.context}</td>
                 </tr>
               ))}
             </tbody>

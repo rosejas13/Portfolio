@@ -1,0 +1,209 @@
+/* ===== Dashboard ===== */
+.dashboardGrid {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.statCard {
+  text-align: center;
+}
+
+.statNumber {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.statLabel {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+.dashboardSubtitle {
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+/* ===== CRUD Tables ===== */
+.crudHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tableWrap {
+  margin-top: 16px;
+}
+
+.actionCell {
+  text-align: right;
+}
+
+/* ===== CRUD Cards ===== */
+.cardItem {
+  margin-top: 12px;
+}
+
+.cardContent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cardActions {
+  text-align: right;
+}
+
+/* ===== Skills ===== */
+.skillCategory {
+  margin-top: 20px;
+}
+
+.skillCategoryTitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* ===== Leads ===== */
+.leadMessage {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leadStatusSelect {
+  width: auto;
+  font-size: 12px;
+  padding: 2px 6px;
+}
+
+.empty {
+  color: var(--text-muted);
+  margin-top: 20px;
+}
+
+.emptyTable {
+  color: var(--text-muted);
+}
+
+/* ===== Config ===== */
+.configKey {
+  font-weight: 600;
+}
+
+.configValue {
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.configTextarea {
+  min-height: 80px;
+  font-family: monospace;
+}
+
+/* ===== Metrics ===== */
+.metricsGrid {
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  margin-bottom: 32px;
+}
+
+.metricCard {
+  text-align: center;
+}
+
+.metricNumber {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.metricLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.metricsTable {
+  margin-bottom: 32px;
+}
+
+.metricsSubtitle {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-bottom: 24px;
+}
+
+.loadingText {
+  color: var(--text-muted);
+}
+
+/* ===== Login ===== */
+.loginWrap {
+  max-width: 400px;
+  margin: 60px auto;
+}
+
+.loginSubtitle {
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+/* ===== Admin Layout ===== */
+.sidebarTitle {
+  font-size: 14px;
+  margin-bottom: 12px;
+  padding: 0 12px;
+}
+
+.backLink {
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.sidebarDivider {
+  margin: 12px 0;
+  border: none;
+  border-top: 1px solid #e0e0e0;
+}
+
+.logoutLink {
+  cursor: pointer;
+}
+
+/* Metric table specific */
+.redText { color: #e63946; }
+.greenText { color: #2ecc71; }
+
+.cellMono {
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.cellMonoSmall {
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.cellSmall {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.cellMedium {
+  font-size: 13px;
+  max-width: 300px;
+}
+
+.cellTiny {
+  font-family: monospace;
+  font-size: 11px;
+}
+
+.cellBold {
+  font-weight: 600;
+}
+
+/* ===== Experience/Education shared ===== */
+.cardTitle {
+  font-size: 16px;
+  margin-bottom: 4px;
+}

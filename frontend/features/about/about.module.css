@@ -1,0 +1,67 @@
+.section {
+  margin-bottom: 40px;
+}
+
+.bio {
+  color: #555;
+  line-height: 1.8;
+  max-width: 600px;
+}
+
+.categoryBlock {
+  margin-bottom: 16px;
+}
+
+.categoryTitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.expItem {
+  margin-bottom: 24px;
+  padding-left: 20px;
+  border-left: 2px solid #e0e0e0;
+}
+
+.expHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.expRole {
+  font-size: 16px;
+  margin-bottom: 2px;
+}
+
+.expDate {
+  font-size: 13px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  margin-left: 12px;
+}
+
+.expCompany {
+  color: var(--primary);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.expHighlights {
+  padding-left: 20px;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.7;
+}
+
+.eduCardText {
+  color: var(--text-secondary);
+}
+
+.eduCardDate {
+  font-size: 13px;
+  color: var(--text-muted);
+}
