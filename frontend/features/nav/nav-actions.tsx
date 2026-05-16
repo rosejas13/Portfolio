@@ -46,18 +46,6 @@ export function ThemeToggle() {
       ref={btnRef}
       className="theme-toggle-desktop"
       aria-label="Toggle dark mode"
-      style={{
-        background: 'none',
-        border: '1px solid var(--color-border)',
-        borderRadius: 6,
-        cursor: 'pointer',
-        fontSize: 18,
-        lineHeight: 1,
-        padding: '4px 8px',
-        color: 'var(--color-text)',
-        minWidth: 34,
-        minHeight: 34,
-      }}
     >
       {isDark() ? '\u2600' : '\u263E'}
     </button>
@@ -84,91 +72,43 @@ export function MobileMenu() {
     }
   }, [open])
 
+  function toggleTheme() {
+    const added = document.documentElement.classList.toggle('dark')
+    localStorage.setItem('theme', added ? 'dark' : 'light')
+    setDrawerTick(n => n + 1)
+  }
+
+  const isDark = mounted && document.documentElement.classList.contains('dark')
+
   return (
     <>
       <button
         onClick={() => setOpen(!open)}
-        aria-label={open ? 'Close menu' : 'Open menu'}
-        style={{
-          display: 'none',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 4,
-          background: 'none',
-          border: 'none',
-          borderRadius: 6,
-          cursor: 'pointer',
-          padding: 6,
-          color: 'var(--color-text)',
-        }}
         className="hamburger-trigger"
+        aria-label={open ? 'Close menu' : 'Open menu'}
+        aria-expanded={open}
       >
-        <span style={{ display: 'block', width: 20, height: 2, background: 'currentColor', borderRadius: 1, transition: 'transform 0.2s ease', transform: open ? 'translateY(6px) rotate(45deg)' : 'none' }} />
-        <span style={{ display: 'block', width: 20, height: 2, background: 'currentColor', borderRadius: 1, opacity: open ? 0 : 1, transition: 'opacity 0.2s ease' }} />
-        <span style={{ display: 'block', width: 20, height: 2, background: 'currentColor', borderRadius: 1, transition: 'transform 0.2s ease', transform: open ? 'translateY(-6px) rotate(-45deg)' : 'none' }} />
+        <span className="hamburger-line" style={{ transform: open ? 'translateY(6px) rotate(45deg)' : 'none' }} />
+        <span className="hamburger-line" style={{ opacity: open ? 0 : 1 }} />
+        <span className="hamburger-line" style={{ transform: open ? 'translateY(-6px) rotate(-45deg)' : 'none' }} />
       </button>
-      {open && (
-        <div
-          onClick={() => setOpen(false)}
-          style={{
-            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', zIndex: 90,
-          }}
-        />
-      )}
-      <div
-        style={{
-          position: 'fixed', top: 0, right: 0, bottom: 0, width: 240,
-          background: 'var(--color-surface)',
-          borderLeft: '1px solid var(--color-border)',
-          padding: '2rem',
-          display: 'flex', flexDirection: 'column', gap: '1rem',
-          zIndex: 100,
-          transform: open ? 'translateX(0)' : 'translateX(100%)',
-          transition: 'transform 0.25s cubic-bezier(0.16,1,0.3,1)',
-        }}
-        aria-hidden={!open}
-      >
+
+      {open && <div className="mobile-drawer-backdrop" onClick={() => setOpen(false)} />}
+
+      <div className={`mobile-drawer${open ? ' open' : ''}`} aria-hidden={!open}>
         {links.map(l => (
-          <Link key={l.href} href={l.href} onClick={() => setOpen(false)}
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'var(--fs-h5)',
-              fontWeight: 600,
-              color: 'var(--color-text)',
-              padding: '0.5rem 0',
-              textDecoration: 'none',
-            }}
-          >
+          <Link key={l.href} href={l.href} className="mobile-drawer-link" onClick={() => setOpen(false)}>
             {l.label}
           </Link>
         ))}
-        <hr style={{ border: 'none', borderTop: '1px solid var(--color-border)', margin: '0.5rem 0' }} />
-        <button
-          onClick={() => {
-            const added = document.documentElement.classList.toggle('dark')
-            localStorage.setItem('theme', added ? 'dark' : 'light')
-            setDrawerTick(n => n + 1)
-          }}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontFamily: 'var(--font-display)',
-            fontSize: 'var(--fs-base)',
-            fontWeight: 500,
-            color: 'var(--color-text-secondary)',
-            padding: '0.5rem 0',
-            cursor: 'pointer',
-            textAlign: 'left',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-          }}
-        >
-          <span style={{ fontSize: 'var(--fs-h5)', lineHeight: 1 }}>
-            {mounted && document.documentElement.classList.contains('dark') ? '\u2600' : '\u263E'}
+
+        <hr className="mobile-drawer-divider" />
+
+        <button onClick={toggleTheme} className="mobile-drawer-theme-btn">
+          <span className="mobile-drawer-theme-icon">
+            {isDark ? '\u2600' : '\u263E'}
           </span>
-          {mounted && document.documentElement.classList.contains('dark') ? 'Light mode' : 'Dark mode'}
+          {isDark ? 'Light mode' : 'Dark mode'}
         </button>
       </div>
     </>

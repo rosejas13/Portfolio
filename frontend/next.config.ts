@@ -1,10 +1,11 @@
 import type { NextConfig } from 'next'
+import { API_URL } from './lib/config'
 
 const nextConfig: NextConfig = {
   rewrites: async () => [
     {
       source: '/api/:path*',
-      destination: `${process.env.API_URL || 'http://localhost:3001'}/:path*`,
+      destination: `${API_URL}/:path*`,
     },
   ],
 }

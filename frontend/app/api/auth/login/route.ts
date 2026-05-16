@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { API_URL } from '@/lib/config'
 
 export async function POST(request: NextRequest) {
   const hasSupabase = !!process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -31,9 +32,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Dev: login_dev RPC
-    const apiUrl = process.env.API_URL || 'http://localhost:3001'
-    const res = await fetch(`${apiUrl}/rpc/login_dev`, {
+    const res = await fetch(`${API_URL}/rpc/login_dev`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
     })

@@ -1,4 +1,4 @@
-const API = process.env.API_URL || 'http://localhost:3001'
+import { API_URL as API } from './config'
 
 export async function fetchJson<T>(path: string, fallback: T, options?: RequestInit): Promise<T> {
   try {

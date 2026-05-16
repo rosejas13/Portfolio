@@ -19,7 +19,7 @@
 | Input Validation | No email format validation on leads | Medium | Fixed (DB constraint) |
 | Input Validation | No URL format validation on project URLs | Medium | Fixed (DB constraint) |
 | Input Validation | No slug format validation | Medium | Fixed (DB constraint) |
-| CSP | `unsafe-inline` on style-src, no script-src directive | Medium | Fixed |
+| CSP | `unsafe-inline` on both style-src and script-src (still present in Caddyfile) | Medium | In production middleware, not in Caddyfile |
 | Testing | No security tests existed | High | Added |
 | Docs | Security posture doc was outdated | Low | Updated |
 
@@ -75,7 +75,7 @@ Browser                          Next.js Server              PostgREST
 ### After
 - **Origin locked**: CORS allows only `http://localhost:5173` (dev) and `https://your-domain.com` (prod)
 - **Credentials**: `Access-Control-Allow-Credentials: true` with CSRF token enforcement
-- **CSP tightened**: Removed `unsafe-inline`, added `script-src 'self'` and `connect-src 'self'`
+- **CSP tightened in middleware**: Next.js middleware injects `script-src 'self'` with a `nonce-` value and `style-src 'self' 'unsafe-inline'`. The Caddyfile still includes `'unsafe-inline'` for both `script-src` and `style-src` as a fallback for dev/production at the proxy level.
 - **X-XSS-Protection**: Set to `0` (modern browsers handle this; CSP is the real protection)
 - **Server header**: Suppressed (`-Server`)
 - **Rate limit headers**: Exposed for transparency
@@ -88,7 +88,7 @@ X-Frame-Options: DENY
 Referrer-Policy: strict-origin-when-cross-origin
 X-XSS-Protection: 0
 Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
-Content-Security-Policy: default-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; script-src 'self'; connect-src 'self'
+Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'
 ```
 
 ---
