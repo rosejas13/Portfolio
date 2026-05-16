@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const links = [
   { href: '/', label: 'Home' },
@@ -12,25 +12,32 @@ const links = [
 ]
 
 export function ThemeToggle() {
-  const [icon, setIcon] = useState<string | null>(null)
+  const btnRef = useRef<HTMLButtonElement>(null)
+  const [, forceRender] = useState(0)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
-    const stored = localStorage.getItem('theme')
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const isDark = stored ? stored === 'dark' : prefersDark
-    setIcon(isDark ? '\u2600' : '\u263E')
-    document.documentElement.classList.toggle('dark', isDark)
+    const el = btnRef.current
+    if (!el) return
+    function handler() {
+      const added = document.documentElement.classList.toggle('dark')
+      localStorage.setItem('theme', added ? 'dark' : 'light')
+      forceRender(n => n + 1)
+    }
+    el.addEventListener('click', handler)
+    return () => el.removeEventListener('click', handler)
   }, [])
 
-  function toggle() {
-    const next = document.documentElement.classList.toggle('dark')
-    localStorage.setItem('theme', next ? 'dark' : 'light')
-    setIcon(next ? '\u2600' : '\u263E')
+  function isDark() {
+    if (!mounted) return false
+    return document.documentElement.classList.contains('dark')
   }
 
   return (
     <button
-      onClick={toggle}
+      ref={btnRef}
       aria-label="Toggle dark mode"
       style={{
         background: 'none',
@@ -48,7 +55,7 @@ export function ThemeToggle() {
         justifyContent: 'center',
       }}
     >
-      {icon || '\u2600'}
+      {isDark() ? '\u2600' : '\u263E'}
     </button>
   )
 }
