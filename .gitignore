@@ -38,3 +38,4 @@ supabase/.temp/
 # Personal checklist
 checklist.md
 .checklist/
+.vercel
