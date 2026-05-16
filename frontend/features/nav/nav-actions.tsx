@@ -16,7 +16,13 @@ export function ThemeToggle() {
   const [, forceRender] = useState(0)
   const [mounted, setMounted] = useState(false)
 
-  useEffect(() => { setMounted(true) }, [])
+  useEffect(() => {
+    const stored = localStorage.getItem('theme')
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isDark = stored ? stored === 'dark' : prefersDark
+    document.documentElement.classList.toggle('dark', isDark)
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const el = btnRef.current
@@ -51,9 +57,6 @@ export function ThemeToggle() {
         color: 'var(--color-text)',
         minWidth: 34,
         minHeight: 34,
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
       }}
     >
       {isDark() ? '\u2600' : '\u263E'}
