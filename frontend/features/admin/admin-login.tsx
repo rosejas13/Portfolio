@@ -1,8 +1,7 @@
 'use client'
 
-import { useState, useEffect, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 import styles from './admin.module.css'
 
 export default function AdminLogin() {
@@ -13,35 +12,6 @@ export default function AdminLogin() {
   const [submitting, setSubmitting] = useState(false)
 
   const useSupabase = !!process.env.NEXT_PUBLIC_SUPABASE_URL
-
-  // Conditional passkey: silently offer passkey via browser autofill
-  useEffect(() => {
-    if (!useSupabase || typeof window === 'undefined') return
-    if (!window.PublicKeyCredential?.isConditionalMediationAvailable) return
-
-    window.PublicKeyCredential.isConditionalMediationAvailable().then(available => {
-      if (!available) return
-
-      const supabase = createClient()
-      supabase.auth.passkey.startAuthentication().then(({ data, error }) => {
-        if (error || !data) return
-        const opts = PublicKeyCredential.parseRequestOptionsFromJSON(data.options)
-        return navigator.credentials.get({
-          publicKey: opts,
-          mediation: 'conditional',
-        }).then(credential => {
-          if (!credential) return
-          const pkCred = credential as PublicKeyCredential
-          return supabase.auth.passkey.verifyAuthentication({
-            challengeId: data.challenge_id,
-            credential: pkCred.toJSON(),
-          })
-        }).then(result => {
-          if (result?.data?.user) router.push('/admin')
-        })
-      }).catch(() => { /* no passkey available */ })
-    }).catch(() => {})
-  }, [useSupabase, router])
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -61,25 +31,6 @@ export default function AdminLogin() {
       router.push('/admin')
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Login failed')
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
-  async function handlePasskeySignIn() {
-    if (!useSupabase) {
-      setError('Supabase Auth is required for passkey sign-in.')
-      return
-    }
-    setError('')
-    setSubmitting(true)
-    try {
-      const supabase = createClient()
-      const { data, error: pkError } = await supabase.auth.signInWithPasskey()
-      if (pkError) throw new Error(pkError.message)
-      if (data) router.push('/admin')
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Passkey sign-in failed')
     } finally {
       setSubmitting(false)
     }
@@ -105,7 +56,7 @@ export default function AdminLogin() {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
-            <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="username webauthn" />
+            <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
           </div>
           <div className="form-group">
             <label htmlFor="password">Password</label>
@@ -115,19 +66,6 @@ export default function AdminLogin() {
             {submitting ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
-        {useSupabase && (
-          <div style={{ marginTop: 16, textAlign: 'center' }}>
-            <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '16px 0' }} />
-            <button
-              type="button"
-              className="btn btn-secondary w-full"
-              onClick={handlePasskeySignIn}
-              disabled={submitting}
-            >
-              Sign in with Passkey
-            </button>
-          </div>
-        )}
       </div>
     </div>
   )
