@@ -67,6 +67,9 @@ export function ThemeToggle() {
 export function MobileMenu() {
   const [open, setOpen] = useState(false)
   const [, setDrawerTick] = useState(0)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
     if (!open) return
@@ -163,9 +166,9 @@ export function MobileMenu() {
           }}
         >
           <span style={{ fontSize: 'var(--fs-h5)', lineHeight: 1 }}>
-            {document.documentElement.classList.contains('dark') ? '\u2600' : '\u263E'}
+            {mounted && document.documentElement.classList.contains('dark') ? '\u2600' : '\u263E'}
           </span>
-          {document.documentElement.classList.contains('dark') ? 'Light mode' : 'Dark mode'}
+          {mounted && document.documentElement.classList.contains('dark') ? 'Light mode' : 'Dark mode'}
         </button>
       </div>
     </>
