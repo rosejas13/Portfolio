@@ -25,17 +25,19 @@ export default function AdminLogin() {
       const supabase = createClient()
       supabase.auth.passkey.startAuthentication().then(({ data, error }) => {
         if (error || !data) return
+        const opts = PublicKeyCredential.parseRequestOptionsFromJSON(data.options)
         return navigator.credentials.get({
-          publicKey: data,
+          publicKey: opts,
           mediation: 'conditional',
         }).then(credential => {
           if (!credential) return
+          const pkCred = credential as PublicKeyCredential
           return supabase.auth.passkey.verifyAuthentication({
-            challengeId: data.challenge,
-            credential: credential as unknown as Record<string, unknown>,
+            challengeId: data.challenge_id,
+            credential: pkCred.toJSON(),
           })
         }).then(result => {
-          if (result?.data) router.push('/admin')
+          if (result?.data?.user) router.push('/admin')
         })
       }).catch(() => { /* no passkey available */ })
     }).catch(() => {})
