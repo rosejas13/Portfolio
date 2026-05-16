@@ -198,6 +198,12 @@ nav .logo:hover { text-decoration: none; opacity: 0.8; }
   gap: var(--space-xs);
 }
 
+.theme-toggle-desktop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ===== Page Layout ===== */
 .page {
   padding: var(--space-3xl) 0;
