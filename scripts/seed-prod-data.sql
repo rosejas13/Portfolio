@@ -1,6 +1,3 @@
--- Ensure uuid columns exist (from migration 009_security.sql)
-ALTER TABLE internal.users ADD COLUMN IF NOT EXISTS uuid uuid NOT NULL DEFAULT gen_random_uuid();
-CREATE UNIQUE INDEX IF NOT EXISTS idx_users_uuid ON internal.users (uuid);
 ALTER TABLE api.projects ADD COLUMN IF NOT EXISTS uuid uuid NOT NULL DEFAULT gen_random_uuid();
 CREATE UNIQUE INDEX IF NOT EXISTS idx_projects_uuid ON api.projects (uuid);
 ALTER TABLE api.posts ADD COLUMN IF NOT EXISTS uuid uuid NOT NULL DEFAULT gen_random_uuid();
@@ -29,7 +26,6 @@ SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
-SET row_security = off;
 
 --
 -- Data for Name: education; Type: TABLE DATA; Schema: api; Owner: -
@@ -165,13 +161,6 @@ INSERT INTO api.site_config (key, value) VALUES ('social_github', '"https://gith
 
 
 --
--- Data for Name: users; Type: TABLE DATA; Schema: internal; Owner: -
---
-
-INSERT INTO internal.users (id, email, name, avatar_url, disabled, created_at, uuid) VALUES (1, 'dev@localhost', 'Dev User', NULL, false, '2026-05-15 06:08:46.815838+00', 'df8e2351-123a-4d80-a8c5-7640342988fa') ON CONFLICT DO NOTHING;
-
-
---
 -- Name: education_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
 --
 
@@ -211,13 +200,6 @@ SELECT pg_catalog.setval('api.projects_id_seq', 2, true);
 --
 
 SELECT pg_catalog.setval('api.skills_id_seq', 34, true);
-
-
---
--- Name: users_id_seq; Type: SEQUENCE SET; Schema: internal; Owner: -
---
-
-SELECT pg_catalog.setval('internal.users_id_seq', 2, true);
 
 
 --
