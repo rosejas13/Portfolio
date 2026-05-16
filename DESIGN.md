@@ -140,11 +140,4 @@ Fluid scale:
 | `--transition-base` | `250ms var(--ease-out)` |
 | `--transition-slow` | `400ms var(--ease-out)` |
 
-## Breakpoints
 
-| Token | Value |
-|---|---|
-| `--bp-sm` | `640px` |
-| `--bp-md` | `768px` |
-| `--bp-lg` | `1024px` |
-| `--bp-xl` | `1280px` |

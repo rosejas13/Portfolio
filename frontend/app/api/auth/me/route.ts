@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { API_URL } from '@/lib/config'
 
 export async function GET(request: NextRequest) {
   const hasSupabase = !!process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -30,10 +31,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ role: 'anon' }, { status: 401 })
   }
 
-  const apiUrl = process.env.API_URL || 'http://localhost:3001'
-
   try {
-    const res = await fetch(`${apiUrl}/rpc/whoami`, {
+    const res = await fetch(`${API_URL}/rpc/whoami`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
