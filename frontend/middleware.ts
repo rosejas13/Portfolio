@@ -96,10 +96,35 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // Inject custom JWT as Bearer for API proxy (dev only: Supabase handles its own auth)
-  const isProd = process.env.NODE_ENV === 'production'
-  if (pathname.startsWith('/api/') && !pathname.startsWith('/api/auth/') && token && !isProd) {
-    requestHeaders.set('Authorization', `Bearer ${token}`)
+  // Inject auth token as Bearer for API proxy to PostgREST
+  if (pathname.startsWith('/api/') && !pathname.startsWith('/api/auth/')) {
+    const isProd = process.env.NODE_ENV === 'production'
+    if (!isProd && token) {
+      // Dev: use custom JWT from cookie
+      requestHeaders.set('Authorization', `Bearer ${token}`)
+    } else if (isProd && hasSupabaseSession) {
+      // Production: extract access_token from Supabase session cookie
+      const sbCookie = request.cookies.getAll().find(c => c.name.startsWith('sb-'))
+      if (sbCookie) {
+        try {
+          // Handle chunked cookies: sb-*-auth-token, sb-*-auth-token-0, sb-*-auth-token-1...
+          const prefix = sbCookie.name.replace(/-\d+$/, '')
+          const chunks = request.cookies.getAll()
+            .filter(c => c.name === prefix || c.name.startsWith(prefix + '-'))
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(c => c.value)
+          const combined = chunks.join('')
+          const base64 = combined.replace(/-/g, '+').replace(/_/g, '/')
+          const decoded = JSON.parse(atob(base64))
+          const accessToken = decoded.access_token || decoded[0]?.access_token
+          if (accessToken) {
+            requestHeaders.set('Authorization', `Bearer ${accessToken}`)
+          }
+        } catch {
+          // Cookie decode failed — skip auth header injection
+        }
+      }
+    }
   }
 
   const response = NextResponse.next({ request: { headers: requestHeaders } })
