@@ -6,12 +6,13 @@ export async function fetchJson<T>(path: string, fallback: T, options?: RequestI
       'Content-Type': 'application/json',
       ...(options?.headers as Record<string, string>),
     }
+    const url = `${API}${path.replace('/rpc/', '/rpc/api.')}`
     if (SUPABASE_ANON_KEY) {
       headers['apikey'] = SUPABASE_ANON_KEY
       headers['Authorization'] = `Bearer ${SUPABASE_ANON_KEY}`
     }
 
-    const res = await fetch(`${API}${path}`, {
+    const res = await fetch(url, {
       ...options,
       headers,
       next: { revalidate: 60 },
