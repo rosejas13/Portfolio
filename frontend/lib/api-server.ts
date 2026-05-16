@@ -6,7 +6,7 @@ export async function fetchJson<T>(path: string, fallback: T, options?: RequestI
       'Content-Type': 'application/json',
       ...(options?.headers as Record<string, string>),
     }
-    const url = `${API}${path.replace('/rpc/', '/rpc/api.')}`
+    const url = `${API}${path}`
     if (SUPABASE_ANON_KEY) {
       headers['apikey'] = SUPABASE_ANON_KEY
       headers['Authorization'] = `Bearer ${SUPABASE_ANON_KEY}`
