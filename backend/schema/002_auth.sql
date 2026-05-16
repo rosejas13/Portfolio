@@ -36,7 +36,7 @@ as $$
 begin
   return current_setting('app.jwt_secret', true);
 exception when undefined_object then
-  return 'dev-secret-change-in-production-this-is-32-chars!!';
+  return 'placeholder-jwt-secret-removed';
 end;
 $$;
 

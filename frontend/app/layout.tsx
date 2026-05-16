@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { headers } from 'next/headers'
 import Nav from '@/features/nav/nav'
 import { ClientShell } from '@/features/shell/client-shell'
 import './globals.css'
@@ -8,11 +9,13 @@ export const metadata = {
   description: 'Software Engineer — Full Stack · AWS · DevOps',
 }
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const nonce = (await headers()).get('x-nonce') || ''
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{
+        <script nonce={nonce} dangerouslySetInnerHTML={{
           __html: `(function(){var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')})()`
         }} />
       </head>

@@ -1,0 +1,43 @@
+.subtitle {
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.meta {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.empty {
+  color: var(--text-muted);
+}
+
+.backLink {
+  font-size: 14px;
+}
+
+.pageTitle {
+  margin-top: 12px;
+}
+
+.postMeta {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.tagItem {
+  margin-left: 8px;
+}
+
+.content {
+  line-height: 1.8;
+}

@@ -1,6 +1,6 @@
 const API = '/api'
 
-function csrfToken(): string {
+export function csrfToken(): string {
   let t = sessionStorage.getItem('csrf_token')
   if (!t) {
     t = crypto.randomUUID()
