@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useState, useEffect, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import styles from './admin.module.css'
@@ -13,6 +13,33 @@ export default function AdminLogin() {
   const [submitting, setSubmitting] = useState(false)
 
   const useSupabase = !!process.env.NEXT_PUBLIC_SUPABASE_URL
+
+  // Conditional passkey: silently offer passkey via browser autofill
+  useEffect(() => {
+    if (!useSupabase || typeof window === 'undefined') return
+    if (!window.PublicKeyCredential?.isConditionalMediationAvailable) return
+
+    window.PublicKeyCredential.isConditionalMediationAvailable().then(available => {
+      if (!available) return
+
+      const supabase = createClient()
+      supabase.auth.passkey.startAuthentication().then(({ data, error }) => {
+        if (error || !data) return
+        return navigator.credentials.get({
+          publicKey: data,
+          mediation: 'conditional',
+        }).then(credential => {
+          if (!credential) return
+          return supabase.auth.passkey.verifyAuthentication({
+            challengeId: data.challenge,
+            credential: credential as unknown as Record<string, unknown>,
+          })
+        }).then(result => {
+          if (result?.data) router.push('/admin')
+        })
+      }).catch(() => { /* no passkey available */ })
+    }).catch(() => {})
+  }, [useSupabase, router])
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -76,7 +103,7 @@ export default function AdminLogin() {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
-            <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+            <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="username webauthn" />
           </div>
           <div className="form-group">
             <label htmlFor="password">Password</label>
