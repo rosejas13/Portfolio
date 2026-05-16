@@ -202,6 +202,105 @@ nav .logo:hover { text-decoration: none; opacity: 0.8; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px 8px;
+  color: var(--color-text);
+  min-width: 34px;
+  min-height: 34px;
+}
+
+/* Hamburger trigger (mobile only) */
+.hamburger-trigger {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 6px;
+  color: var(--color-text);
+}
+
+.hamburger-line {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Mobile drawer */
+.mobile-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 90;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 240px;
+  background: var(--color-surface);
+  border-left: 1px solid var(--color-border);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  z-index: 100;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mobile-drawer:not(.open) {
+  transform: translateX(100%);
+}
+.mobile-drawer.open {
+  transform: translateX(0);
+}
+
+.mobile-drawer-link {
+  font-family: var(--font-display);
+  font-size: var(--fs-h5);
+  font-weight: 600;
+  color: var(--color-text);
+  padding: 0.5rem 0;
+  text-decoration: none;
+}
+
+.mobile-drawer-divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 0.5rem 0;
+}
+
+.mobile-drawer-theme-btn {
+  background: none;
+  border: none;
+  font-family: var(--font-display);
+  font-size: var(--fs-base);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  padding: 0.5rem 0;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mobile-drawer-theme-icon {
+  font-size: var(--fs-h5);
+  line-height: 1;
 }
 
 /* ===== Page Layout ===== */
@@ -514,7 +613,7 @@ footer {
   }
 
   .hamburger-trigger {
-    display: inline-flex !important;
+    display: inline-flex;
   }
 
   .page {

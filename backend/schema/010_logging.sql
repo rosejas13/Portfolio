@@ -28,14 +28,9 @@ grant select on internal.request_log to web_admin;
 
 -- Error log: captures exception details when DB operations fail.
 -- Error messages are sanitized — no PII, no raw data.
-create table if not exists internal.error_log (
-  id          bigserial primary key,
-  request_id  uuid,
-  error_code  text,
-  error_msg   text,
-  context     text,
-  created_at  timestamptz not null default now()
-);
+-- Table created by 007_error_handling.sql — migrate columns for v010.
+alter table internal.error_log add column if not exists request_id uuid;
+alter table internal.error_log add column if not exists context text;
 
 create index if not exists idx_error_log_created_at on internal.error_log(created_at desc);
 create index if not exists idx_error_log_request_id on internal.error_log(request_id);
