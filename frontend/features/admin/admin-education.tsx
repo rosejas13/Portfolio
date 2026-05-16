@@ -1,41 +1,24 @@
 'use client'
 
-import { useState, useEffect, type FormEvent } from 'react'
-import { get, post, patch, del } from '@/lib/api-client'
+import type { Education } from '@/lib/types'
+import { useCrud } from '@/lib/use-crud'
+import styles from './admin.module.css'
 
 export default function AdminEducation() {
-  const [items, setItems] = useState<any[]>([])
-  const [editing, setEditing] = useState<any | null>(null)
-  const [error, setError] = useState('')
-
-  useEffect(() => { get<any[]>('/education').then(setItems) }, [])
-
-  async function handleSave(e: FormEvent) {
-    e.preventDefault(); setError('')
-    try {
-      if (editing?.id) { await patch(`/education?id=eq.${editing.id}`, editing) }
-      else { await post('/education', editing!) }
-      setEditing(null); setItems(await get('/education'))
-    } catch (err: unknown) { setError(String(err)) }
-  }
-
-  async function handleDelete(id: number) {
-    if (!confirm('Delete?')) return
-    await del(`/education?id=eq.${id}`); setItems(await get('/education'))
-  }
+  const { items, editing, setEditing, error, handleSave, handleDelete } = useCrud<Education>('education')
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div className={styles.crudHeader}>
         <h1>Education</h1>
         <button className="btn btn-primary" onClick={() => setEditing({ school: '' })}>+ New</button>
       </div>
       {error && <div className="error">{error}</div>}
-      {items.map((i: any) => (
-        <div key={i.id} className="card" style={{ marginTop: 12 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div><h3>{i.school}</h3><p style={{ color: '#666' }}>{[i.degree, i.field].filter(Boolean).join(' in ')}</p></div>
-            <div style={{ textAlign: 'right' }}>
+      {items.map(i => (
+        <div key={i.id} className={`card ${styles.cardItem}`}>
+          <div className={styles.cardContent}>
+            <div><h3 className={styles.cardTitle}>{i.school}</h3><p className="text-secondary">{[i.degree, i.field].filter(Boolean).join(' in ')}</p></div>
+            <div className={styles.cardActions}>
               <button className="btn btn-secondary btn-sm" onClick={() => setEditing(i)}>Edit</button>{' '}
               <button className="btn btn-danger btn-sm" onClick={() => handleDelete(i.id)}>Del</button>
             </div>

@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
+import { csrfToken } from '@/lib/api-client'
+import styles from './contact.module.css'
 
 function sanitize(input: string, maxLen: number): string {
   return input.trim().slice(0, maxLen)
@@ -13,15 +15,6 @@ export default function ContactPage() {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
-
-  function csrfToken(): string {
-    let t = sessionStorage.getItem('csrf_token')
-    if (!t) {
-      t = crypto.randomUUID()
-      sessionStorage.setItem('csrf_token', t)
-    }
-    return t
-  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -60,28 +53,30 @@ export default function ContactPage() {
 
   return (
     <div className="page">
-      <div className="container" style={{ maxWidth: 600, margin: '0 auto' }}>
-        <h1>Contact</h1>
-        <p style={{ color: '#666', marginBottom: 24 }}>Get in touch — I&apos;d love to hear from you.</p>
-        {status === 'success' && <div className="success">Thanks! I&apos;ll get back to you soon.</div>}
-        {status === 'error' && <div className="error">{error}</div>}
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Name</label>
-            <input value={name} onChange={e => setName(e.target.value)} required maxLength={200} />
-          </div>
-          <div className="form-group">
-            <label>Email</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} required maxLength={320} />
-          </div>
-          <div className="form-group">
-            <label>Message</label>
-            <textarea value={message} onChange={e => setMessage(e.target.value)} required maxLength={5000} />
-          </div>
-          <button type="submit" className="btn btn-primary" disabled={submitting}>
-            {submitting ? 'Sending...' : 'Send'}
-          </button>
-        </form>
+      <div className="container">
+        <div className={styles.pageWrap}>
+          <h1>Contact</h1>
+          <p className={styles.subtitle}>Get in touch — I&apos;d love to hear from you.</p>
+          {status === 'success' && <div className="success">Thanks! I&apos;ll get back to you soon.</div>}
+          {status === 'error' && <div className="error">{error}</div>}
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>Name</label>
+              <input value={name} onChange={e => setName(e.target.value)} required maxLength={200} />
+            </div>
+            <div className="form-group">
+              <label>Email</label>
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)} required maxLength={320} />
+            </div>
+            <div className="form-group">
+              <label>Message</label>
+              <textarea value={message} onChange={e => setMessage(e.target.value)} required maxLength={5000} />
+            </div>
+            <button type="submit" className="btn btn-primary" disabled={submitting}>
+              {submitting ? 'Sending...' : 'Send'}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   )

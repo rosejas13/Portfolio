@@ -2,18 +2,27 @@
 
 import { useState, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
+import styles from './admin.module.css'
 
 export default function AdminLogin() {
   const router = useRouter()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+
+  const useSupabase = !!process.env.NEXT_PUBLIC_SUPABASE_URL
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setError('')
     setSubmitting(true)
     try {
-      const res = await fetch('/api/auth/login', { method: 'POST' })
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: useSupabase ? { 'Content-Type': 'application/json' } : undefined,
+        body: useSupabase ? JSON.stringify({ email, password }) : undefined,
+      })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
         throw new Error(data.error || 'Login failed')
@@ -28,13 +37,25 @@ export default function AdminLogin() {
 
   return (
     <div className="page">
-      <div className="container" style={{ maxWidth: 400, margin: '60px auto' }}>
+      <div className={`container ${styles.loginWrap}`}>
         <h1>Admin Login</h1>
-        <p style={{ color: '#666', marginBottom: 20 }}>Sign in to manage your portfolio.</p>
+        <p className={styles.loginSubtitle}>Sign in to manage your portfolio.</p>
         {error && <div className="error">{error}</div>}
         <form onSubmit={handleSubmit}>
-          <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={submitting}>
-            {submitting ? 'Signing in...' : 'Sign in with Dev Account'}
+          {useSupabase && (
+            <>
+              <div className="form-group">
+                <label>Email</label>
+                <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+              </div>
+              <div className="form-group">
+                <label>Password</label>
+                <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+              </div>
+            </>
+          )}
+          <button type="submit" className="btn btn-primary w-full" disabled={submitting}>
+            {submitting ? 'Signing in...' : useSupabase ? 'Sign in' : 'Sign in with Dev Account'}
           </button>
         </form>
       </div>

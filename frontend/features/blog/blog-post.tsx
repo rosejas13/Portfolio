@@ -1,8 +1,10 @@
 import { fetchJson } from '@/lib/api-server'
+import type { Post } from '@/lib/types'
 import Link from 'next/link'
+import styles from './blog.module.css'
 
 export default async function BlogPost({ slug }: { slug: string }) {
-  const posts = await fetchJson<any[]>(`/posts?slug=eq.${slug}`, [])
+  const posts = await fetchJson<Post[]>(`/posts?slug=eq.${slug}`, [])
   const post = posts[0]
 
   if (!post) return <div className="page container"><p>Post not found.</p></div>
@@ -10,13 +12,13 @@ export default async function BlogPost({ slug }: { slug: string }) {
   return (
     <div className="page">
       <div className="container">
-        <Link href="/blog" style={{ fontSize: 14 }}>&larr; Back to blog</Link>
-        <h1 style={{ marginTop: 12 }}>{post.title}</h1>
-        <div style={{ fontSize: 13, color: '#888', marginBottom: 20 }}>
+        <Link href="/blog" className={styles.backLink}>&larr; Back to blog</Link>
+        <h1 className={styles.pageTitle}>{post.title}</h1>
+        <div className={styles.postMeta}>
           {new Date(post.created_at).toLocaleDateString()}
-          {post.tags && post.tags.map((t: string) => <span key={t} className="tag" style={{ marginLeft: 8 }}>{t}</span>)}
+          {post.tags && post.tags.map(t => <span key={t} className={`tag ${styles.tagItem}`}>{t}</span>)}
         </div>
-        {post.content && <div style={{ lineHeight: 1.8 }}>{post.content}</div>}
+        {post.content && <div className={styles.content}>{post.content}</div>}
       </div>
     </div>
   )

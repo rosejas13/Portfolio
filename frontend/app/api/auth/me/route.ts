@@ -1,6 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
 
 export async function GET(request: NextRequest) {
+  const hasSupabase = !!process.env.NEXT_PUBLIC_SUPABASE_URL
+
+  if (hasSupabase) {
+    try {
+      const supabase = await createClient()
+      const { data: { user }, error } = await supabase.auth.getUser()
+
+      if (error || !user) {
+        return NextResponse.json({ role: 'anon' }, { status: 401 })
+      }
+
+      return NextResponse.json({
+        role: 'authenticated',
+        email: user.email,
+        name: user.user_metadata?.name || user.email,
+        user_uuid: user.id,
+      })
+    } catch {
+      return NextResponse.json({ error: 'Server error' }, { status: 502 })
+    }
+  }
+
   const token = request.cookies.get('token')?.value
 
   if (!token) {

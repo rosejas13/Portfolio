@@ -1,6 +1,7 @@
 'use client'
 
 import { Component, type ReactNode } from 'react'
+import styles from './shell.module.css'
 
 interface Props {
   children: ReactNode
@@ -44,19 +45,18 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return this.props.fallback || (
-        <div style={{ padding: 40, textAlign: 'center' }}>
+        <div className={styles.errorWrap}>
           <h2>Something went wrong</h2>
-          <p style={{ color: '#666' }}>
+          <p className={styles.errorText}>
             The error has been logged. Please try refreshing the page.
           </p>
           {this.state.errorId && (
-            <p style={{ fontSize: 12, color: '#999', marginTop: 8 }}>
+            <p className={styles.errorRef}>
               Reference: {this.state.errorId}
             </p>
           )}
           <button
-            className="btn btn-primary"
-            style={{ marginTop: 16 }}
+            className={`btn btn-primary ${styles.refreshBtn}`}
             onClick={() => window.location.reload()}
           >
             Refresh Page

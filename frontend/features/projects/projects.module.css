@@ -1,0 +1,36 @@
+.grid {
+  margin-top: 20px;
+}
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.techStack {
+  margin-top: 8px;
+}
+
+.backLink {
+  font-size: 14px;
+}
+
+.pageTitle {
+  margin-top: 12px;
+}
+
+.tagline {
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+.description {
+  margin-top: 20px;
+  line-height: 1.8;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}

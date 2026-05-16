@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-// In-memory rate limiter (single-instance; for multi-instance use Redis)
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
 
 function getClientIp(request: NextRequest): string {
@@ -13,19 +12,15 @@ function getClientIp(request: NextRequest): string {
 function checkRateLimit(key: string, maxRequests: number, windowMs: number): boolean {
   const now = Date.now()
   const entry = rateLimitMap.get(key)
-
   if (!entry || now > entry.resetAt) {
     rateLimitMap.set(key, { count: 1, resetAt: now + windowMs })
     return true
   }
-
   if (entry.count >= maxRequests) return false
-
   entry.count++
   return true
 }
 
-// Periodic cleanup of expired entries (every 5 minutes)
 if (typeof setInterval !== 'undefined') {
   setInterval(() => {
     const now = Date.now()
@@ -35,11 +30,24 @@ if (typeof setInterval !== 'undefined') {
   }, 5 * 60 * 1000)
 }
 
+const ADMIN_MUTATIONS = [
+  '/api/projects',
+  '/api/posts',
+  '/api/skills',
+  '/api/experiences',
+  '/api/education',
+  '/api/site_config',
+  '/api/leads',
+]
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const host = request.headers.get('host') || ''
+  const ip = getClientIp(request)
+  const token = request.cookies.get('token')?.value
+  const hasSupabaseSession = request.cookies.getAll().some(c => c.name.startsWith('sb-'))
 
-  // Redirect .vercel.app domain to custom domain (disable public Vercel URL)
+  // Redirect .vercel.app domain to custom domain
   if (host.includes('vercel.app')) {
     const url = request.nextUrl.clone()
     url.host = 'jcrose.dev'
@@ -47,63 +55,73 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 308)
   }
 
-  const token = request.cookies.get('token')?.value
-  const ip = getClientIp(request)
+  // CSP nonce
+  const nonce = crypto.randomUUID()
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-nonce', nonce)
 
   // Rate limiting
   if (pathname === '/api/rpc/login_dev') {
     if (!checkRateLimit(`login:${ip}`, 10, 60_000)) {
-      return NextResponse.json(
-        { error: 'Too many login attempts' },
-        { status: 429 }
-      )
+      return NextResponse.json({ error: 'Too many login attempts' }, { status: 429 })
     }
   }
 
   if (pathname === '/api/leads' && request.method === 'POST') {
     if (!checkRateLimit(`leads:${ip}`, 5, 60_000)) {
-      return NextResponse.json(
-        { error: 'Too many messages' },
-        { status: 429 }
-      )
+      return NextResponse.json({ error: 'Too many messages' }, { status: 429 })
     }
   }
 
-  // General rate limit
+  if (ADMIN_MUTATIONS.some(p => pathname.startsWith(p))) {
+    if (request.method === 'POST' || request.method === 'PATCH' || request.method === 'DELETE') {
+      if (!checkRateLimit(`admin:${ip}`, 30, 60_000)) {
+        return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+      }
+    }
+  }
+
   if (pathname.startsWith('/api/')) {
     if (!checkRateLimit(`global:${ip}`, 100, 60_000)) {
-      return NextResponse.json(
-        { error: 'Too many requests' },
-        { status: 429 }
-      )
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
     }
   }
 
-  // Protect admin routes (except login page)
+  // Protect admin routes (check Supabase session OR custom JWT)
   if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
-    if (!token) {
+    if (!hasSupabaseSession && !token) {
       const url = request.nextUrl.clone()
       url.pathname = '/admin/login'
       return NextResponse.redirect(url)
     }
   }
 
-  // For API proxy requests: inject JWT from cookie as Authorization header
-  // (except auth routes which handle the cookie themselves)
-  if (pathname.startsWith('/api/') && !pathname.startsWith('/api/auth/') && token) {
-    const requestHeaders = new Headers(request.headers)
+  // Inject custom JWT as Bearer for API proxy (dev only: Supabase handles its own auth)
+  const isProd = process.env.NODE_ENV === 'production'
+  if (pathname.startsWith('/api/') && !pathname.startsWith('/api/auth/') && token && !isProd) {
     requestHeaders.set('Authorization', `Bearer ${token}`)
-    return NextResponse.next({
-      request: { headers: requestHeaders },
-    })
   }
 
-  return NextResponse.next()
+  const response = NextResponse.next({ request: { headers: requestHeaders } })
+
+  // Set CSP on pages (not API responses or Next.js internals)
+  if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next')) {
+    response.headers.set(
+      'Content-Security-Policy',
+      [
+        `default-src 'self'`,
+        `script-src 'self' 'nonce-${nonce}'`,
+        `style-src 'self' 'unsafe-inline'`,
+        `img-src 'self' data:`,
+        `font-src 'self'`,
+        `connect-src 'self'`,
+      ].join('; ')
+    )
+  }
+
+  return response
 }
 
 export const config = {
-  matcher: [
-    // Exclude Next.js internals and static assets from middleware
-    '/((?!_next|static|favicon.ico).*)',
-  ],
+  matcher: ['/((?!_next|static|favicon.ico).*)'],
 }
