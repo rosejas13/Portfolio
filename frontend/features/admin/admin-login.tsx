@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, type FormEvent, useEffect } from 'react'
+import { useState, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 import styles from './admin.module.css'
 
 export default function AdminLogin() {
@@ -12,12 +13,6 @@ export default function AdminLogin() {
   const [submitting, setSubmitting] = useState(false)
 
   const useSupabase = !!process.env.NEXT_PUBLIC_SUPABASE_URL
-
-  useEffect(() => {
-    if (!useSupabase) {
-      setError('Supabase Auth is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel environment variables.')
-    }
-  }, [useSupabase])
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -37,6 +32,25 @@ export default function AdminLogin() {
       router.push('/admin')
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Login failed')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  async function handlePasskeySignIn() {
+    if (!useSupabase) {
+      setError('Supabase Auth is required for passkey sign-in.')
+      return
+    }
+    setError('')
+    setSubmitting(true)
+    try {
+      const supabase = createClient()
+      const { data, error: pkError } = await supabase.auth.signInWithPasskey()
+      if (pkError) throw new Error(pkError.message)
+      if (data) router.push('/admin')
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Passkey sign-in failed')
     } finally {
       setSubmitting(false)
     }
@@ -72,6 +86,19 @@ export default function AdminLogin() {
             {submitting ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
+        {useSupabase && (
+          <div style={{ marginTop: 16, textAlign: 'center' }}>
+            <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '16px 0' }} />
+            <button
+              type="button"
+              className="btn btn-secondary w-full"
+              onClick={handlePasskeySignIn}
+              disabled={submitting}
+            >
+              Sign in with Passkey
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )
