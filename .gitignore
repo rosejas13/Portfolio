@@ -31,6 +31,11 @@ Thumbs.db
 
 # Test results
 backend/tests/results/
+frontend/test-results/
+frontend/playwright-report/
+
+# Security — pen-test methodology stays local
+frontend/test/security/penetration-test.spec.ts
 
 # Supabase local
 supabase/.temp/
