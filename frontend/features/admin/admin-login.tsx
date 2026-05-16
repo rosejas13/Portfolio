@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useState, type FormEvent, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import styles from './admin.module.css'
 
@@ -13,15 +13,22 @@ export default function AdminLogin() {
 
   const useSupabase = !!process.env.NEXT_PUBLIC_SUPABASE_URL
 
+  useEffect(() => {
+    if (!useSupabase) {
+      setError('Supabase Auth is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel environment variables.')
+    }
+  }, [useSupabase])
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setError('')
     setSubmitting(true)
     try {
+      const body = useSupabase ? JSON.stringify({ email, password }) : undefined
       const res = await fetch('/api/auth/login', {
         method: 'POST',
-        headers: useSupabase ? { 'Content-Type': 'application/json' } : undefined,
-        body: useSupabase ? JSON.stringify({ email, password }) : undefined,
+        headers: body ? { 'Content-Type': 'application/json' } : undefined,
+        body,
       })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
@@ -40,22 +47,29 @@ export default function AdminLogin() {
       <div className={`container ${styles.loginWrap}`}>
         <h1>Admin Login</h1>
         <p className={styles.loginSubtitle}>Sign in to manage your portfolio.</p>
-        {error && <div className="error">{error}</div>}
+        {error && (
+          <div className="error" role="alert">
+            {error}
+            <button
+              onClick={() => setError('')}
+              style={{ float: 'right', background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, fontSize: 16 }}
+              aria-label="Dismiss"
+            >
+              &times;
+            </button>
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
-          {useSupabase && (
-            <>
-              <div className="form-group">
-                <label>Email</label>
-                <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
-              </div>
-              <div className="form-group">
-                <label>Password</label>
-                <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
-              </div>
-            </>
-          )}
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+          </div>
           <button type="submit" className="btn btn-primary w-full" disabled={submitting}>
-            {submitting ? 'Signing in...' : useSupabase ? 'Sign in' : 'Sign in with Dev Account'}
+            {submitting ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
       </div>
