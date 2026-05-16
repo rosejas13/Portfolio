@@ -1,12 +1,21 @@
 name: Deploy
 on:
   push:
-    branches: [dev, main, master]
+    branches: [dev]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deploy environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
 
 jobs:
   schema:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name == 'main' || github.ref_name == 'master' && 'production' || 'development' }}
+    environment: ${{ github.ref_name == 'master' && 'production' || 'development' }}
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
@@ -22,7 +31,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: schema
-    environment: ${{ github.ref_name == 'main' || github.ref_name == 'master' && 'production' || 'development' }}
+    environment: ${{ github.ref_name == 'master' && 'production' || 'development' }}
     env:
       API_URL: ${{ secrets.SUPABASE_URL }}/rest/v1
     defaults:
@@ -38,13 +47,11 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      # Vercel deploy (primary for Next.js)
       - name: Deploy to Vercel
-        if: ${{ secrets.VERCEL_TOKEN != '' }}
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: ${{ github.ref_name == 'main' || github.ref_name == 'master' && '--prod' || '' }}
+          vercel-args: ${{ github.ref_name == 'master' && '--prod' || '' }}
           working-directory: frontend
