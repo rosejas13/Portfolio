@@ -2,7 +2,6 @@
 -- PostgreSQL database dump
 --
 
-\restrict 0hJJYXb7f4cauFgdEXs8RrSUwV7BstafB5YSDtd45RAHaUKhwMVqklCb8BwjoAZ
 
 -- Dumped from database version 16.14
 -- Dumped by pg_dump version 16.14
@@ -211,5 +210,4 @@ SELECT pg_catalog.setval('internal.users_id_seq', 2, true);
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 0hJJYXb7f4cauFgdEXs8RrSUwV7BstafB5YSDtd45RAHaUKhwMVqklCb8BwjoAZ
 
