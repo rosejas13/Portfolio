@@ -130,7 +130,8 @@ export function middleware(request: NextRequest) {
   const response = NextResponse.next({ request: { headers: requestHeaders } })
 
   // Set CSP on pages (not API responses or Next.js internals)
-  if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next')) {
+  // Skip in development; Next.js HMR scripts don't carry the nonce
+  if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next') && process.env.NODE_ENV === 'production') {
     response.headers.set(
       'Content-Security-Policy',
       [
