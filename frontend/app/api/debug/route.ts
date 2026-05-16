@@ -4,7 +4,7 @@ import { API_URL, SUPABASE_ANON_KEY } from '@/lib/config'
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  const testUrl = `${API_URL}/rpc/get_site_config`
+  const testUrl = `${API_URL}/rpc/api.get_site_config`
   try {
     const headers: Record<string, string> = { 'Content-Type': 'application/json' }
     if (SUPABASE_ANON_KEY) {
