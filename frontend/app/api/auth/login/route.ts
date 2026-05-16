@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 
 export async function POST(request: NextRequest) {
   const hasSupabase = !!process.env.NEXT_PUBLIC_SUPABASE_URL
+  const isProduction = process.env.NODE_ENV === 'production'
 
   try {
     if (hasSupabase) {
@@ -21,6 +22,13 @@ export async function POST(request: NextRequest) {
       }
 
       return NextResponse.json({ ok: true })
+    }
+
+    if (isProduction) {
+      return NextResponse.json(
+        { error: 'Supabase Auth is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel environment variables.' },
+        { status: 501 }
+      )
     }
 
     // Dev: login_dev RPC

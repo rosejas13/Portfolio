@@ -35,11 +35,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
   }, [router])
 
+  const isLoginPage = pathname === '/admin/login'
+
   useEffect(() => {
+    if (isLoginPage) {
+      setLoading(false)
+      return
+    }
     checkAuth()
     const interval = setInterval(checkAuth, 5 * 60 * 1000)
     return () => clearInterval(interval)
-  }, [checkAuth])
+  }, [checkAuth, isLoginPage])
 
   if (loading) return null
 
