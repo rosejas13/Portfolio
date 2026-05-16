@@ -159,7 +159,7 @@ nav {
   display: flex;
   align-items: center;
   gap: var(--space-lg);
-  padding: var(--space-lg) 0;
+  padding: var(--space-xl) 0 var(--space-lg);
 }
 nav .logo {
   font-family: var(--font-display);
@@ -494,6 +494,7 @@ footer {
 
   nav {
     gap: var(--space-sm);
+    padding: var(--space-lg) 0 var(--space-md);
   }
 
   .nav-links {
