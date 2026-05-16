@@ -1,9 +1,9 @@
 .pageWrap {
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 36rem;
 }
 
 .subtitle {
-  color: var(--text-secondary);
-  margin-bottom: 24px;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xl);
+  font-size: var(--fs-lg);
 }

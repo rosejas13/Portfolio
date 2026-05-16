@@ -1,36 +1,65 @@
 .grid {
-  margin-top: 20px;
+  margin-top: var(--space-xl);
 }
 
 .cardLink {
   text-decoration: none;
   color: inherit;
+  display: block;
+}
+
+.cardLink .card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardLink:hover h3 {
+  color: var(--color-primary);
+}
+
+.cardLink h3 {
+  transition: color var(--transition-fast);
 }
 
 .techStack {
-  margin-top: 8px;
+  margin-top: var(--space-md);
+  margin-top: auto;
+  padding-top: var(--space-md);
 }
 
 .backLink {
-  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.backLink:hover {
+  color: var(--color-primary);
+  text-decoration: none;
 }
 
 .pageTitle {
-  margin-top: 12px;
+  margin-top: var(--space-md);
 }
 
 .tagline {
-  color: var(--text-secondary);
-  font-size: 16px;
+  color: var(--color-text-secondary);
+  font-size: var(--fs-h5);
+  max-width: 60ch;
 }
 
 .description {
-  margin-top: 20px;
-  line-height: 1.8;
+  margin-top: var(--space-xl);
+  line-height: var(--lh-base);
+  max-width: 65ch;
 }
 
 .actions {
   display: flex;
-  gap: 12px;
-  margin-top: 24px;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
 }

@@ -1,19 +1,24 @@
 import type { ReactNode } from 'react'
 import { headers } from 'next/headers'
+import { sora, onest } from '@/lib/design-tokens/fonts'
 import Nav from '@/features/nav/nav'
 import { ClientShell } from '@/features/shell/client-shell'
+import { RoseIcon } from '@/lib/rose-icon'
 import './globals.css'
 
 export const metadata = {
   title: 'Jasper Cordova | Portfolio',
   description: 'Software Engineer — Full Stack · AWS · DevOps',
+  icons: {
+    icon: '/favicon.svg',
+  },
 }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const nonce = (await headers()).get('x-nonce') || ''
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={`${sora.variable} ${onest.variable}`}>
       <head>
         <script nonce={nonce} dangerouslySetInnerHTML={{
           __html: `(function(){var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')})()`
@@ -24,7 +29,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <Nav />
           {children}
           <footer>
-            <div className="container">&copy; {new Date().getFullYear()} — Built with Next.js + PostgREST + Supabase</div>
+            <div className="container">
+              <RoseIcon size={12} /> &copy; {new Date().getFullYear()} — Built with Next.js + PostgREST + Supabase
+            </div>
           </footer>
         </ClientShell>
       </body>

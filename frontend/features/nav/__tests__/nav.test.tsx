@@ -2,8 +2,9 @@ import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import Nav from '../nav'
 
-vi.mock('../theme-toggle', () => ({
-  default: () => <button data-testid="theme-toggle">Toggle</button>,
+vi.mock('../nav-actions', () => ({
+  ThemeToggle: () => <button data-testid="theme-toggle">Toggle</button>,
+  MobileMenu: () => <div data-testid="mobile-menu" />,
 }))
 
 describe('Nav', () => {
