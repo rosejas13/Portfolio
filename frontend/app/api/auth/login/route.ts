@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
 
       if (error) {
-        return NextResponse.json({ error: 'Login failed' }, { status: 401 })
+        return NextResponse.json({ error: error.message || 'Login failed' }, { status: 401 })
       }
 
       return NextResponse.json({ ok: true })
