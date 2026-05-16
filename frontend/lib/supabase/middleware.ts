@@ -20,6 +20,9 @@ export async function updateSession(request: NextRequest) {
           )
         },
       },
+      auth: {
+        experimental: { passkey: true },
+      },
     }
   )
 

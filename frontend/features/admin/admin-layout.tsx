@@ -15,6 +15,7 @@ const links = [
   { to: '/admin/leads', label: 'Leads' },
   { to: '/admin/config', label: 'Site Config' },
   { to: '/admin/metrics', label: 'Metrics' },
+  { to: '/admin/passkeys', label: 'Passkeys' },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
