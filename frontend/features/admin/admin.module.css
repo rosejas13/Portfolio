@@ -1,4 +1,3 @@
-/* ===== Dashboard ===== */
 .dashboardGrid {
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 }
@@ -8,62 +7,61 @@
 }
 
 .statNumber {
-  font-size: 32px;
+  font-size: 2rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--color-primary);
 }
 
 .statLabel {
-  font-size: 13px;
-  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
   text-transform: capitalize;
 }
 
 .dashboardSubtitle {
-  color: var(--text-secondary);
-  margin-bottom: 24px;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xl);
 }
 
-/* ===== CRUD Tables ===== */
 .crudHeader {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .tableWrap {
-  margin-top: 16px;
+  margin-top: var(--space-md);
 }
 
 .actionCell {
   text-align: right;
 }
 
-/* ===== CRUD Cards ===== */
 .cardItem {
-  margin-top: 12px;
+  margin-top: var(--space-md);
 }
 
 .cardContent {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
 }
 
 .cardActions {
   text-align: right;
 }
 
-/* ===== Skills ===== */
 .skillCategory {
-  margin-top: 20px;
+  margin-top: var(--space-xl);
 }
 
 .skillCategoryTitle {
-  font-size: 14px;
-  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
   text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-/* ===== Leads ===== */
 .leadMessage {
   max-width: 200px;
   overflow: hidden;
@@ -73,27 +71,26 @@
 
 .leadStatusSelect {
   width: auto;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   padding: 2px 6px;
 }
 
 .empty {
-  color: var(--text-muted);
-  margin-top: 20px;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xl);
 }
 
 .emptyTable {
-  color: var(--text-muted);
+  color: var(--color-text-muted);
 }
 
-/* ===== Config ===== */
 .configKey {
   font-weight: 600;
 }
 
 .configValue {
   font-family: monospace;
-  font-size: 13px;
+  font-size: var(--fs-sm);
 }
 
 .configTextarea {
@@ -101,10 +98,9 @@
   font-family: monospace;
 }
 
-/* ===== Metrics ===== */
 .metricsGrid {
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  margin-bottom: 32px;
+  margin-bottom: var(--space-2xl);
 }
 
 .metricCard {
@@ -112,84 +108,82 @@
 }
 
 .metricNumber {
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--color-primary);
 }
 
 .metricLabel {
-  font-size: 12px;
-  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
 }
 
 .metricsTable {
-  margin-bottom: 32px;
+  margin-bottom: var(--space-2xl);
 }
 
 .metricsSubtitle {
-  color: var(--text-muted);
-  font-size: 13px;
-  margin-bottom: 24px;
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+  margin-bottom: var(--space-xl);
 }
 
 .loadingText {
-  color: var(--text-muted);
+  color: var(--color-text-muted);
 }
 
-/* ===== Login ===== */
 .loginWrap {
   max-width: 400px;
   margin: 60px auto;
 }
 
 .loginSubtitle {
-  color: var(--text-secondary);
-  margin-bottom: 20px;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xl);
 }
 
-/* ===== Admin Layout ===== */
 .sidebarTitle {
-  font-size: 14px;
-  margin-bottom: 12px;
-  padding: 0 12px;
+  font-family: var(--font-display);
+  font-size: var(--fs-base);
+  margin-bottom: var(--space-md);
+  padding: 0 var(--space-md);
 }
 
 .backLink {
-  font-size: 12px;
-  margin-bottom: 8px;
+  font-size: var(--fs-xs);
+  margin-bottom: var(--space-xs);
 }
 
 .sidebarDivider {
-  margin: 12px 0;
+  margin: var(--space-md) 0;
   border: none;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--color-border);
 }
 
 .logoutLink {
   cursor: pointer;
 }
 
-/* Metric table specific */
-.redText { color: #e63946; }
-.greenText { color: #2ecc71; }
+.redText { color: oklch(55% 0.15 30); }
+.greenText { color: oklch(55% 0.12 145); }
 
 .cellMono {
   font-family: monospace;
-  font-size: 13px;
+  font-size: var(--fs-sm);
 }
 
 .cellMonoSmall {
   font-family: monospace;
-  font-size: 12px;
+  font-size: var(--fs-xs);
 }
 
 .cellSmall {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   white-space: nowrap;
 }
 
 .cellMedium {
-  font-size: 13px;
+  font-size: var(--fs-sm);
   max-width: 300px;
 }
 
@@ -202,8 +196,8 @@
   font-weight: 600;
 }
 
-/* ===== Experience/Education shared ===== */
 .cardTitle {
-  font-size: 16px;
-  margin-bottom: 4px;
+  font-family: var(--font-display);
+  font-size: var(--fs-base);
+  margin-bottom: var(--space-xs);
 }

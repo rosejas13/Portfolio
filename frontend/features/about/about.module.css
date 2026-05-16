@@ -1,67 +1,107 @@
 .section {
-  margin-bottom: 40px;
+  margin-bottom: var(--space-3xl);
+}
+
+.section:first-child {
+  margin-top: 0;
 }
 
 .bio {
-  color: #555;
-  line-height: 1.8;
-  max-width: 600px;
+  color: var(--color-text-secondary);
+  line-height: var(--lh-base);
+  max-width: 65ch;
+  font-size: var(--fs-lg);
 }
 
 .categoryBlock {
-  margin-bottom: 16px;
+  margin-bottom: var(--space-lg);
 }
 
 .categoryTitle {
-  font-size: 14px;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-family: var(--font-display);
+  font-size: var(--fs-base);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--space-sm);
 }
 
 .expItem {
-  margin-bottom: 24px;
-  padding-left: 20px;
-  border-left: 2px solid #e0e0e0;
+  position: relative;
+  margin-bottom: var(--space-xl);
+  padding-left: var(--space-xl);
+}
+
+.expItem::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.4em;
+  bottom: calc(-1 * var(--space-xl) + 0.4em);
+  width: 1px;
+  background: var(--color-border);
+}
+
+.expItem:last-child::before {
+  bottom: 0.4em;
+}
+
+.expItem::after {
+  content: '';
+  position: absolute;
+  left: -3px;
+  top: 0.4em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: 2px solid var(--color-bg);
 }
 
 .expHeader {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
 }
 
 .expRole {
-  font-size: 16px;
-  margin-bottom: 2px;
+  font-family: var(--font-display);
+  font-size: var(--fs-h5);
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
 }
 
 .expDate {
-  font-size: 13px;
-  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
   white-space: nowrap;
-  margin-left: 12px;
 }
 
 .expCompany {
-  color: var(--primary);
-  font-size: 14px;
-  margin-bottom: 8px;
+  color: var(--color-primary);
+  font-size: var(--fs-base);
+  font-weight: 500;
+  margin-bottom: var(--space-sm);
 }
 
 .expHighlights {
-  padding-left: 20px;
-  font-size: 14px;
-  color: #555;
-  line-height: 1.7;
+  padding-left: var(--space-lg);
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--lh-base);
+}
+
+.expHighlights li {
+  margin-bottom: var(--space-xs);
 }
 
 .eduCardText {
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
 }
 
 .eduCardDate {
-  font-size: 13px;
-  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
 }

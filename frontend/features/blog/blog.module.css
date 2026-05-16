@@ -1,43 +1,69 @@
 .subtitle {
-  color: var(--text-secondary);
-  margin-bottom: 24px;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xl);
+  font-size: var(--fs-lg);
 }
 
 .cardLink {
   text-decoration: none;
   color: inherit;
+  display: block;
+}
+
+.cardLink:hover h3 {
+  color: var(--color-primary);
+}
+
+.cardLink h3 {
+  transition: color var(--transition-fast);
 }
 
 .meta {
   display: flex;
-  gap: 8px;
-  margin-top: 8px;
-  font-size: 13px;
-  color: var(--text-muted);
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
 }
 
 .empty {
-  color: var(--text-muted);
+  color: var(--color-text-muted);
+  margin-top: var(--space-xl);
 }
 
 .backLink {
-  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.backLink:hover {
+  color: var(--color-primary);
+  text-decoration: none;
 }
 
 .pageTitle {
-  margin-top: 12px;
+  margin-top: var(--space-md);
 }
 
 .postMeta {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-bottom: 20px;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
 }
 
 .tagItem {
-  margin-left: 8px;
+  margin-left: var(--space-xs);
 }
 
 .content {
-  line-height: 1.8;
+  line-height: var(--lh-base);
+  max-width: 70ch;
 }

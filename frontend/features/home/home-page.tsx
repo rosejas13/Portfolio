@@ -1,6 +1,7 @@
 import { fetchJson } from '@/lib/api-server'
 import type { Post } from '@/lib/types'
 import Link from 'next/link'
+import { RoseIcon } from '@/lib/rose-icon'
 import styles from './home.module.css'
 
 export default async function HomePage() {
@@ -10,8 +11,11 @@ export default async function HomePage() {
   return (
     <div className="page">
       <div className="container">
-        <section className="hero">
-          <h1>{config.hero_tagline || 'Software Engineer'}</h1>
+        <section className={styles.hero}>
+          <div className={styles.roseMotif} aria-hidden="true">
+            <RoseIcon size={96} />
+          </div>
+          <h1 className={styles.heroTitle}>{config.hero_tagline || 'Software Engineer'}</h1>
           <p>{config.hero_bio || ''}</p>
           <div className={styles.heroActions}>
             <Link href="/projects" className="btn btn-primary">View Projects</Link>
