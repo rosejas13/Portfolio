@@ -159,7 +159,9 @@ nav {
   display: flex;
   align-items: center;
   gap: var(--space-lg);
-  padding: var(--space-xl) 0 var(--space-lg);
+}
+nav.container {
+  padding: var(--space-xl) var(--space-xl) var(--space-lg);
 }
 nav .logo {
   font-family: var(--font-display);
@@ -492,9 +494,9 @@ footer {
     padding: 0 var(--space-md);
   }
 
-  nav {
+  nav.container {
     gap: var(--space-sm);
-    padding: var(--space-lg) 0 var(--space-md);
+    padding: var(--space-lg) var(--space-md) var(--space-md);
   }
 
   .nav-links {
