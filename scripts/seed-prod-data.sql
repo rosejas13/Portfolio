@@ -1,3 +1,17 @@
+-- Ensure uuid columns exist (from migration 009_security.sql)
+ALTER TABLE internal.users ADD COLUMN IF NOT EXISTS uuid uuid NOT NULL DEFAULT gen_random_uuid();
+CREATE UNIQUE INDEX IF NOT EXISTS idx_users_uuid ON internal.users (uuid);
+ALTER TABLE api.projects ADD COLUMN IF NOT EXISTS uuid uuid NOT NULL DEFAULT gen_random_uuid();
+CREATE UNIQUE INDEX IF NOT EXISTS idx_projects_uuid ON api.projects (uuid);
+ALTER TABLE api.posts ADD COLUMN IF NOT EXISTS uuid uuid NOT NULL DEFAULT gen_random_uuid();
+CREATE UNIQUE INDEX IF NOT EXISTS idx_posts_uuid ON api.posts (uuid);
+ALTER TABLE api.leads ADD COLUMN IF NOT EXISTS uuid uuid NOT NULL DEFAULT gen_random_uuid();
+CREATE UNIQUE INDEX IF NOT EXISTS idx_leads_uuid ON api.leads (uuid);
+ALTER TABLE api.experiences ADD COLUMN IF NOT EXISTS uuid uuid NOT NULL DEFAULT gen_random_uuid();
+CREATE UNIQUE INDEX IF NOT EXISTS idx_experiences_uuid ON api.experiences (uuid);
+ALTER TABLE api.education ADD COLUMN IF NOT EXISTS uuid uuid NOT NULL DEFAULT gen_random_uuid();
+CREATE UNIQUE INDEX IF NOT EXISTS idx_education_uuid ON api.education (uuid);
+
 --
 -- PostgreSQL database dump
 --
