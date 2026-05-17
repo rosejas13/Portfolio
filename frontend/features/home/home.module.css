@@ -10,7 +10,7 @@
   top: 50%;
   transform: translateY(-50%);
   color: var(--color-primary);
-  opacity: 0.04;
+  opacity: 0.2;
   pointer-events: none;
   line-height: 0;
 }
