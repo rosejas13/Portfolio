@@ -1,7 +1,7 @@
 import { fetchJson } from '@/lib/api-server'
 import type { Post } from '@/lib/types'
 import Link from 'next/link'
-import { RoseIcon } from '@/lib/rose-icon'
+import { RoseMotif } from '@/lib/rose-motif'
 import styles from './home.module.css'
 
 export default async function HomePage() {
@@ -25,7 +25,7 @@ export default async function HomePage() {
             {config.social_email && <a href={`mailto:${config.social_email}`}>{config.social_email}</a>}
           </div>
           <div className={styles.roseMotif} aria-hidden="true">
-            <RoseIcon size={96} />
+            <RoseMotif size={96} />
           </div>
         </section>
 

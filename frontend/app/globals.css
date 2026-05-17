@@ -164,12 +164,16 @@ nav.container {
   padding: var(--space-xl) var(--space-xl) var(--space-lg);
 }
 nav .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   font-family: var(--font-display);
   font-size: var(--fs-lg);
   font-weight: 700;
   color: var(--color-text);
   margin-right: auto;
   letter-spacing: -0.01em;
+  text-decoration: none;
 }
 nav .logo:hover { text-decoration: none; opacity: 0.8; }
 
@@ -540,6 +544,10 @@ footer {
   font-size: var(--fs-sm);
   color: var(--color-text-muted);
   transition: border-color var(--transition-base);
+}
+
+footer svg {
+  vertical-align: middle;
 }
 
 /* ===== Status Messages ===== */

@@ -7,10 +7,10 @@ import { RoseIcon } from '@/lib/rose-icon'
 import './globals.css'
 
 export const metadata = {
-  title: 'Jasper Cordova | Portfolio',
+  title: 'Jasper Cordova | Software Engineer',
   description: 'Software Engineer — Full Stack · AWS · DevOps',
   icons: {
-    icon: '/favicon.svg',
+    icon: '/favicon.svg?v=2',
     shortcut: '/favicon.svg',
   },
 }

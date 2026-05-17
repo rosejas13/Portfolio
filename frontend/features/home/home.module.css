@@ -101,6 +101,7 @@
     transform: none;
     display: flex;
     justify-content: flex-end;
+    margin-right: -1.5rem;
     margin-top: var(--space-lg);
     opacity: 0.25;
   }
