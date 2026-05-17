@@ -22,8 +22,8 @@ export default async function ProjectDetail({ slug }: { slug: string }) {
         )}
         {project.description && <div className={styles.description}>{project.description}</div>}
         <div className={styles.actions}>
-          {project.live_url && <a href={project.live_url} className="btn btn-primary" target="_blank">Live site</a>}
-          {project.repo_url && <a href={project.repo_url} className="btn btn-secondary" target="_blank">Source code</a>}
+          {project.live_url && <a href={project.live_url} className="btn btn-primary" target="_blank" rel="noopener noreferrer">Live site</a>}
+          {project.repo_url && <a href={project.repo_url} className="btn btn-secondary" target="_blank" rel="noopener noreferrer">Source code</a>}
         </div>
       </div>
     </div>

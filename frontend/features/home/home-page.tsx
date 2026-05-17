@@ -19,11 +19,11 @@ export default async function HomePage() {
             <Link href="/about" className="btn btn-secondary">About Me</Link>
             <Link href="/contact" className="btn btn-secondary">Contact</Link>
           </div>
-          <div className={styles.socialLinks}>
-            {config.social_github && <a href={config.social_github} target="_blank">GitHub</a>}
-            {config.social_linkedin && <a href={config.social_linkedin} target="_blank">LinkedIn</a>}
+          <nav className={styles.socialLinks} aria-label="Social links">
+            {config.social_github && <a href={config.social_github} target="_blank" rel="noopener noreferrer">GitHub</a>}
+            {config.social_linkedin && <a href={config.social_linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>}
             {config.social_email && <a href={`mailto:${config.social_email}`}>{config.social_email}</a>}
-          </div>
+          </nav>
           <div className={styles.roseMotif} aria-hidden="true">
             <RoseMotif size={96} />
           </div>
@@ -36,8 +36,8 @@ export default async function HomePage() {
               <Link href="/blog" className="btn btn-secondary btn-sm">All posts</Link>
             </div>
             {posts.map(p => (
-              <Link key={p.id} href={`/blog/${p.slug}`} className={styles.postLink}>
-                <div className="card">
+              <Link key={p.id} href={`/blog/${p.slug}`} className={styles.postLink} aria-label={p.title}>
+                <div className="card" aria-hidden="true">
                   <h3>{p.title}</h3>
                   {p.excerpt && <p>{p.excerpt}</p>}
                   <div className={styles.postDate}>
