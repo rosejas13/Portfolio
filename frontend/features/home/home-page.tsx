@@ -14,9 +14,6 @@ export default async function HomePage() {
         <section className={styles.hero}>
           <h1 className={styles.heroTitle}>{config.hero_tagline || 'Software Engineer'}</h1>
           <p>{config.hero_bio || ''}</p>
-          <div className={styles.roseMotif} aria-hidden="true">
-            <RoseIcon size={96} />
-          </div>
           <div className={styles.heroActions}>
             <Link href="/projects" className="btn btn-primary">View Projects</Link>
             <Link href="/about" className="btn btn-secondary">About Me</Link>
@@ -26,6 +23,9 @@ export default async function HomePage() {
             {config.social_github && <a href={config.social_github} target="_blank">GitHub</a>}
             {config.social_linkedin && <a href={config.social_linkedin} target="_blank">LinkedIn</a>}
             {config.social_email && <a href={`mailto:${config.social_email}`}>{config.social_email}</a>}
+          </div>
+          <div className={styles.roseMotif} aria-hidden="true">
+            <RoseIcon size={96} />
           </div>
         </section>
 
