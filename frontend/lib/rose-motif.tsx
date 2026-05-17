@@ -14,6 +14,14 @@ export function RoseMotif({ size = 14, className }: { size?: number; className?:
       <g transform="translate(-0.06641901,1.9261514)">
         <g transform="matrix(2.45,0,0,2.45,-17.4,-7.6)">
           <defs>
+            <rect
+              id="rr1"
+              x="12.02"
+              y="10.990834"
+              width="0.01"
+              height="10.067573"
+              rx="0.005"
+            />
             <path
               id="rp6"
               d="M 11.916195,16.581542 C 12.015155,15.049667 11.53552,13.79531 10.495694,13.195998 9.455867,12.596684 8.2512521,12.544101 7.3671663,12.94781 c -0.2217872,1.021426 0.1428017,2.290294 1.0390839,3.141466 0.8638926,0.82604 2.1081528,0.961279 3.5099448,0.492266 z"
@@ -21,14 +29,6 @@ export function RoseMotif({ size = 14, className }: { size?: number; className?:
             <path
               id="rp7"
               d="m 12.132358,17.399214 c -0.09896,-1.531875 0.380675,-2.786232 1.420501,-3.385544 1.039827,-0.599314 2.244442,-0.651897 3.128528,-0.248188 0.221787,1.021426 -0.142802,2.290294 -1.039084,3.141466 -0.863893,0.82604 -2.108153,0.961279 -3.509945,0.492266 z"
-            />
-            <rect
-              id="rr1"
-              x="11.894638"
-              y="10.990834"
-              width="0.01"
-              height="10.067573"
-              rx="0.005"
             />
             <path
               id="rp1"
@@ -51,11 +51,11 @@ export function RoseMotif({ size = 14, className }: { size?: number; className?:
               d="m 7.2847603,4.6509614 c 2.0476328,-0.084246 3.7982317,0.7518054 4.5656487,2.1583415 0.767414,1.4065359 0.799978,3.0159393 0.233559,4.1832931 C 10.71378,11.256713 9.0316467,10.730489 7.9236013,9.5076732 6.848089,8.3288714 9.0574257,6.7162194 7.2847603,4.6509614 Z"
             />
 
-            {/* leaf masks */}
+            {/* leaf masks: cut out stem+border, mask each other, masked by bud */}
             <mask id="rm6" maskUnits="userSpaceOnUse">
               <rect x="-20" y="-20" width="80" height="80" fill="white" />
+              <use href="#rr1" stroke="black" strokeWidth="0.3" fill="black" />
               <use href="#rp7" stroke="black" strokeWidth="0.6" fill="black" />
-              <use href="#rr1" stroke="black" strokeWidth="0.6" fill="black" />
               <use href="#rp1" stroke="black" strokeWidth="0.6" fill="black" />
               <use href="#rp2" stroke="black" strokeWidth="0.6" fill="black" />
               <use href="#rp3" stroke="black" strokeWidth="0.6" fill="black" />
@@ -65,19 +65,7 @@ export function RoseMotif({ size = 14, className }: { size?: number; className?:
 
             <mask id="rm7" maskUnits="userSpaceOnUse">
               <rect x="-20" y="-20" width="80" height="80" fill="white" />
-              <use href="#rr1" stroke="black" strokeWidth="0.6" fill="black" />
-              <use href="#rp1" stroke="black" strokeWidth="0.6" fill="black" />
-              <use href="#rp2" stroke="black" strokeWidth="0.6" fill="black" />
-              <use href="#rp3" stroke="black" strokeWidth="0.6" fill="black" />
-              <use href="#rp4" stroke="black" strokeWidth="0.6" fill="black" />
-              <use href="#rp5" stroke="black" strokeWidth="0.6" fill="black" />
-            </mask>
-
-            {/* stem mask: hidden behind bud, gapped from leaves */}
-            <mask id="rm_stem" maskUnits="userSpaceOnUse">
-              <rect x="-20" y="-20" width="80" height="80" fill="white" />
-              <use href="#rp6" stroke="black" strokeWidth="0.9" fill="black" />
-              <use href="#rp7" stroke="black" strokeWidth="0.9" fill="black" />
+              <use href="#rr1" stroke="black" strokeWidth="0.3" fill="black" />
               <use href="#rp1" stroke="black" strokeWidth="0.6" fill="black" />
               <use href="#rp2" stroke="black" strokeWidth="0.6" fill="black" />
               <use href="#rp3" stroke="black" strokeWidth="0.6" fill="black" />
@@ -113,12 +101,12 @@ export function RoseMotif({ size = 14, className }: { size?: number; className?:
             </mask>
           </defs>
 
-          {/* leaves */}
+          {/* stem — solid, on bottom, no mask */}
+          <use href="#rr1" fill="currentColor" stroke="none" />
+
+          {/* leaves — cut around stem+border, masked by each other and bud */}
           <use href="#rp6" mask="url(#rm6)" />
           <use href="#rp7" mask="url(#rm7)" />
-
-          {/* stem */}
-          <use href="#rr1" mask="url(#rm_stem)" />
 
           {/* bud */}
           <use href="#rp1" mask="url(#rm1)" />
