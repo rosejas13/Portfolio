@@ -46,6 +46,17 @@
   --transition-slow: 400ms var(--ease-out);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 :root {
   --color-bg: oklch(98.5% 0.005 85);
   --color-surface: oklch(99% 0.003 85);
@@ -114,6 +125,23 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-md);
+  z-index: 1000;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-primary);
+  color: oklch(99% 0 0);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: var(--space-md);
+}
+
 /* ===== Typography ===== */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
@@ -139,6 +167,11 @@ a {
 a:hover {
   color: var(--color-primary-hover);
   text-decoration: underline;
+}
+a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 ::selection {
@@ -448,7 +481,7 @@ select {
 input:focus,
 textarea:focus,
 select:focus {
-  outline: none;
+  outline: 2px solid transparent;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px var(--color-primary-subtle);
   background: var(--color-surface);

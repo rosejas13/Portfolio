@@ -47,7 +47,7 @@ export function ThemeToggle() {
       className="theme-toggle-desktop"
       aria-label="Toggle dark mode"
     >
-      {isDark() ? '\u2600' : '\u263E'}
+      {isDark() ? <span aria-hidden="true">{'\u2600'}</span> : <span aria-hidden="true">{'\u263E'}</span>}
     </button>
   )
 }
@@ -56,13 +56,37 @@ export function MobileMenu() {
   const [open, setOpen] = useState(false)
   const [, setDrawerTick] = useState(0)
   const [mounted, setMounted] = useState(false)
+  const drawerRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
     if (!open) return
+    const drawer = drawerRef.current
+    const focusable = drawer?.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )
+    const first = focusable?.[0]
+    const last = focusable?.[focusable.length - 1]
+
+    first?.focus()
+
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') setOpen(false)
+      if (e.key === 'Escape') {
+        setOpen(false)
+        triggerRef.current?.focus()
+        return
+      }
+      if (e.key === 'Tab') {
+        if (e.shiftKey && document.activeElement === first && last) {
+          e.preventDefault()
+          last.focus()
+        } else if (!e.shiftKey && document.activeElement === last && first) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
     }
     document.addEventListener('keydown', onKeyDown)
     document.body.style.overflow = 'hidden'
@@ -83,6 +107,7 @@ export function MobileMenu() {
   return (
     <>
       <button
+        ref={triggerRef}
         onClick={() => setOpen(!open)}
         className="hamburger-trigger"
         aria-label={open ? 'Close menu' : 'Open menu'}
@@ -95,7 +120,7 @@ export function MobileMenu() {
 
       {open && <div className="mobile-drawer-backdrop" onClick={() => setOpen(false)} />}
 
-      <div className={`mobile-drawer${open ? ' open' : ''}`} aria-hidden={!open}>
+      <div ref={drawerRef} className={`mobile-drawer${open ? ' open' : ''}`} aria-hidden={!open}>
         {links.map(l => (
           <Link key={l.href} href={l.href} className="mobile-drawer-link" onClick={() => setOpen(false)}>
             {l.label}
@@ -105,7 +130,7 @@ export function MobileMenu() {
         <hr className="mobile-drawer-divider" />
 
         <button onClick={toggleTheme} className="mobile-drawer-theme-btn">
-          <span className="mobile-drawer-theme-icon">
+          <span className="mobile-drawer-theme-icon" aria-hidden="true">
             {isDark ? '\u2600' : '\u263E'}
           </span>
           {isDark ? 'Light mode' : 'Dark mode'}
