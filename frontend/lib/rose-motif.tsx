@@ -46,9 +46,9 @@ export function RoseMotif({ size = 14, className }: { size?: number; className?:
               id="rr1"
               x="11.894638"
               y="10.990834"
-              width="0.3"
+              width="0.15"
               height="10.067573"
-              rx="0.1"
+              rx="0.075"
             />
 
             <mask id="rm1" maskUnits="userSpaceOnUse">
