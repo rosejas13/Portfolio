@@ -36,7 +36,7 @@ as $$
 begin
   return current_setting('app.jwt_secret', true);
 exception when undefined_object then
-  return 'placeholder-jwt-secret-removed';
+  raise exception 'app.jwt_secret is not configured';
 end;
 $$;
 
@@ -125,5 +125,5 @@ as $$
   );
 $$;
 
-grant execute on function api.login_dev to anon;
+-- grant execute on function api.login_dev to anon;  -- disabled: dev-only, not for production
 grant execute on function api.whoami to anon, web_admin, web_collaborator, web_agent;

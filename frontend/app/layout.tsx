@@ -11,6 +11,7 @@ export const metadata = {
   description: 'Software Engineer — Full Stack · AWS · DevOps',
   icons: {
     icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
   },
 }
 
@@ -20,9 +21,12 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning className={`${sora.variable} ${onest.variable}`}>
       <head>
-        <script nonce={nonce} dangerouslySetInnerHTML={{
-          __html: `(function(){var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')})()`
-        }} />
+        <script
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')})()`,
+          }}
+        />
       </head>
       <body>
         <ClientShell>
@@ -30,7 +34,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           {children}
           <footer>
             <div className="container">
-              <RoseIcon size={12} /> &copy; {new Date().getFullYear()} — Built with Next.js + PostgREST + Supabase
+              <RoseIcon size={12} /> &copy; {new Date().getFullYear()} — Built with Next.js +
+              PostgREST + Supabase
             </div>
           </footer>
         </ClientShell>
