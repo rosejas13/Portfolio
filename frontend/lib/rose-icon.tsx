@@ -16,6 +16,7 @@ export function RoseIcon({
       stroke={color}
       strokeWidth="0.3"
       strokeLinejoin="round"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
       aria-hidden="true"
       className={className}
     >
@@ -45,36 +46,36 @@ export function RoseIcon({
 
             <mask id="rm1" maskUnits="userSpaceOnUse">
               <rect x="-20" y="-20" width="80" height="80" fill="white" />
-              <use href="#rp2" stroke="black" strokeWidth="0.6" fill="black" />
-              <use href="#rp3" stroke="black" strokeWidth="0.6" fill="black" />
-              <use href="#rp4" stroke="black" strokeWidth="0.6" fill="black" />
-              <use href="#rp5" stroke="black" strokeWidth="0.6" fill="black" />
+              <use xlinkHref="#rp2" stroke="black" strokeWidth="0.6" fill="black" />
+              <use xlinkHref="#rp3" stroke="black" strokeWidth="0.6" fill="black" />
+              <use xlinkHref="#rp4" stroke="black" strokeWidth="0.6" fill="black" />
+              <use xlinkHref="#rp5" stroke="black" strokeWidth="0.6" fill="black" />
             </mask>
 
             <mask id="rm2" maskUnits="userSpaceOnUse">
               <rect x="-20" y="-20" width="80" height="80" fill="white" />
-              <use href="#rp3" stroke="black" strokeWidth="0.6" fill="black" />
-              <use href="#rp4" stroke="black" strokeWidth="0.6" fill="black" />
-              <use href="#rp5" stroke="black" strokeWidth="0.6" fill="black" />
+              <use xlinkHref="#rp3" stroke="black" strokeWidth="0.6" fill="black" />
+              <use xlinkHref="#rp4" stroke="black" strokeWidth="0.6" fill="black" />
+              <use xlinkHref="#rp5" stroke="black" strokeWidth="0.6" fill="black" />
             </mask>
 
             <mask id="rm3" maskUnits="userSpaceOnUse">
               <rect x="-20" y="-20" width="80" height="80" fill="white" />
-              <use href="#rp4" stroke="black" strokeWidth="0.6" fill="black" />
-              <use href="#rp5" stroke="black" strokeWidth="0.6" fill="black" />
+              <use xlinkHref="#rp4" stroke="black" strokeWidth="0.6" fill="black" />
+              <use xlinkHref="#rp5" stroke="black" strokeWidth="0.6" fill="black" />
             </mask>
 
             <mask id="rm4" maskUnits="userSpaceOnUse">
               <rect x="-20" y="-20" width="80" height="80" fill="white" />
-              <use href="#rp5" stroke="black" strokeWidth="0.6" fill="black" />
+              <use xlinkHref="#rp5" stroke="black" strokeWidth="0.6" fill="black" />
             </mask>
           </defs>
 
-          <use href="#rp1" mask="url(#rm1)" />
-          <use href="#rp2" mask="url(#rm2)" />
-          <use href="#rp3" mask="url(#rm3)" />
-          <use href="#rp4" mask="url(#rm4)" />
-          <use href="#rp5" />
+          <use xlinkHref="#rp1" mask="url(#rm1)" />
+          <use xlinkHref="#rp2" mask="url(#rm2)" />
+          <use xlinkHref="#rp3" mask="url(#rm3)" />
+          <use xlinkHref="#rp4" mask="url(#rm4)" />
+          <use xlinkHref="#rp5" />
         </g>
       </g>
     </svg>

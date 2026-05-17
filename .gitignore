@@ -45,3 +45,4 @@ supabase/.temp/
 checklist.md
 .checklist/
 .vercel
+.env*.local
