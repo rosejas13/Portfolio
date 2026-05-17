@@ -29,9 +29,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         />
       </head>
       <body>
+        <a href="#main-content" className="skip-link">Skip to content</a>
         <ClientShell>
           <Nav />
-          {children}
+          <main id="main-content">{children}</main>
           <footer>
             <div className="container">
               <RoseIcon size={12} /> &copy; {new Date().getFullYear()} — Built with Next.js +
