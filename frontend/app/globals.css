@@ -79,6 +79,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   --color-bg: oklch(14% 0.008 220);
   --color-surface: oklch(19% 0.01 220);
   --color-surface-hover: oklch(22% 0.01 220);
@@ -119,6 +120,7 @@ body {
   font-size: var(--fs-base);
   line-height: var(--lh-base);
   color: var(--color-text);
+  color-scheme: light;
   background: var(--color-bg);
   transition: background var(--transition-base), color var(--transition-base);
   -webkit-font-smoothing: antialiased;
@@ -344,6 +346,7 @@ nav .logo:hover { text-decoration: none; opacity: 0.8; }
 .page {
   padding: var(--space-3xl) 0;
   min-height: calc(100vh - 10rem);
+  min-height: calc(100dvh - 10rem);
 }
 .page h1 {
   margin-bottom: var(--space-sm);
