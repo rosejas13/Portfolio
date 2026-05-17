@@ -12,11 +12,11 @@ export default async function HomePage() {
     <div className="page">
       <div className="container">
         <section className={styles.hero}>
+          <h1 className={styles.heroTitle}>{config.hero_tagline || 'Software Engineer'}</h1>
+          <p>{config.hero_bio || ''}</p>
           <div className={styles.roseMotif} aria-hidden="true">
             <RoseIcon size={96} />
           </div>
-          <h1 className={styles.heroTitle}>{config.hero_tagline || 'Software Engineer'}</h1>
-          <p>{config.hero_bio || ''}</p>
           <div className={styles.heroActions}>
             <Link href="/projects" className="btn btn-primary">View Projects</Link>
             <Link href="/about" className="btn btn-secondary">About Me</Link>
