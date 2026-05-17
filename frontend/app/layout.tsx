@@ -21,6 +21,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning className={`${sora.variable} ${onest.variable}`}>
       <head>
+        <meta name="color-scheme" content="light dark" />
         <script
           nonce={nonce}
           dangerouslySetInnerHTML={{
