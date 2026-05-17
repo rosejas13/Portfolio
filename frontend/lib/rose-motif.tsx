@@ -18,9 +18,9 @@ export function RoseMotif({ size = 14, className }: { size?: number; className?:
               id="rr1"
               x="12.02"
               y="10.990834"
-              width="0.01"
+              width="0.15"
               height="10.067573"
-              rx="0.005"
+              rx="0.075"
             />
             <path
               id="rp6"
