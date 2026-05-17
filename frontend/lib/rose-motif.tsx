@@ -16,7 +16,7 @@ export function RoseMotif({ size = 14, className }: { size?: number; className?:
           <defs>
             <rect
               id="rr1"
-              x="12.02"
+              x="11.87"
               y="10.990834"
               width="0.3"
               height="10.067573"
