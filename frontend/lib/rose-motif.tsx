@@ -18,9 +18,9 @@ export function RoseMotif({ size = 14, className }: { size?: number; className?:
               id="rr1"
               x="12.02"
               y="10.990834"
-              width="0.15"
+              width="0.3"
               height="10.067573"
-              rx="0.075"
+              rx="0.15"
             />
             <path
               id="rp6"
@@ -50,6 +50,16 @@ export function RoseMotif({ size = 14, className }: { size?: number; className?:
               id="rp5"
               d="m 7.2847603,4.6509614 c 2.0476328,-0.084246 3.7982317,0.7518054 4.5656487,2.1583415 0.767414,1.4065359 0.799978,3.0159393 0.233559,4.1832931 C 10.71378,11.256713 9.0316467,10.730489 7.9236013,9.5076732 6.848089,8.3288714 9.0574257,6.7162194 7.2847603,4.6509614 Z"
             />
+
+            {/* stem mask: hidden under bud */}
+            <mask id="rm_stem" maskUnits="userSpaceOnUse">
+              <rect x="-20" y="-20" width="80" height="80" fill="white" />
+              <use href="#rp1" stroke="black" strokeWidth="0.6" fill="black" />
+              <use href="#rp2" stroke="black" strokeWidth="0.6" fill="black" />
+              <use href="#rp3" stroke="black" strokeWidth="0.6" fill="black" />
+              <use href="#rp4" stroke="black" strokeWidth="0.6" fill="black" />
+              <use href="#rp5" stroke="black" strokeWidth="0.6" fill="black" />
+            </mask>
 
             {/* leaf masks: cut out stem+border, mask each other, masked by bud */}
             <mask id="rm6" maskUnits="userSpaceOnUse">
@@ -101,8 +111,8 @@ export function RoseMotif({ size = 14, className }: { size?: number; className?:
             </mask>
           </defs>
 
-          {/* stem — solid, on bottom, no mask */}
-          <use href="#rr1" fill="currentColor" stroke="none" />
+          {/* stem — solid, under bud, no mask from leaves */}
+          <use href="#rr1" mask="url(#rm_stem)" fill="currentColor" stroke="none" />
 
           {/* leaves — cut around stem+border, masked by each other and bud */}
           <use href="#rp6" mask="url(#rm6)" />
