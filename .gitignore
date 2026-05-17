@@ -18,6 +18,7 @@ frontend/.next/
 # Environment
 .env
 .env.local
+.env.vercel
 
 # Logs
 *.log
