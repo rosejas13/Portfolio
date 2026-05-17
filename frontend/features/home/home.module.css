@@ -95,7 +95,19 @@
   }
 
   .roseMotif {
-    display: none;
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--space-lg);
+    opacity: 0.25;
+  }
+
+  .roseMotif svg {
+    width: 72px;
+    height: 72px;
   }
 
   .heroActions {
