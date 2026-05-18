@@ -3,6 +3,10 @@ export async function POST(request: Request) {
   const BOT_TOKEN = process.env.SLACK_BOT_TOKEN
   const CHANNEL = process.env.SLACK_CHANNEL
 
+  if (!webhookUrl && (!BOT_TOKEN || !CHANNEL)) {
+    return Response.json({ error: 'No Slack configuration' }, { status: 501 })
+  }
+
   let body: { name?: string; email?: string; message?: string }
   try {
     body = await request.json()
@@ -50,7 +54,6 @@ export async function POST(request: Request) {
       })
       const json = await res.json() as { ok?: boolean; error?: string }
       if (json.ok) return Response.json({ ok: true })
-      console.error('Slack bot post failed:', json.error)
       return Response.json({ error: 'Slack notification failed' }, { status: 502 })
     } catch {
       return Response.json({ error: 'Slack unreachable' }, { status: 502 })
