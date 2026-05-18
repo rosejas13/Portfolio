@@ -1,6 +1,72 @@
+'use client'
+
+import { useState, useEffect, useRef, type FormEvent } from 'react'
+import Script from 'next/script'
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'
+
 export default function PrivacyPage() {
+  const [delEmail, setDelEmail] = useState('')
+  const [delStatus, setDelStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [delMsg, setDelMsg] = useState('')
+  const [delSubmitting, setDelSubmitting] = useState(false)
+  const [turnstileToken, setTurnstileToken] = useState('')
+  const turnstileId = useRef(`del-ts-${Math.random().toString(36).slice(2)}`)
+
+  useEffect(() => {
+    const onLoad = () => {
+      const el = document.getElementById(turnstileId.current)
+      if (window.turnstile && el) {
+        window.turnstile.render(`#${turnstileId.current}`, {
+          sitekey: TURNSTILE_SITE_KEY,
+          callback: (token: string) => setTurnstileToken(token),
+          'expired-callback': () => setTurnstileToken(''),
+          theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
+        })
+      }
+    }
+    if (window.turnstile) {
+      onLoad()
+    } else {
+      window.addEventListener('load-turnstile', onLoad as EventListener)
+      return () => window.removeEventListener('load-turnstile', onLoad as EventListener)
+    }
+  }, [])
+
+  async function handleDelete(e: FormEvent) {
+    e.preventDefault()
+    if (delSubmitting) return
+    if (!turnstileToken) { setDelStatus('error'); setDelMsg('Please complete the security check.'); return }
+    setDelSubmitting(true)
+    setDelStatus('idle')
+    try {
+      const res = await fetch('/api/leads/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: delEmail, turnstile: turnstileToken }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error((data as { error?: string }).error || 'Failed')
+      setDelStatus('success')
+      setDelMsg((data as { message?: string }).message || 'Deletion processed.')
+      setDelEmail('')
+      setTurnstileToken('')
+      if (window.turnstile) window.turnstile.reset(`#${turnstileId.current}`)
+    } catch (err: unknown) {
+      setDelStatus('error')
+      setDelMsg(err instanceof Error ? err.message : 'Failed')
+    } finally {
+      setDelSubmitting(false)
+    }
+  }
+
   return (
     <div className="page">
+      <Script
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstile"
+        strategy="afterInteractive"
+        onLoad={() => window.dispatchEvent(new Event('load-turnstile'))}
+      />
       <div className="container">
         <h1>Privacy Policy</h1>
         <p>This is a personal portfolio site. I do not sell, share, or monetize your data. No analytics, no tracking cookies, no advertising.</p>
@@ -49,6 +115,28 @@ export default function PrivacyPage() {
 
         <h2>International transfers</h2>
         <p>Data is stored in the United States. By using the contact form, you consent to this transfer. Supabase and Vercel maintain Standard Contractual Clauses for EU data transfers.</p>
+
+        <h2>Request data deletion</h2>
+        <p>Enter the email address you used on the contact form to delete all associated records:</p>
+        {delStatus === 'success' && <div className="success">{delMsg}</div>}
+        {delStatus === 'error' && <div className="error">{delMsg}</div>}
+        <form onSubmit={handleDelete} style={{ marginTop: '1rem' }}>
+          <div className="form-group">
+            <label htmlFor="del-email">Email address to delete</label>
+            <input
+              id="del-email"
+              type="email"
+              value={delEmail}
+              onChange={e => setDelEmail(e.target.value)}
+              required
+              placeholder="you@example.com"
+            />
+          </div>
+          <div id={turnstileId.current} style={{ marginBottom: '1rem' }} />
+          <button type="submit" className="btn btn-secondary" disabled={delSubmitting}>
+            {delSubmitting ? 'Deleting...' : 'Delete my data'}
+          </button>
+        </form>
 
         <h2>Changes</h2>
         <p>If this policy changes, I&apos;ll update this page.</p>

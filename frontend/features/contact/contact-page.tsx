@@ -11,12 +11,6 @@ function sanitize(input: string, maxLen: number): string {
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'
 
-declare global {
-  interface Window {
-    turnstile?: { render: (...args: unknown[]) => void; remove: (...args: unknown[]) => void; reset: (...args: unknown[]) => void }
-  }
-}
-
 export default function ContactPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
