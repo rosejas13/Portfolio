@@ -9,4 +9,5 @@ interface Window {
     remove: (selector: string) => void
     reset: (selector: string) => void
   }
+  onloadTurnstile?: () => void
 }
