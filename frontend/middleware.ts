@@ -68,7 +68,7 @@ export function middleware(request: NextRequest) {
   }
 
   if (pathname === '/api/leads' && request.method === 'POST') {
-    if (!checkRateLimit(`leads:${ip}`, 5, 60_000)) {
+    if (!checkRateLimit(`leads:${ip}`, 15, 60_000)) {
       return NextResponse.json({ error: 'Too many messages' }, { status: 429 })
     }
   }

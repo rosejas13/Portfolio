@@ -43,6 +43,16 @@ export default function ContactPage() {
       setName('')
       setEmail('')
       setMessage('')
+      // Fire-and-forget Slack notification
+      fetch('/api/slack/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: sanitize(name, 200),
+          email: sanitize(email, 320),
+          message: sanitize(message, 5000),
+        }),
+      }).catch(() => {})
     } catch (err: unknown) {
       setStatus('error')
       setError(err instanceof Error ? err.message : 'Failed to send. Please try again.')
