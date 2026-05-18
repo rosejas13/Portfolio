@@ -11,13 +11,13 @@ export default function PrivacyPage() {
   const [delMsg, setDelMsg] = useState('')
   const [delSubmitting, setDelSubmitting] = useState(false)
   const [turnstileToken, setTurnstileToken] = useState('')
-  const turnstileId = useRef(`del-ts-${Math.random().toString(36).slice(2)}`)
+  const turnstileId = useRef(`del-ts-${Math.random().toString(36).slice(2)}`).current
 
   useEffect(() => {
     const onLoad = () => {
-      const el = document.getElementById(turnstileId.current)
+      const el = document.getElementById(turnstileId)
       if (window.turnstile && el) {
-        window.turnstile.render(`#${turnstileId.current}`, {
+        window.turnstile.render(`#${turnstileId}`, {
           sitekey: TURNSTILE_SITE_KEY,
           callback: (token: string) => setTurnstileToken(token),
           'expired-callback': () => setTurnstileToken(''),
@@ -51,7 +51,7 @@ export default function PrivacyPage() {
       setDelMsg((data as { message?: string }).message || 'Deletion processed.')
       setDelEmail('')
       setTurnstileToken('')
-      if (window.turnstile) window.turnstile.reset(`#${turnstileId.current}`)
+      if (window.turnstile) window.turnstile.reset(`#${turnstileId}`)
     } catch (err: unknown) {
       setDelStatus('error')
       setDelMsg(err instanceof Error ? err.message : 'Failed')
@@ -132,7 +132,7 @@ export default function PrivacyPage() {
               placeholder="you@example.com"
             />
           </div>
-          <div id={turnstileId.current} style={{ marginBottom: '1rem' }} />
+          <div id={turnstileId} style={{ marginBottom: '1rem' }} />
           <button type="submit" className="btn btn-secondary" disabled={delSubmitting}>
             {delSubmitting ? 'Deleting...' : 'Delete my data'}
           </button>
