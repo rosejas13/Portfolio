@@ -103,26 +103,26 @@ export default function ContactPage() {
         <div className={styles.pageWrap}>
           <h1>Contact</h1>
           <p className={styles.subtitle}>Get in touch — I&apos;d love to hear from you.</p>
-          {status === 'success' && <div className="success">Thanks! I&apos;ll get back to you soon.</div>}
-          {status === 'error' && <div className="error">{error}</div>}
+          {status === 'success' && <div className="success" role="status">Thanks! I&apos;ll get back to you soon.</div>}
+          {status === 'error' && <div className="error" role="status" id="contact-error">{error}</div>}
           <form onSubmit={handleSubmit}>
             <div style={{ position: 'absolute', left: '-9999px', opacity: 0 }} aria-hidden="true">
-              <label>Leave this empty</label>
-              <input tabIndex={-1} autoComplete="off" value={botField} onChange={e => setBotField(e.target.value)} />
+              <label htmlFor="contact-bot">Leave this empty</label>
+              <input id="contact-bot" tabIndex={-1} autoComplete="off" value={botField} onChange={e => setBotField(e.target.value)} />
             </div>
             <div className="form-group">
-              <label>Name</label>
-              <input value={name} onChange={e => setName(e.target.value)} required maxLength={200} />
+              <label htmlFor="contact-name">Name</label>
+              <input id="contact-name" value={name} onChange={e => setName(e.target.value)} required maxLength={200} autoComplete="name" aria-describedby="contact-error" />
             </div>
             <div className="form-group">
-              <label>Email</label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} required maxLength={320} />
+              <label htmlFor="contact-email">Email</label>
+              <input id="contact-email" type="email" value={email} onChange={e => setEmail(e.target.value)} required maxLength={320} autoComplete="email" aria-describedby="contact-error" />
             </div>
             <div className="form-group">
-              <label>Message</label>
-              <textarea value={message} onChange={e => setMessage(e.target.value)} required maxLength={5000} />
+              <label htmlFor="contact-message">Message</label>
+              <textarea id="contact-message" value={message} onChange={e => setMessage(e.target.value)} required maxLength={5000} aria-describedby="contact-error" />
             </div>
-            <div id={turnstileId} style={{ marginBottom: '1rem' }} />
+            <div id={turnstileId} style={{ marginBottom: '1rem' }} aria-label="Security verification" />
             <button type="submit" className="btn btn-primary" disabled={submitting || !name.trim() || !email.trim() || !message.trim() || !turnstileToken}>
               {submitting ? 'Sending...' : 'Send'}
             </button>

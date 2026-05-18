@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json({ ok: true })
     response.cookies.set('token', jwt, {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       path: '/',
       maxAge: 60 * 60 * 24,

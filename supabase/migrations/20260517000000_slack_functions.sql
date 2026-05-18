@@ -25,7 +25,9 @@ as $$
   limit result_limit;
 $$;
 
-grant execute on function api.list_leads(text, int) to anon;
+-- Auth note: These functions use SECURITY DEFINER to allow API routes
+-- (which inject the anon or service key) to manage leads. In production,
+-- direct RPC access should be restricted at the reverse-proxy level.
 grant execute on function api.list_leads(text, int) to authenticated;
 
 -- Delete leads by email (for GDPR deletion requests)
@@ -44,7 +46,6 @@ begin
 end;
 $$;
 
-grant execute on function api.delete_leads_by_email(text) to anon;
 grant execute on function api.delete_leads_by_email(text) to authenticated;
 
 -- Update lead status (for Slack interactive buttons)
@@ -65,23 +66,5 @@ begin
 end;
 $$;
 
-grant execute on function api.update_lead_status(int, text) to anon;
 grant execute on function api.update_lead_status(int, text) to authenticated;
-
--- Delete a single lead by ID (for Slack interactive buttons)
-create or replace function api.delete_lead_by_id(lead_id int)
-returns void
-language plpgsql
-security definer
-set search_path = ''
-as $$
-begin
-  delete from api.leads where id = lead_id;
-  if not found then
-    raise exception 'Lead not found';
-  end if;
-end;
-$$;
-
-grant execute on function api.delete_lead_by_id(int) to anon;
 grant execute on function api.delete_lead_by_id(int) to authenticated;

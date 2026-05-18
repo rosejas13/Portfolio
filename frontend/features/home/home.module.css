@@ -34,18 +34,22 @@
 .socialLinks {
   margin-top: var(--space-lg);
   display: flex;
-  gap: var(--space-lg);
-  font-size: var(--fs-sm);
-  color: var(--color-text-muted);
+  gap: var(--space-md);
+  font-size: var(--fs-base);
+  color: var(--color-text-secondary);
 }
 
 .socialLinks a {
-  color: var(--color-text-muted);
-  transition: color var(--transition-fast);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background var(--transition-fast);
 }
 
 .socialLinks a:hover {
   color: var(--color-primary);
+  background: var(--color-primary-subtle);
 }
 
 .recentPosts {
