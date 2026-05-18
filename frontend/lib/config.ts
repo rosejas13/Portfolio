@@ -25,13 +25,17 @@ export function authHeaders(extra?: Record<string, string>): Record<string, stri
 export async function verifyTurnstile(token: string): Promise<boolean> {
   if (!TURNSTILE_SECRET || TURNSTILE_SECRET === TURNSTILE_TEST_SECRET) return true
   if (!token) return false
-  const formData = new FormData()
-  formData.append('secret', TURNSTILE_SECRET)
-  formData.append('response', token)
-  const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-    method: 'POST',
-    body: formData,
-  })
-  const json = await res.json() as { success?: boolean }
-  return !!json.success
+  try {
+    const formData = new FormData()
+    formData.append('secret', TURNSTILE_SECRET)
+    formData.append('response', token)
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: formData,
+    })
+    const json = await res.json() as { success?: boolean }
+    return !!json.success
+  } catch {
+    return true // fail-open: don't block users if Cloudflare API is unreachable
+  }
 }
