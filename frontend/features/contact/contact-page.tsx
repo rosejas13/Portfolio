@@ -1,11 +1,20 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useState, useEffect, useRef, type FormEvent } from 'react'
 import { csrfToken } from '@/lib/api-client'
+import Script from 'next/script'
 import styles from './contact.module.css'
 
 function sanitize(input: string, maxLen: number): string {
   return input.trim().slice(0, maxLen)
+}
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'
+
+declare global {
+  interface Window {
+    turnstile?: { render: (...args: unknown[]) => void; remove: (...args: unknown[]) => void; reset: (...args: unknown[]) => void }
+  }
 }
 
 export default function ContactPage() {
@@ -16,11 +25,35 @@ export default function ContactPage() {
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [botField, setBotField] = useState('')
+  const [turnstileToken, setTurnstileToken] = useState('')
+  const turnstileRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    const id = `ts-${Math.random().toString(36).slice(2)}`
+    turnstileRef.current = id
+    const onLoad = () => {
+      if (window.turnstile && document.getElementById(id)) {
+        window.turnstile.render(`#${id}`, {
+          sitekey: TURNSTILE_SITE_KEY,
+          callback: (token: string) => setTurnstileToken(token),
+          'expired-callback': () => setTurnstileToken(''),
+          theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
+        })
+      }
+    }
+    if (window.turnstile) {
+      onLoad()
+    } else {
+      window.addEventListener('load-turnstile', onLoad as EventListener)
+      return () => window.removeEventListener('load-turnstile', onLoad as EventListener)
+    }
+  }, [])
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     if (submitting) return
     if (botField) { setStatus('success'); setName(''); setEmail(''); setMessage(''); return }
+    if (!turnstileToken) { setStatus('error'); setError('Please complete the security check.'); return }
     setSubmitting(true)
     setStatus('idle')
     try {
@@ -35,17 +68,20 @@ export default function ContactPage() {
           name: sanitize(name, 200),
           email: sanitize(email, 320),
           message: sanitize(message, 5000),
+          turnstile: turnstileToken,
         }),
       })
       if (!res.ok) {
         if (res.status === 429) throw new Error('Too many messages. Please try again later.')
-        throw new Error('Failed to send. Please try again.')
+        const body = await res.json().catch(() => ({}))
+        throw new Error((body as { error?: string }).error || 'Failed to send. Please try again.')
       }
       setStatus('success')
       setName('')
       setEmail('')
       setMessage('')
-      // Fire-and-forget Slack notification
+      setTurnstileToken('')
+      if (window.turnstile && turnstileRef.current) window.turnstile.reset(`#${turnstileRef.current}`)
       fetch('/api/slack/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -58,6 +94,7 @@ export default function ContactPage() {
     } catch (err: unknown) {
       setStatus('error')
       setError(err instanceof Error ? err.message : 'Failed to send. Please try again.')
+      if (window.turnstile && turnstileRef.current) window.turnstile.reset(`#${turnstileRef.current}`)
     } finally {
       setSubmitting(false)
     }
@@ -65,6 +102,11 @@ export default function ContactPage() {
 
   return (
     <div className="page">
+      <Script
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstile"
+        strategy="afterInteractive"
+        onLoad={() => window.dispatchEvent(new Event('load-turnstile'))}
+      />
       <div className="container">
         <div className={styles.pageWrap}>
           <h1>Contact</h1>
@@ -88,6 +130,7 @@ export default function ContactPage() {
               <label>Message</label>
               <textarea value={message} onChange={e => setMessage(e.target.value)} required maxLength={5000} />
             </div>
+            <div id={turnstileRef.current || 'turnstile'} style={{ marginBottom: '1rem' }} />
             <button type="submit" className="btn btn-primary" disabled={submitting}>
               {submitting ? 'Sending...' : 'Send'}
             </button>

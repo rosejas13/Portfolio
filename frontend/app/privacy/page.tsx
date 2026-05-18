@@ -3,19 +3,50 @@ export default function PrivacyPage() {
     <div className="page">
       <div className="container">
         <h1>Privacy Policy</h1>
-        <p>This is a personal portfolio site. I do not sell, share, or monetize your data.</p>
+        <p>This is a personal portfolio site. I do not sell, share, or monetize your data. No analytics, no tracking cookies, no advertising.</p>
 
         <h2>What data is collected</h2>
-        <p>The contact form collects the name, email, and message you provide. This data is stored securely and used only to respond to your inquiry.</p>
+        <p>The contact form collects your name, email address, and message. Submitting the form is voluntary — you choose what to share.</p>
 
-        <h2>Third-party services</h2>
-        <p>This site is hosted on Vercel and uses Supabase for data storage. Neither service receives your data for their own purposes. The site does not use analytics, tracking cookies, or advertising.</p>
+        <h2>Legal basis (GDPR)</h2>
+        <p>Processing is based on legitimate interest: you are contacting me, and I need your email to respond. No automated decisions or profiling take place.</p>
+
+        <h2>How data is used</h2>
+        <p>Your contact information is used solely to respond to your inquiry. It is never sold, shared with third parties for marketing, or used for any purpose beyond our conversation.</p>
+
+        <h2>Data storage</h2>
+        <p>Contact form submissions are stored in a Supabase database hosted in the United States. Supabase acts as a data processor and does not access your data for its own purposes.</p>
+
+        <h2>Retention</h2>
+        <p>Contact form data is retained indefinitely unless you request deletion. I keep it to maintain context for ongoing conversations and professional relationships.</p>
 
         <h2>Your rights</h2>
-        <p>You can request deletion of your contact form data at any time by emailing me. I will remove your information within 30 days.</p>
+        <p>Under GDPR and CCPA, you have the right to:</p>
+        <ul>
+          <li>Access the data I hold about you</li>
+          <li>Request correction of inaccurate data</li>
+          <li>Request deletion of your data</li>
+          <li>Withdraw consent (for any consent-based processing)</li>
+        </ul>
+        <p>To exercise these rights, email me at the address on the Contact page. I will respond within 30 days.</p>
 
-        <p className="text-sm" style={{ marginTop: '3rem', color: 'var(--color-text-muted)' }}>
-          Last updated: May 2026
+        <h2>CCPA notice</h2>
+        <p>I do not sell personal information. I do not use your data for targeted advertising. I collect only the categories of information you voluntarily provide (name, email, message content).</p>
+
+        <h2>Third-party services</h2>
+        <p>This site uses Vercel (hosting) and Supabase (database). Cloudflare provides DNS and security. Cloudflare Turnstile provides bot protection on the contact form — it does not track you across sites.</p>
+
+        <h2>Children&apos;s privacy</h2>
+        <p>This site is not directed at children under 13, and I do not knowingly collect data from them.</p>
+
+        <h2>International transfers</h2>
+        <p>Data is stored in the United States. By using the contact form, you consent to this transfer. Supabase and Vercel maintain Standard Contractual Clauses for EU data transfers.</p>
+
+        <h2>Changes</h2>
+        <p>If this policy changes, I&apos;ll update this page.</p>
+
+        <p style={{ marginTop: '3rem', color: 'var(--color-text-muted)', fontSize: 'var(--fs-sm)' }}>
+          Last updated: May 2026 &middot; Questions? Use the contact form.
         </p>
       </div>
     </div>
