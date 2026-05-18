@@ -15,14 +15,7 @@ export function RoseMotif({ size = 14, className }: { size?: number; className?:
       <g transform="translate(-0.06641901,1.9261514)">
         <g transform="matrix(2.45,0,0,2.45,-17.4,-7.6)">
           <defs>
-            <rect
-              id="rr1"
-              x="11.87"
-              y="10.990834"
-              width="0.3"
-              height="10.067573"
-              rx="0.15"
-            />
+            <rect id="rr1" x="11.87" y="10.990834" width="0.3" height="10.067573" rx="0.15" />
             <path
               id="rp6"
               d="M 11.916195,16.581542 C 12.015155,15.049667 11.53552,13.79531 10.495694,13.195998 9.455867,12.596684 8.2512521,12.544101 7.3671663,12.94781 c -0.2217872,1.021426 0.1428017,2.290294 1.0390839,3.141466 0.8638926,0.82604 2.1081528,0.961279 3.5099448,0.492266 z"
@@ -113,7 +106,13 @@ export function RoseMotif({ size = 14, className }: { size?: number; className?:
           </defs>
 
           {/* stem — solid, under bud, no mask from leaves */}
-          <use href="#rr1" xlinkHref="#rr1" mask="url(#rm_stem)" fill="currentColor" stroke="none" />
+          <use
+            href="#rr1"
+            xlinkHref="#rr1"
+            mask="url(#rm_stem)"
+            fill="currentColor"
+            stroke="none"
+          />
 
           {/* leaves — cut around stem+border, masked by each other and bud */}
           <use href="#rp6" xlinkHref="#rp6" mask="url(#rm6)" />
