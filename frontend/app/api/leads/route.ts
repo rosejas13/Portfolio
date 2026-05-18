@@ -48,6 +48,8 @@ export async function POST(request: Request) {
     })
 
     if (!res.ok) {
+      const errText = await res.text().catch(() => 'unknown')
+      console.error('PostgREST leads insert failed', { status: res.status, body: errText.slice(0, 500) })
       return Response.json({ error: 'Failed to send. Please try again.' }, { status: 502 })
     }
 
