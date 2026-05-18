@@ -26,25 +26,20 @@ export async function POST(request: Request) {
       const res = await fetch('https://slack.com/api/chat.postMessage', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json; charset=utf-8',
           Authorization: `Bearer ${BOT_TOKEN}`,
         },
         body: JSON.stringify({
           channel: CHANNEL,
           text,
-          blocks: [{
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: `📬 *New contact from portfolio*\n*Name:* ${name || '—'}\n*Email:* ${email ? `<mailto:${email}|${email}>` : '—'}\n\n*Message:*\n${(message || '').slice(0, 1500)}`,
-            },
-          }],
         }),
       })
       const json = await res.json() as { ok?: boolean; error?: string }
       if (json.ok) return Response.json({ ok: true })
-      console.error('Slack bot post failed:', json.error)
-    } catch { /* fall through to webhook */ }
+      return Response.json({ error: `Slack: ${json.error || 'unknown'}` }, { status: 502 })
+    } catch (err) {
+      return Response.json({ error: `Slack unreachable: ${err instanceof Error ? err.message : 'unknown'}` }, { status: 502 })
+    }
   }
 
   if (webhookUrl) {
