@@ -1,6 +1,7 @@
 export async function POST(request: Request) {
   const webhookUrl = process.env.SLACK_WEBHOOK_URL
   const BOT_TOKEN = process.env.SLACK_BOT_TOKEN
+  const CHANNEL = process.env.SLACK_CHANNEL
 
   let body: { name?: string; email?: string; message?: string }
   try {
@@ -14,46 +15,47 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Empty payload' }, { status: 400 })
   }
 
-  const text = `*New contact from portfolio*`
-  const blocks = [
-    {
-      type: 'section' as const,
-      text: {
-        type: 'mrkdwn' as const,
-        text: `📬 *New contact from portfolio*\n*Name:* ${name || '—'}\n*Email:* ${email ? `<mailto:${email}|${email}>` : '—'}\n\n*Message:*\n${(message || '').slice(0, 1500)}`,
-      },
-    },
-    {
-      type: 'context' as const,
-      elements: [{ type: 'mrkdwn' as const, text: 'Use `/leads` to manage contacts.' }],
-    },
-  ]
+  const text = `📬 *New contact from portfolio*\n*Name:* ${name || '—'}\n*Email:* ${email || '—'}\n*Message:* ${(message || '').slice(0, 1500)}`
 
-  // Try bot token first for rich messages, fall back to webhook
-  if (BOT_TOKEN) {
+  if (webhookUrl) {
     try {
-      await fetch('https://slack.com/api/chat.postMessage', {
+      const res = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      })
+      if (res.ok) return Response.json({ ok: true })
+    } catch { /* continue to bot token fallback */ }
+  }
+
+  if (BOT_TOKEN && CHANNEL) {
+    try {
+      const res = await fetch('https://slack.com/api/chat.postMessage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${BOT_TOKEN}`,
         },
-        body: JSON.stringify({ text, blocks }),
+        body: JSON.stringify({
+          channel: CHANNEL,
+          text,
+          blocks: [{
+            type: 'section',
+            text: {
+              type: 'mrkdwn',
+              text: `📬 *New contact from portfolio*\n*Name:* ${name || '—'}\n*Email:* ${email ? `<mailto:${email}|${email}>` : '—'}\n\n*Message:*\n${(message || '').slice(0, 1500)}`,
+            },
+          }],
+        }),
       })
-      return Response.json({ ok: true })
-    } catch { /* fall through */ }
+      const json = await res.json() as { ok?: boolean; error?: string }
+      if (json.ok) return Response.json({ ok: true })
+      console.error('Slack bot post failed:', json.error)
+      return Response.json({ error: 'Slack notification failed' }, { status: 502 })
+    } catch {
+      return Response.json({ error: 'Slack unreachable' }, { status: 502 })
+    }
   }
 
-  if (webhookUrl) {
-    try {
-      await fetch(webhookUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: `${text}\n${name} (${email}): ${(message || '').slice(0, 300)}` }),
-      })
-      return Response.json({ ok: true })
-    } catch { /* fire and forget */ }
-  }
-
-  return Response.json({ error: 'Not configured' }, { status: 501 })
+  return Response.json({ error: 'No Slack configuration' }, { status: 501 })
 }
