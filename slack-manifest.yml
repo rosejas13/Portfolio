@@ -1,0 +1,28 @@
+display_information:
+  name: Portfolio Bot
+  description: Lead management for jcrose.dev
+  background_color: "#149086"
+features:
+  slash_commands:
+    - command: /leads
+      url: https://jcrose.dev/api/slack/commands
+      description: List recent contact form leads
+      usage_hint: "[status] [limit]  —  e.g. /leads new 10"
+      should_escape: false
+  bot_user:
+    display_name: Portfolio Bot
+oauth_config:
+  scopes:
+    bot:
+      - commands
+      - chat:write
+      - chat:write.public
+      - channels:history
+      - channels:read
+settings:
+  interactivity:
+    is_enabled: true
+    request_url: https://jcrose.dev/api/slack/interactions
+  org_deploy_enabled: false
+  socket_mode_enabled: false
+  token_rotation_enabled: false
