@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
       destination: '/api/slack/:path*',
     },
     {
+      source: '/api/leads',
+      destination: '/api/leads',
+    },
+    {
       source: '/api/:path*',
       destination: `${API_URL}/:path*`,
     },
