@@ -123,7 +123,7 @@ export default function ContactPage() {
               <textarea value={message} onChange={e => setMessage(e.target.value)} required maxLength={5000} />
             </div>
             <div id={turnstileId} style={{ marginBottom: '1rem' }} />
-            <button type="submit" className="btn btn-primary" disabled={submitting}>
+            <button type="submit" className="btn btn-primary" disabled={submitting || !name.trim() || !email.trim() || !message.trim() || !turnstileToken}>
               {submitting ? 'Sending...' : 'Send'}
             </button>
           </form>
