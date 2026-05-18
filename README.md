@@ -85,5 +85,5 @@ all-in-pg/
 
 | Environment | URL | Notes |
 |---|---|---|
-| Local dev | `http://localhost:5173` | `next dev`, Docker backend |
+| Local dev | `http://localhost:5173` | `npm run dev`, Docker backend |
 | Production | `https://jcrose.dev` | Vercel + Supabase |
