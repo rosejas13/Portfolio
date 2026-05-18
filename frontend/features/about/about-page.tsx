@@ -68,7 +68,9 @@ export default async function AboutPage() {
                 {[e.degree, e.field].filter(Boolean).length > 0 && (
                   <p className={styles.eduCardText}>{[e.degree, e.field].filter(Boolean).join(' in ')}</p>
                 )}
-                <p className={styles.eduCardDate}>{e.start_date || 'Unknown'} — {e.end_date || 'Present'}</p>
+                {e.start_date && (
+                  <p className={styles.eduCardDate}>{e.start_date} — {e.end_date || 'Present'}</p>
+                )}
               </div>
             ))}
           </section>
