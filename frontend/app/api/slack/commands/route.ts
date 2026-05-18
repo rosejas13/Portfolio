@@ -103,7 +103,7 @@ export async function POST(request: Request) {
         },
       ],
     })
-  } catch (err) {
+  } catch {
     return Response.json({
       response_type: 'ephemeral',
       text: 'Failed to fetch leads. Please try again.',

@@ -20,14 +20,12 @@ export default function ContactPage() {
   const [submitting, setSubmitting] = useState(false)
   const [botField, setBotField] = useState('')
   const [turnstileToken, setTurnstileToken] = useState('')
-  const turnstileRef = useRef<string | null>(null)
+  const turnstileId = useRef(`contact-ts-${Math.random().toString(36).slice(2)}`).current
 
   useEffect(() => {
-    const id = `ts-${Math.random().toString(36).slice(2)}`
-    turnstileRef.current = id
     const onLoad = () => {
-      if (window.turnstile && document.getElementById(id)) {
-        window.turnstile.render(`#${id}`, {
+      if (window.turnstile && document.getElementById(turnstileId)) {
+        window.turnstile.render(`#${turnstileId}`, {
           sitekey: TURNSTILE_SITE_KEY,
           callback: (token: string) => setTurnstileToken(token),
           'expired-callback': () => setTurnstileToken(''),
@@ -75,7 +73,7 @@ export default function ContactPage() {
       setEmail('')
       setMessage('')
       setTurnstileToken('')
-      if (window.turnstile && turnstileRef.current) window.turnstile.reset(`#${turnstileRef.current}`)
+      if (window.turnstile) window.turnstile.reset(`#${turnstileId}`)
       fetch('/api/slack/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -88,7 +86,7 @@ export default function ContactPage() {
     } catch (err: unknown) {
       setStatus('error')
       setError(err instanceof Error ? err.message : 'Failed to send. Please try again.')
-      if (window.turnstile && turnstileRef.current) window.turnstile.reset(`#${turnstileRef.current}`)
+      if (window.turnstile) window.turnstile.reset(`#${turnstileId}`)
     } finally {
       setSubmitting(false)
     }
@@ -124,7 +122,7 @@ export default function ContactPage() {
               <label>Message</label>
               <textarea value={message} onChange={e => setMessage(e.target.value)} required maxLength={5000} />
             </div>
-            <div id={turnstileRef.current || 'turnstile'} style={{ marginBottom: '1rem' }} />
+            <div id={turnstileId} style={{ marginBottom: '1rem' }} />
             <button type="submit" className="btn btn-primary" disabled={submitting}>
               {submitting ? 'Sending...' : 'Send'}
             </button>
