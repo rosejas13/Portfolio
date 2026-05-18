@@ -45,12 +45,16 @@ export default function ContactPage() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
+    e.stopPropagation()
     if (submitting) return
     if (botField) { setStatus('success'); setName(''); setEmail(''); setMessage(''); return }
     if (!turnstileToken) { setStatus('error'); setError('Please complete the security check.'); return }
     setSubmitting(true)
     setStatus('idle')
     try {
+      const sanitizedName = sanitize(name, 200)
+      const sanitizedEmail = sanitize(email, 320)
+      const sanitizedMessage = sanitize(message, 5000)
       const res = await fetch('/api/leads', {
         method: 'POST',
         headers: {
@@ -59,9 +63,9 @@ export default function ContactPage() {
           'X-CSRF-Token': csrfToken(),
         },
         body: JSON.stringify({
-          name: sanitize(name, 200),
-          email: sanitize(email, 320),
-          message: sanitize(message, 5000),
+          name: sanitizedName,
+          email: sanitizedEmail,
+          message: sanitizedMessage,
           turnstile: turnstileToken,
         }),
       })
@@ -76,14 +80,11 @@ export default function ContactPage() {
       setMessage('')
       setTurnstileToken('')
       if (window.turnstile) window.turnstile.reset(`#${turnstileId}`)
+      // Fire-and-forget Slack notification
       fetch('/api/slack/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: sanitize(name, 200),
-          email: sanitize(email, 320),
-          message: sanitize(message, 5000),
-        }),
+        body: JSON.stringify({ name: sanitizedName, email: sanitizedEmail, message: sanitizedMessage }),
       }).catch(() => {})
     } catch (err: unknown) {
       setStatus('error')
