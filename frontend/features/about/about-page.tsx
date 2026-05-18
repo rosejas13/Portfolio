@@ -65,8 +65,10 @@ export default async function AboutPage() {
             {education.map(e => (
               <div key={e.id} className="card">
                 <h3>{e.school}</h3>
-                <p className={styles.eduCardText}>{[e.degree, e.field].filter(Boolean).join(' in ')}</p>
-                <p className={styles.eduCardDate}>{e.start_date} — {e.end_date || 'Present'}</p>
+                {[e.degree, e.field].filter(Boolean).length > 0 && (
+                  <p className={styles.eduCardText}>{[e.degree, e.field].filter(Boolean).join(' in ')}</p>
+                )}
+                <p className={styles.eduCardDate}>{e.start_date || 'Unknown'} — {e.end_date || 'Present'}</p>
               </div>
             ))}
           </section>
