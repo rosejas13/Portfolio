@@ -151,11 +151,12 @@ export function middleware(request: NextRequest) {
       'Content-Security-Policy',
       [
         `default-src 'self'`,
-        `script-src 'self' 'nonce-${nonce}'`,
+        `script-src 'self' 'nonce-${nonce}' https://challenges.cloudflare.com`,
         `style-src 'self' 'unsafe-inline'`,
         `img-src 'self' data:`,
         `font-src 'self'`,
-        `connect-src 'self' https://fhantuyujrusrtrvctzw.supabase.co`,
+        `connect-src 'self' https://fhantuyujrusrtrvctzw.supabase.co https://challenges.cloudflare.com`,
+        `frame-src https://challenges.cloudflare.com`,
       ].join('; ')
     )
     response.headers.set('X-Frame-Options', 'DENY')
@@ -163,7 +164,7 @@ export function middleware(request: NextRequest) {
     response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
     response.headers.set(
       'Permissions-Policy',
-      'camera=(), microphone=(), geolocation=(), interest-cohort=()'
+      'camera=(), microphone=(), geolocation=()'
     )
   }
 
