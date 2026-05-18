@@ -15,10 +15,12 @@ export default function ContactPage() {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [botField, setBotField] = useState('')
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     if (submitting) return
+    if (botField) { setStatus('success'); setName(''); setEmail(''); setMessage(''); return }
     setSubmitting(true)
     setStatus('idle')
     try {
@@ -70,6 +72,10 @@ export default function ContactPage() {
           {status === 'success' && <div className="success">Thanks! I&apos;ll get back to you soon.</div>}
           {status === 'error' && <div className="error">{error}</div>}
           <form onSubmit={handleSubmit}>
+            <div style={{ position: 'absolute', left: '-9999px', opacity: 0 }} aria-hidden="true">
+              <label>Leave this empty</label>
+              <input tabIndex={-1} autoComplete="off" value={botField} onChange={e => setBotField(e.target.value)} />
+            </div>
             <div className="form-group">
               <label>Name</label>
               <input value={name} onChange={e => setName(e.target.value)} required maxLength={200} />
