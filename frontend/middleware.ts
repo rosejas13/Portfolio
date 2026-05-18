@@ -63,27 +63,27 @@ export function middleware(request: NextRequest) {
   // Rate limiting
   if (pathname === '/api/rpc/login_dev') {
     if (!checkRateLimit(`login:${ip}`, 10, 60_000)) {
-      return NextResponse.json({ error: 'Too many login attempts' }, { status: 429 })
+      return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
     }
   }
 
   if (pathname === '/api/leads' && request.method === 'POST') {
     if (!checkRateLimit(`leads:${ip}`, 15, 60_000)) {
-      return NextResponse.json({ error: 'Too many messages' }, { status: 429 })
+      return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
     }
   }
 
   if (ADMIN_MUTATIONS.some(p => pathname.startsWith(p))) {
     if (request.method === 'POST' || request.method === 'PATCH' || request.method === 'DELETE') {
       if (!checkRateLimit(`admin:${ip}`, 30, 60_000)) {
-        return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+        return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
       }
     }
   }
 
   if (pathname.startsWith('/api/')) {
     if (!checkRateLimit(`global:${ip}`, 100, 60_000)) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+      return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
     }
   }
 
@@ -155,7 +155,7 @@ export function middleware(request: NextRequest) {
         `style-src 'self' 'unsafe-inline'`,
         `img-src 'self' data:`,
         `font-src 'self'`,
-        `connect-src 'self' https://fhantuyujrusrtrvctzw.supabase.co https://challenges.cloudflare.com`,
+        `connect-src 'self' ${process.env.NEXT_PUBLIC_SUPABASE_URL || ''} https://challenges.cloudflare.com`,
         `frame-src https://challenges.cloudflare.com`,
       ].join('; ')
     )

@@ -62,9 +62,9 @@
   --color-surface: oklch(99% 0.003 85);
   --color-surface-hover: oklch(97% 0.005 85);
   --color-text: oklch(20% 0.01 85);
-  --color-text-secondary: oklch(50% 0.01 85);
-  --color-text-muted: oklch(65% 0.008 85);
-  --color-border: oklch(88% 0.008 85);
+  --color-text-secondary: oklch(45% 0.01 85);
+  --color-text-muted: oklch(55% 0.008 85);
+  --color-border: oklch(78% 0.008 85);
   --color-border-strong: oklch(80% 0.01 85);
   --color-primary: oklch(55% 0.13 195);
   --color-primary-hover: oklch(50% 0.14 195);
@@ -174,6 +174,11 @@ a:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
   border-radius: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 ::selection {
@@ -421,7 +426,7 @@ button:active,
 }
 .btn-primary {
   background: var(--color-primary);
-  color: oklch(99% 0 0);
+  color: var(--color-text);
 }
 .btn-primary:hover {
   background: var(--color-primary-hover);
@@ -437,7 +442,7 @@ button:active,
 }
 .btn-accent {
   background: var(--color-accent);
-  color: oklch(99% 0 0);
+  color: var(--color-text);
 }
 .btn-accent:hover {
   background: var(--color-accent-hover);

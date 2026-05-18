@@ -118,8 +118,8 @@ export default function PrivacyPage() {
 
         <h2>Request data deletion</h2>
         <p>Enter the email address you used on the contact form to delete all associated records:</p>
-        {delStatus === 'success' && <div className="success">{delMsg}</div>}
-        {delStatus === 'error' && <div className="error">{delMsg}</div>}
+        {delStatus === 'success' && <div className="success" role="status">{delMsg}</div>}
+        {delStatus === 'error' && <div className="error" role="status" id="del-error">{delMsg}</div>}
         <form onSubmit={handleDelete} style={{ marginTop: '1rem' }}>
           <div className="form-group">
             <label htmlFor="del-email">Email address to delete</label>
@@ -129,10 +129,12 @@ export default function PrivacyPage() {
               value={delEmail}
               onChange={e => setDelEmail(e.target.value)}
               required
+              autoComplete="email"
+              aria-describedby="del-error"
               placeholder="you@example.com"
             />
           </div>
-          <div id={turnstileId} style={{ marginBottom: '1rem' }} />
+          <div id={turnstileId} style={{ marginBottom: '1rem' }} aria-label="Security verification" />
           <button type="submit" className="btn btn-secondary" disabled={delSubmitting}>
             {delSubmitting ? 'Deleting...' : 'Delete my data'}
           </button>
