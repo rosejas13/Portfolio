@@ -38,8 +38,8 @@ GitHub Actions
        Supabase + Vercel
            │
            ▼
-    Verify on staging URL       Deploy to PROD
-    (all-in-pg.vercel.app)      (jcrose.dev)
+    PR reviewed              Deploy to PROD
+    (master)                 (jcrose.dev)
            │
            ▼
      Manual verify

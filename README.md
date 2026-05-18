@@ -53,7 +53,6 @@ Browser ─→ Next.js 15 (SSR + ISR, port 5173 dev / Vercel prod)
 ## Directory Structure
 
 ```
-all-in-pg/
 ├── frontend/               # Next.js 15 App Router
 │   ├── app/                # Routes, layout, globals.css, middleware
 │   ├── features/           # Feature modules (home, about, blog, admin, etc.)
