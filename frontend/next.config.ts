@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
       destination: '/api/leads',
     },
     {
+      source: '/api/leads/delete',
+      destination: '/api/leads/delete',
+    },
+    {
       source: '/api/:path*',
       destination: `${API_URL}/:path*`,
     },
