@@ -21,20 +21,28 @@ export default function PrivacyPage() {
         <p>Contact form data is retained indefinitely unless you request deletion. I keep it to maintain context for ongoing conversations and professional relationships.</p>
 
         <h2>Your rights</h2>
-        <p>Under GDPR and CCPA, you have the right to:</p>
+        <p>Under GDPR (EU/UK residents) and CCPA (California residents), you have the right to:</p>
         <ul>
-          <li>Access the data I hold about you</li>
+          <li>Know what personal data I hold about you</li>
           <li>Request correction of inaccurate data</li>
-          <li>Request deletion of your data</li>
-          <li>Withdraw consent (for any consent-based processing)</li>
+          <li>Request deletion of your data — including from the database and from Slack</li>
+          <li>Receive a copy of your data</li>
+          <li>Withdraw consent where processing is based on consent</li>
         </ul>
-        <p>To exercise these rights, email me at the address on the Contact page. I will respond within 30 days.</p>
+        <p>To exercise these rights, email me at the address on the Contact page. I will respond within 30 days as required by law.</p>
 
         <h2>CCPA notice</h2>
         <p>I do not sell personal information. I do not use your data for targeted advertising. I collect only the categories of information you voluntarily provide (name, email, message content).</p>
 
         <h2>Third-party services</h2>
-        <p>This site uses Vercel (hosting) and Supabase (database). Cloudflare provides DNS and security. Cloudflare Turnstile provides bot protection on the contact form — it does not track you across sites.</p>
+        <p>This site uses the following services that may process your data:</p>
+        <ul>
+          <li><strong>Vercel</strong> — hosting. May process IP addresses and request metadata.</li>
+          <li><strong>Supabase</strong> — database. Stores contact form submissions.</li>
+          <li><strong>Cloudflare</strong> — DNS, security, and bot protection (Turnstile). Processes IP addresses and security challenge data. Turnstile does not track you across sites.</li>
+          <li><strong>Slack</strong> — when you submit the contact form, your name, email, and message are forwarded to a private Slack channel so I can respond quickly. The message persists in Slack unless deleted.</li>
+        </ul>
+        <p>None of these services receive your data for their own marketing or advertising purposes.</p>
 
         <h2>Children&apos;s privacy</h2>
         <p>This site is not directed at children under 13, and I do not knowingly collect data from them.</p>
