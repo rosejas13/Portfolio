@@ -1,6 +1,7 @@
 export async function POST(request: Request) {
-  const webhookUrl = process.env.SLACK_WEBHOOK_URL
   const BOT_TOKEN = process.env.SLACK_BOT_TOKEN
+  const CHANNEL = process.env.SLACK_CHANNEL
+  const webhookUrl = process.env.SLACK_WEBHOOK_URL
 
   let body: { email?: string; deletedCount?: number }
   try {
@@ -12,8 +13,7 @@ export async function POST(request: Request) {
   const { email, deletedCount } = body
   if (!email) return Response.json({ error: 'Missing email' }, { status: 400 })
 
-  // Prefer bot token over webhook for richer messages
-  if (BOT_TOKEN) {
+  if (BOT_TOKEN && CHANNEL) {
     try {
       await fetch('https://slack.com/api/chat.postMessage', {
         method: 'POST',
@@ -22,31 +22,29 @@ export async function POST(request: Request) {
           Authorization: `Bearer ${BOT_TOKEN}`,
         },
         body: JSON.stringify({
+          channel: CHANNEL,
           text: `🗑 Deletion processed for \`${email}\``,
-          blocks: [
-            {
-              type: 'section',
-              text: {
-                type: 'mrkdwn',
-                text: `🗑 *Deletion request processed*\nEmail: \`${email}\`\nRows removed from database: *${deletedCount ?? 'unknown'}*\n\n⚠️ Delete any messages containing this email from the Slack channel manually.`,
-              },
+          blocks: [{
+            type: 'section',
+            text: {
+              type: 'mrkdwn',
+              text: `🗑 *Deletion request processed*\nEmail: \`${email}\`\nRows removed from database: *${deletedCount ?? 'unknown'}*\n\n⚠️ Delete any messages containing this email from the Slack channel manually.`,
             },
-          ],
+          }],
         }),
       })
-    } catch { /* fall through to webhook */ }
+      return Response.json({ ok: true })
+    } catch { /* fall through */ }
   }
 
-  // Fallback to webhook
-  if (webhookUrl && !BOT_TOKEN) {
+  if (webhookUrl) {
     try {
       await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text: `🗑 Deletion request: ${email} — ${deletedCount} rows removed from DB. Delete any matching Slack messages.`,
-        }),
+        body: JSON.stringify({ text: `🗑 Deletion request: ${email} — ${deletedCount} rows removed from DB. Delete any matching Slack messages.` }),
       })
+      return Response.json({ ok: true })
     } catch { /* fire and forget */ }
   }
 
