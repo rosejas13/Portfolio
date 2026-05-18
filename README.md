@@ -87,4 +87,3 @@ all-in-pg/
 |---|---|---|
 | Local dev | `http://localhost:5173` | `next dev`, Docker backend |
 | Production | `https://jcrose.dev` | Vercel + Supabase |
-| Staging | `https://all-in-pg.vercel.app` | Vercel preview |
