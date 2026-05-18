@@ -127,6 +127,21 @@ export function middleware(request: NextRequest) {
     }
   }
 
+  // Fallback: inject anon key for public endpoints when no session exists
+  const publicPostEndpoints = ['/api/leads']
+  if (
+    pathname.startsWith('/api/') &&
+    !pathname.startsWith('/api/auth/') &&
+    !requestHeaders.has('Authorization') &&
+    publicPostEndpoints.some(p => pathname === p && request.method === 'POST')
+  ) {
+    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    if (anonKey) {
+      requestHeaders.set('apikey', anonKey)
+      requestHeaders.set('Authorization', `Bearer ${anonKey}`)
+    }
+  }
+
   const response = NextResponse.next({ request: { headers: requestHeaders } })
 
   // Set CSP on pages (not API responses or Next.js internals)
