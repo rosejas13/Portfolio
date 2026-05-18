@@ -2,11 +2,14 @@
 
 ## Project Setup
 
-1. Create two Supabase projects (free tier):
-   - `portfolio-dev` — development/staging
-   - `portfolio-prod` — production
+A single Supabase project is used for production (`fhantuyujrusrtrvctzw`, named `rosejas13`). For local development, the Supabase CLI provides a local Docker stack.
 
-2. Enable the pgcrypto extension in both projects:
+1. Link to the remote project:
+   ```bash
+   supabase link --project-ref fhantuyujrusrtrvctzw
+   ```
+
+2. Enable the pgcrypto extension:
    ```sql
    create extension if not exists pgcrypto;
    ```
@@ -77,10 +80,10 @@ Our current RLS policies already follow this pattern — they just need `auth.ui
 
 ## Dev vs Prod Strategy
 
-| | Dev | Prod |
+| | Local Dev | Production |
 |---|---|---|
-| **Supabase project** | `portfolio-dev` | `portfolio-prod` |
-| **Branch** | `dev` | `main` |
-| **Frontend URL** | `dev-portfolio.example.app` | `portfolio.example.com` |
-| **Auth** | Dev login disabled, use Supabase Auth directly | Same |
-| **Data** | Reset periodically with dummy data | Real data, never reset |
+| **Supabase** | `supabase start` (Docker) | `fhantuyujrusrtrvctzw.supabase.co` |
+| **Branch** | feature branch | `master` |
+| **Frontend** | `http://localhost:5173` | `https://jcrose.dev` |
+| **Auth** | Dev login via RPC (`login_dev`) | Supabase Auth |
+| **Data** | Docker ephemeral | Real data, never reset |

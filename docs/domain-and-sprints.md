@@ -19,8 +19,7 @@
 
 ### Domain structure
 ```
-jcrose.dev               →  Vercel (React frontend)
-all-in-pg.vercel.app     →  Vercel preview (staging)
+jcrose.dev               →  Vercel (Next.js frontend)
 <project>.supabase.co    →  Supabase API (backend)
 ```
 
@@ -52,8 +51,7 @@ GitHub Actions
 - Feature branches — branch from `master`, merge back via PR.
 
 ### Environment Gates
-- **Staging**: Vercel preview deploys on PR (all-in-pg.vercel.app)
-- **Production**: Requires PR merge to `master` + environment approval in GitHub
+- **Production**: Push to `master` triggers Vercel deploy via Git Integration. PR review required by branch protection.
 
 ### GitHub Environments
 Set up in GitHub.com → Settings → Environments:
