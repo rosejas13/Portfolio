@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { headers } from 'next/headers'
+import Link from 'next/link'
 import { sora, onest } from '@/lib/design-tokens/fonts'
 import Nav from '@/features/nav/nav'
 import { ClientShell } from '@/features/shell/client-shell'
@@ -38,6 +39,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
             <div className="container">
               <RoseIcon size={12} /> &copy; {new Date().getFullYear()} — Built with Next.js +
               PostgREST + Supabase
+              <span className="footer-sep">|</span>
+              <Link href="/privacy" className="footer-link">Privacy</Link>
             </div>
           </footer>
         </ClientShell>
