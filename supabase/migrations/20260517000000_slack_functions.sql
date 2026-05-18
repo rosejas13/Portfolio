@@ -1,5 +1,8 @@
 -- Slack integration: lead query and deletion functions
--- These run as SECURITY DEFINER so the anon role can call them
+-- These run as SECURITY DEFINER so authenticated routes can manage leads
+
+-- Restore anon insert access for contact form (sequence ownership)
+grant usage on api.leads_id_seq to anon;
 
 -- Query leads for Slack /leads command
 create or replace function api.list_leads(

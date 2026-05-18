@@ -14,7 +14,7 @@ export default function PrivacyPage() {
   const turnstileId = useRef(`del-ts-${Math.random().toString(36).slice(2)}`).current
 
   useEffect(() => {
-    const onLoad = () => {
+    const onTurnstileLoad = () => {
       const el = document.getElementById(turnstileId)
       if (window.turnstile && el) {
         window.turnstile.render(`#${turnstileId}`, {
@@ -26,10 +26,10 @@ export default function PrivacyPage() {
       }
     }
     if (window.turnstile) {
-      onLoad()
+      onTurnstileLoad()
     } else {
-      window.addEventListener('load-turnstile', onLoad as EventListener)
-      return () => window.removeEventListener('load-turnstile', onLoad as EventListener)
+      window.onloadTurnstile = onTurnstileLoad
+      return () => { delete window.onloadTurnstile }
     }
   }, [])
 
@@ -65,7 +65,6 @@ export default function PrivacyPage() {
       <Script
         src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstile"
         strategy="afterInteractive"
-        onLoad={() => window.dispatchEvent(new Event('load-turnstile'))}
       />
       <div className="container">
         <h1>Privacy Policy</h1>

@@ -54,8 +54,7 @@ export async function POST(request: Request) {
     })
 
     if (!res.ok) {
-      const errText = await res.text().catch(() => '')
-      return Response.json({ error: errText || 'Failed to send' }, { status: res.status })
+      return Response.json({ error: 'Failed to send. Please try again.' }, { status: 502 })
     }
 
     return Response.json({ ok: true })

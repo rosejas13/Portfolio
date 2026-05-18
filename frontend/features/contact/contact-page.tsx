@@ -23,7 +23,7 @@ export default function ContactPage() {
   const turnstileId = useRef(`contact-ts-${Math.random().toString(36).slice(2)}`).current
 
   useEffect(() => {
-    const onLoad = () => {
+    const onTurnstileLoad = () => {
       if (window.turnstile && document.getElementById(turnstileId)) {
         window.turnstile.render(`#${turnstileId}`, {
           sitekey: TURNSTILE_SITE_KEY,
@@ -34,10 +34,10 @@ export default function ContactPage() {
       }
     }
     if (window.turnstile) {
-      onLoad()
+      onTurnstileLoad()
     } else {
-      window.addEventListener('load-turnstile', onLoad as EventListener)
-      return () => window.removeEventListener('load-turnstile', onLoad as EventListener)
+      window.onloadTurnstile = onTurnstileLoad
+      return () => { delete window.onloadTurnstile }
     }
   }, [])
 
@@ -97,7 +97,6 @@ export default function ContactPage() {
       <Script
         src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstile"
         strategy="afterInteractive"
-        onLoad={() => window.dispatchEvent(new Event('load-turnstile'))}
       />
       <div className="container">
         <div className={styles.pageWrap}>
