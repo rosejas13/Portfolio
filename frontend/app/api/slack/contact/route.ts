@@ -4,7 +4,10 @@ export async function POST(request: Request) {
   const CHANNEL = process.env.SLACK_CHANNEL
 
   if (!webhookUrl && (!BOT_TOKEN || !CHANNEL)) {
-    return Response.json({ error: 'No Slack configuration' }, { status: 501 })
+    return Response.json({
+      error: 'No Slack configuration',
+      detail: { webhook: webhookUrl ? 'set' : 'missing', bot: BOT_TOKEN ? 'set' : 'missing', channel: CHANNEL ? 'set' : 'missing' }
+    }, { status: 501 })
   }
 
   let body: { name?: string; email?: string; message?: string }
