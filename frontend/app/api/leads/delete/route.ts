@@ -1,8 +1,6 @@
-export async function POST(request: Request) {
-  const API_URL = (process.env.API_URL || 'http://localhost:3001').replace(/\/$/, '')
-  const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  const TURNSTILE_SECRET = process.env.TURNSTILE_SECRET_KEY
+import { API_URL, authHeaders, verifyTurnstile } from '@/lib/config'
 
+export async function POST(request: Request) {
   let body: { email?: string; turnstile?: string }
   try {
     body = await request.json()
@@ -10,21 +8,8 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Invalid body' }, { status: 400 })
   }
 
-  if (TURNSTILE_SECRET && TURNSTILE_SECRET !== '1x0000000000000000000000000000000AA') {
-    if (!body.turnstile) {
-      return Response.json({ error: 'Security check required' }, { status: 400 })
-    }
-    const formData = new FormData()
-    formData.append('secret', TURNSTILE_SECRET)
-    formData.append('response', body.turnstile)
-    const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-      method: 'POST',
-      body: formData,
-    })
-    const verifyJson = await verifyRes.json() as { success?: boolean }
-    if (!verifyJson.success) {
-      return Response.json({ error: 'Security check failed. Please try again.' }, { status: 400 })
-    }
+  if (!await verifyTurnstile(body.turnstile || '')) {
+    return Response.json({ error: 'Security check failed. Please try again.' }, { status: 400 })
   }
 
   const email = (body.email || '').trim().toLowerCase()
@@ -33,15 +18,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      Prefer: 'return=representation',
-    }
-    if (ANON_KEY) {
-      headers['apikey'] = ANON_KEY
-      headers['Authorization'] = `Bearer ${ANON_KEY}`
-    }
-
+    const headers = authHeaders({ Prefer: 'return=representation' })
     const res = await fetch(`${API_URL}/rpc/delete_leads_by_email`, {
       method: 'POST',
       headers,
@@ -51,7 +28,6 @@ export async function POST(request: Request) {
     const data = await res.json() as number | null
     const deletedCount = typeof data === 'number' ? data : 0
 
-    // Fire-and-forget Slack notification
     fetch(`${request.url.split('/api/leads/delete')[0]}/api/slack/delete`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

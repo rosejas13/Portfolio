@@ -25,12 +25,14 @@ export default function ContactPage() {
   useEffect(() => {
     const onTurnstileLoad = () => {
       if (window.turnstile && document.getElementById(turnstileId)) {
-        window.turnstile.render(`#${turnstileId}`, {
-          sitekey: TURNSTILE_SITE_KEY,
-          callback: (token: string) => setTurnstileToken(token),
-          'expired-callback': () => setTurnstileToken(''),
-          theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
-        })
+        if (!document.getElementById(turnstileId)?.querySelector('iframe')) {
+          window.turnstile.render(`#${turnstileId}`, {
+            sitekey: TURNSTILE_SITE_KEY,
+            callback: (token: string) => setTurnstileToken(token),
+            'expired-callback': () => setTurnstileToken(''),
+            theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
+          })
+        }
       }
     }
     if (window.turnstile) {
