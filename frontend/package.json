@@ -15,6 +15,7 @@
     "test:security:ui": "playwright test --headed"
   },
   "dependencies": {
+    "@azimuth/ui": "file:../../azimuth-ui",
     "@slack/bolt": "^4.7.2",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.105.4",

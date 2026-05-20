@@ -1,3 +1,4 @@
+import { Card, Grid, Tag, Text } from '@azimuth/ui'
 import { fetchJson } from '@/lib/api-server'
 import type { Project } from '@/lib/types'
 import Link from 'next/link'
@@ -9,22 +10,22 @@ export default async function ProjectList() {
   return (
     <div className="page">
       <div className="container">
-        <h1>Projects</h1>
-        <div className={`grid ${styles.grid}`}>
+        <Text as="h1" size="h1" weight="bold">Projects</Text>
+        <Grid cols="auto" gap="lg" className={styles.grid}>
           {projects.map(p => (
             <Link key={p.id} href={`/projects/${p.slug}`} className={styles.cardLink}>
-              <div className="card">
-                <h3>{p.title}</h3>
-                <p>{p.tagline}</p>
+              <Card>
+                <Text as="h3" size="h5" weight="semibold">{p.title}</Text>
+                <Text size="sm" color="secondary">{p.tagline}</Text>
                 {p.tech_stack && (
                   <div className={styles.techStack}>
-                    {p.tech_stack.map(t => <span key={t} className="tag">{t}</span>)}
+                    {p.tech_stack.map(t => <Tag key={t} variant="neutral">{t}</Tag>)}
                   </div>
                 )}
-              </div>
+              </Card>
             </Link>
           ))}
-        </div>
+        </Grid>
       </div>
     </div>
   )

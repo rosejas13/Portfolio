@@ -1,3 +1,4 @@
+import { Card, Tag, Text } from '@azimuth/ui'
 import { fetchJson } from '@/lib/api-server'
 import type { Skill, Experience, Education } from '@/lib/types'
 import styles from './about.module.css'
@@ -21,34 +22,36 @@ export default async function AboutPage() {
     <div className="page">
       <div className="container">
         <section className={styles.section}>
-          <h1>About</h1>
-          <p className={styles.bio}>
+          <Text as="h1" size="h1" weight="bold">About</Text>
+          <Text size="lg" color="secondary" className={styles.bio}>
             {config.hero_bio || 'Software Engineer with experience across full-stack development, AWS cloud architecture, and DevOps.'}
-          </p>
+          </Text>
         </section>
 
         <section className={styles.section}>
-          <h2>Skills</h2>
+          <Text as="h2" size="h2" weight="bold">Skills</Text>
           {Object.entries(byCategory).map(([cat, items]) => (
             <div key={cat} className={styles.categoryBlock}>
-              <h3 className={styles.categoryTitle}>{cat}</h3>
-              <div>{items.map(s => <span key={s.id} className="tag">{s.name}</span>)}</div>
+              <Text as="h3" size="base" weight="semibold" className={styles.categoryTitle}>{cat}</Text>
+              <div className={styles.skillTags}>
+                {items.map(s => <Tag key={s.id} variant="neutral">{s.name}</Tag>)}
+              </div>
             </div>
           ))}
         </section>
 
         {experiences.length > 0 && (
           <section className={styles.section}>
-            <h2>Experience</h2>
+            <Text as="h2" size="h2" weight="bold">Experience</Text>
             {experiences.map(exp => (
               <div key={exp.id} className={styles.expItem}>
                 <div className={styles.expHeader}>
-                  <h3 className={styles.expRole}>{exp.role}</h3>
-                  <span className={styles.expDate}>
+                  <Text as="h3" size="h5" weight="semibold" className={styles.expRole}>{exp.role}</Text>
+                  <Text size="sm" color="muted" as="span" className={styles.expDate}>
                     {exp.start_date} — {exp.current ? 'Present' : exp.end_date}
-                  </span>
+                  </Text>
                 </div>
-                <p className={styles.expCompany}>{exp.company}</p>
+                <Text className={styles.expCompany}>{exp.company}</Text>
                 {exp.highlights && exp.highlights.length > 0 && (
                   <ul className={styles.expHighlights}>
                     {exp.highlights.map((h: string, i: number) => <li key={i}>{h}</li>)}
@@ -61,17 +64,21 @@ export default async function AboutPage() {
 
         {education.length > 0 && (
           <section className={styles.section}>
-            <h2>Education</h2>
+            <Text as="h2" size="h2" weight="bold">Education</Text>
             {education.map(e => (
-              <div key={e.id} className="card">
-                <h3>{e.school}</h3>
+              <Card key={e.id}>
+                <Text as="h3" size="h5" weight="semibold">{e.school}</Text>
                 {[e.degree, e.field].filter(Boolean).length > 0 && (
-                  <p className={styles.eduCardText}>{[e.degree, e.field].filter(Boolean).join(' in ')}</p>
+                  <Text color="secondary" className={styles.eduCardText}>
+                    {[e.degree, e.field].filter(Boolean).join(' in ')}
+                  </Text>
                 )}
                 {e.start_date && (
-                  <p className={styles.eduCardDate}>{e.start_date} — {e.end_date || 'Present'}</p>
+                  <Text size="xs" color="muted" className={styles.eduCardDate}>
+                    {e.start_date} — {e.end_date || 'Present'}
+                  </Text>
                 )}
-              </div>
+              </Card>
             ))}
           </section>
         )}

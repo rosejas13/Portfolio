@@ -17,6 +17,12 @@
   margin-bottom: var(--space-lg);
 }
 
+.skillTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
 .categoryTitle {
   font-family: var(--font-display);
   font-size: var(--fs-base);

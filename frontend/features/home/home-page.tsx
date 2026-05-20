@@ -1,3 +1,4 @@
+import { Card, Text } from '@azimuth/ui'
 import { fetchJson } from '@/lib/api-server'
 import type { Post } from '@/lib/types'
 import Link from 'next/link'
@@ -32,18 +33,18 @@ export default async function HomePage() {
         {posts.length > 0 && (
           <section className={styles.recentPosts}>
             <div className={styles.postHeader}>
-              <h2 className="m-0">Recent Posts</h2>
+              <Text as="h2" size="h2" weight="bold">Recent Posts</Text>
               <Link href="/blog" className="btn btn-secondary btn-sm">All posts</Link>
             </div>
             {posts.map(p => (
               <Link key={p.id} href={`/blog/${p.slug}`} className={styles.postLink} aria-label={p.title}>
-                <div className="card" aria-hidden="true">
-                  <h3>{p.title}</h3>
-                  {p.excerpt && <p>{p.excerpt}</p>}
-                  <div className={styles.postDate}>
+                <Card>
+                  <Text as="h3" size="h5" weight="semibold">{p.title}</Text>
+                  {p.excerpt && <Text size="sm" color="secondary">{p.excerpt}</Text>}
+                  <Text size="xs" color="muted">
                     {new Date(p.created_at).toLocaleDateString()}
-                  </div>
-                </div>
+                  </Text>
+                </Card>
               </Link>
             ))}
           </section>

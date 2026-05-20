@@ -5,6 +5,7 @@ import { sora, onest } from '@/lib/design-tokens/fonts'
 import Nav from '@/features/nav/nav'
 import { ClientShell } from '@/features/shell/client-shell'
 import { RoseIcon } from '@/lib/rose-icon'
+import '@azimuth/ui/styles.css'
 import './globals.css'
 
 export const metadata = {
