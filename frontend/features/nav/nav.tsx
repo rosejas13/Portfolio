@@ -14,6 +14,7 @@ export default function Nav() {
         <Link href="/services">Services</Link>
         <Link href="/projects">Projects</Link>
         <Link href="/blog">Blog</Link>
+        <Link href="/resume">Resume</Link>
         <Link href="/contact">Contact</Link>
       </div>
       <div className="nav-actions">

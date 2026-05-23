@@ -1,0 +1,159 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-3xl);
+  gap: var(--space-lg);
+}
+
+.name {
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+}
+
+.title {
+  font-size: var(--fs-h5);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.contact {
+  display: flex;
+  gap: var(--space-lg);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.section {
+  margin-bottom: var(--space-3xl);
+}
+
+.sectionTitle {
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  padding-bottom: var(--space-sm);
+  border-bottom: 2px solid var(--color-border);
+  margin-bottom: var(--space-lg);
+}
+
+.categoryBlock {
+  margin-bottom: var(--space-md);
+  display: flex;
+  gap: var(--space-md);
+  align-items: baseline;
+}
+
+.categoryName {
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+  min-width: 8em;
+  flex-shrink: 0;
+}
+
+.skillTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.expItem {
+  margin-bottom: var(--space-xl);
+}
+
+.expHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.expRole {
+  font-size: var(--fs-h5);
+  font-weight: 600;
+}
+
+.expDate {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.expCompany {
+  color: var(--color-primary);
+  font-weight: 500;
+  margin-bottom: var(--space-sm);
+}
+
+.expHighlights {
+  padding-left: var(--space-lg);
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--lh-base);
+}
+
+.expHighlights li {
+  margin-bottom: var(--space-xs);
+}
+
+.projectItem {
+  margin-bottom: var(--space-lg);
+}
+
+.projectHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.projectName {
+  font-size: var(--fs-h5);
+  font-weight: 600;
+}
+
+.projectTech {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.projectTagline {
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
+}
+
+.eduItem {
+  margin-bottom: var(--space-lg);
+}
+
+.eduSchool {
+  font-size: var(--fs-h5);
+  font-weight: 600;
+}
+
+.eduDetail {
+  color: var(--color-text-secondary);
+}
+
+.eduDate {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+@media print {
+  .header button {
+    display: none;
+  }
+
+  .section {
+    break-inside: avoid;
+  }
+
+  .expItem, .projectItem, .eduItem {
+    break-inside: avoid;
+  }
+}
