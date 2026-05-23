@@ -4,6 +4,7 @@
 .runtime/
 **/.beads/
 **/.opencode/
+.dolt/
 
 # Node
 .tmp/
