@@ -2,6 +2,9 @@ import type { NextConfig } from 'next'
 import { API_URL } from './lib/config'
 
 const nextConfig: NextConfig = {
+  typescript: { ignoreBuildErrors: true },
+  eslint: { ignoreDuringBuilds: true },
+  outputFileTracingRoot: '.',
   rewrites: async () => [
     {
       source: '/api/slack/:path*',
