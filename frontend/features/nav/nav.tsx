@@ -11,6 +11,7 @@ export default function Nav() {
       <div className="nav-links">
         <Link href="/">Home</Link>
         <Link href="/about">About</Link>
+        <Link href="/services">Services</Link>
         <Link href="/projects">Projects</Link>
         <Link href="/blog">Blog</Link>
         <Link href="/contact">Contact</Link>

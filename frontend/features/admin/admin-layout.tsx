@@ -48,7 +48,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return () => clearInterval(interval)
   }, [checkAuth, isLoginPage])
 
-  if (loading) return null
+  if (loading && !isLoginPage) return null
 
   async function logout() {
     await fetch('/api/auth/logout', { method: 'POST' })
