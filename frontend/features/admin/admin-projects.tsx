@@ -35,6 +35,7 @@ export default function AdminProjects() {
               <div className="form-group"><label>Tagline</label><input value={editing.tagline || ''} onChange={e => setEditing({...editing, tagline: e.target.value})} /></div>
               <div className="form-group"><label>Status</label><select value={editing.status || 'draft'} onChange={e => setEditing({...editing, status: e.target.value})}>
                 <option value="draft">Draft</option><option value="published">Published</option><option value="archived">Archived</option></select></div>
+              <div className="form-group"><label>Case Study (markdown)</label><textarea rows={8} value={editing.case_study || ''} onChange={e => setEditing({...editing, case_study: e.target.value})} /></div>
               <div className="modal-actions">
                 <button type="button" className="btn btn-secondary" onClick={() => setEditing(null)}>Cancel</button>
                 <button type="submit" className="btn btn-primary">Save</button>

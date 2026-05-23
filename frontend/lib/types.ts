@@ -13,6 +13,8 @@ export type Project = {
   status: string
   sort_order: number
   created_at: string
+  case_study: string | null
+  case_study_updated_at: string | null
   updated_at: string
 }
 

@@ -2,6 +2,7 @@ import { Tag, Text } from 'azimuth-ui'
 import { fetchJson } from '@/lib/api-server'
 import type { Project } from '@/lib/types'
 import Link from 'next/link'
+import { Markdown } from '@/lib/markdown'
 import styles from './projects.module.css'
 
 export default async function ProjectDetail({ slug }: { slug: string }) {
@@ -39,6 +40,11 @@ export default async function ProjectDetail({ slug }: { slug: string }) {
           </div>
         )}
         {project.description && <div className={styles.description}>{project.description}</div>}
+        {project.case_study && (
+          <div className={styles.caseStudy}>
+            <Markdown content={project.case_study} className={styles.caseStudyContent} />
+          </div>
+        )}
         <div className={styles.actions}>
           {project.live_url && (
             <a
