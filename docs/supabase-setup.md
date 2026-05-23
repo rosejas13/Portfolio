@@ -2,11 +2,11 @@
 
 ## Project Setup
 
-A single Supabase project is used for production (`fhantuyujrusrtrvctzw`, named `rosejas13`). For local development, the Supabase CLI provides a local Docker stack.
+A single Supabase project is used for production (`<your-project-ref>`, named `rosejas13`). For local development, the Supabase CLI provides a local Docker stack.
 
 1. Link to the remote project:
    ```bash
-   supabase link --project-ref fhantuyujrusrtrvctzw
+   supabase link --project-ref <your-project-ref>
    ```
 
 2. Enable the pgcrypto extension:
@@ -82,7 +82,7 @@ Our current RLS policies already follow this pattern — they just need `auth.ui
 
 | | Local Dev | Production |
 |---|---|---|
-| **Supabase** | `supabase start` (Docker) | `fhantuyujrusrtrvctzw.supabase.co` |
+| **Supabase** | `supabase start` (Docker) | `<your-project-ref>.supabase.co` |
 | **Branch** | feature branch | `master` |
 | **Frontend** | `http://localhost:5173` | `https://jcrose.dev` |
 | **Auth** | Dev login via RPC (`login_dev`) | Supabase Auth |
