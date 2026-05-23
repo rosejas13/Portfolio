@@ -1,5 +1,7 @@
 import { API_URL as API, SUPABASE_ANON_KEY } from './config'
 
+const TIMEOUT_MS = 3_000
+
 export async function fetchJson<T>(path: string, fallback: T, options?: RequestInit): Promise<T> {
   try {
     const headers: Record<string, string> = {
@@ -12,9 +14,16 @@ export async function fetchJson<T>(path: string, fallback: T, options?: RequestI
       headers['Authorization'] = `Bearer ${SUPABASE_ANON_KEY}`
     }
 
+    const existingSignal = options?.signal
+    const timeoutSignal = AbortSignal.timeout(TIMEOUT_MS)
+    const signal = existingSignal
+      ? AbortSignal.any([existingSignal, timeoutSignal])
+      : timeoutSignal
+
     const res = await fetch(url, {
       ...options,
       headers,
+      signal,
       next: { revalidate: 60 },
     })
     if (!res.ok) return fallback
