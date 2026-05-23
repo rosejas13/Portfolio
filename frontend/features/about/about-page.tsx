@@ -1,4 +1,4 @@
-import { Card, Tag, Text } from '@azimuth/ui'
+import { Card, Tag, Text } from 'azimuth-ui'
 import { fetchJson } from '@/lib/api-server'
 import type { Skill, Experience, Education } from '@/lib/types'
 import styles from './about.module.css'
@@ -22,19 +22,30 @@ export default async function AboutPage() {
     <div className="page">
       <div className="container">
         <section className={styles.section}>
-          <Text as="h1" size="h1" weight="bold">About</Text>
+          <Text as="h1" size="h1" weight="bold">
+            About
+          </Text>
           <Text size="lg" color="secondary" className={styles.bio}>
-            {config.hero_bio || 'Software Engineer with experience across full-stack development, AWS cloud architecture, and DevOps.'}
+            {config.hero_bio ||
+              'Software Engineer with experience across full-stack development, AWS cloud architecture, and DevOps.'}
           </Text>
         </section>
 
         <section className={styles.section}>
-          <Text as="h2" size="h2" weight="bold">Skills</Text>
+          <Text as="h2" size="h2" weight="bold">
+            Skills
+          </Text>
           {Object.entries(byCategory).map(([cat, items]) => (
             <div key={cat} className={styles.categoryBlock}>
-              <Text as="h3" size="base" weight="semibold" className={styles.categoryTitle}>{cat}</Text>
+              <Text as="h3" size="base" weight="semibold" className={styles.categoryTitle}>
+                {cat}
+              </Text>
               <div className={styles.skillTags}>
-                {items.map(s => <Tag key={s.id} variant="neutral">{s.name}</Tag>)}
+                {items.map((s) => (
+                  <Tag key={s.id} variant="neutral">
+                    {s.name}
+                  </Tag>
+                ))}
               </div>
             </div>
           ))}
@@ -42,11 +53,15 @@ export default async function AboutPage() {
 
         {experiences.length > 0 && (
           <section className={styles.section}>
-            <Text as="h2" size="h2" weight="bold">Experience</Text>
-            {experiences.map(exp => (
+            <Text as="h2" size="h2" weight="bold">
+              Experience
+            </Text>
+            {experiences.map((exp) => (
               <div key={exp.id} className={styles.expItem}>
                 <div className={styles.expHeader}>
-                  <Text as="h3" size="h5" weight="semibold" className={styles.expRole}>{exp.role}</Text>
+                  <Text as="h3" size="h5" weight="semibold" className={styles.expRole}>
+                    {exp.role}
+                  </Text>
                   <Text size="sm" color="muted" as="span" className={styles.expDate}>
                     {exp.start_date} — {exp.current ? 'Present' : exp.end_date}
                   </Text>
@@ -54,7 +69,9 @@ export default async function AboutPage() {
                 <Text className={styles.expCompany}>{exp.company}</Text>
                 {exp.highlights && exp.highlights.length > 0 && (
                   <ul className={styles.expHighlights}>
-                    {exp.highlights.map((h: string, i: number) => <li key={i}>{h}</li>)}
+                    {exp.highlights.map((h: string, i: number) => (
+                      <li key={i}>{h}</li>
+                    ))}
                   </ul>
                 )}
               </div>
@@ -64,10 +81,14 @@ export default async function AboutPage() {
 
         {education.length > 0 && (
           <section className={styles.section}>
-            <Text as="h2" size="h2" weight="bold">Education</Text>
-            {education.map(e => (
+            <Text as="h2" size="h2" weight="bold">
+              Education
+            </Text>
+            {education.map((e) => (
               <Card key={e.id}>
-                <Text as="h3" size="h5" weight="semibold">{e.school}</Text>
+                <Text as="h3" size="h5" weight="semibold">
+                  {e.school}
+                </Text>
                 {[e.degree, e.field].filter(Boolean).length > 0 && (
                   <Text color="secondary" className={styles.eduCardText}>
                     {[e.degree, e.field].filter(Boolean).join(' in ')}

@@ -1,6 +1,6 @@
 'use client'
 
-import { Alert, Button, Input, Text, TextArea } from '@azimuth/ui'
+import { Alert, Button, Input, Text, TextArea } from 'azimuth-ui'
 import { useState, useEffect, useRef, type FormEvent } from 'react'
 import { csrfToken } from '@/lib/api-client'
 import Script from 'next/script'
@@ -40,7 +40,9 @@ export default function ContactPage() {
       onTurnstileLoad()
     } else {
       window.onloadTurnstile = onTurnstileLoad
-      return () => { delete window.onloadTurnstile }
+      return () => {
+        delete window.onloadTurnstile
+      }
     }
   }, [])
 
@@ -48,8 +50,18 @@ export default function ContactPage() {
     e.preventDefault()
     e.stopPropagation()
     if (submitting) return
-    if (botField) { setStatus('success'); setName(''); setEmail(''); setMessage(''); return }
-    if (!turnstileToken) { setStatus('error'); setError('Please complete the security check.'); return }
+    if (botField) {
+      setStatus('success')
+      setName('')
+      setEmail('')
+      setMessage('')
+      return
+    }
+    if (!turnstileToken) {
+      setStatus('error')
+      setError('Please complete the security check.')
+      return
+    }
     setSubmitting(true)
     setStatus('idle')
     try {
@@ -84,7 +96,11 @@ export default function ContactPage() {
       fetch('/api/slack/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: sanitizedName, email: sanitizedEmail, message: sanitizedMessage }),
+        body: JSON.stringify({
+          name: sanitizedName,
+          email: sanitizedEmail,
+          message: sanitizedMessage,
+        }),
       }).catch(() => {})
     } catch (err: unknown) {
       setStatus('error')
@@ -103,19 +119,35 @@ export default function ContactPage() {
       />
       <div className="container">
         <div className={styles.pageWrap}>
-          <Text as="h1" size="h1" weight="bold">Contact</Text>
-          <Text size="lg" color="secondary" className={styles.subtitle}>Get in touch — I&apos;d love to hear from you.</Text>
-          {status === 'success' && <Alert variant="success">Thanks! I&apos;ll get back to you soon.</Alert>}
-          {status === 'error' && <Alert variant="alert" id="contact-error">{error}</Alert>}
+          <Text as="h1" size="h1" weight="bold">
+            Contact
+          </Text>
+          <Text size="lg" color="secondary" className={styles.subtitle}>
+            Get in touch — I&apos;d love to hear from you.
+          </Text>
+          {status === 'success' && (
+            <Alert variant="success">Thanks! I&apos;ll get back to you soon.</Alert>
+          )}
+          {status === 'error' && (
+            <Alert variant="alert" id="contact-error">
+              {error}
+            </Alert>
+          )}
           <form onSubmit={handleSubmit}>
             <div style={{ position: 'absolute', left: '-9999px', opacity: 0 }} aria-hidden="true">
               <label htmlFor="contact-bot">Leave this empty</label>
-              <input id="contact-bot" tabIndex={-1} autoComplete="off" value={botField} onChange={e => setBotField(e.target.value)} />
+              <input
+                id="contact-bot"
+                tabIndex={-1}
+                autoComplete="off"
+                value={botField}
+                onChange={(e) => setBotField(e.target.value)}
+              />
             </div>
             <Input
               label="Name"
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               required
               maxLength={200}
               autoComplete="name"
@@ -125,7 +157,7 @@ export default function ContactPage() {
               label="Email"
               type="email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               required
               maxLength={320}
               autoComplete="email"
@@ -134,13 +166,23 @@ export default function ContactPage() {
             <TextArea
               label="Message"
               value={message}
-              onChange={e => setMessage(e.target.value)}
+              onChange={(e) => setMessage(e.target.value)}
               required
               maxLength={5000}
               aria-describedby="contact-error"
             />
-            <div id={turnstileId} style={{ marginBlock: '1rem' }} aria-label="Security verification" />
-            <Button type="submit" variant="primary" disabled={submitting || !name.trim() || !email.trim() || !message.trim() || !turnstileToken}>
+            <div
+              id={turnstileId}
+              style={{ marginBlock: '1rem' }}
+              aria-label="Security verification"
+            />
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={
+                submitting || !name.trim() || !email.trim() || !message.trim() || !turnstileToken
+              }
+            >
               {submitting ? 'Sending...' : 'Send'}
             </Button>
           </form>

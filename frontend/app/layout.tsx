@@ -5,7 +5,7 @@ import { sora, onest } from '@/lib/design-tokens/fonts'
 import Nav from '@/features/nav/nav'
 import { ClientShell } from '@/features/shell/client-shell'
 import { RoseIcon } from '@/lib/rose-icon'
-import '@azimuth/ui/styles.css'
+import 'azimuth-ui/styles.css'
 import './globals.css'
 
 export const metadata = {
@@ -32,7 +32,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         />
       </head>
       <body>
-        <a href="#main-content" className="skip-link">Skip to content</a>
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <ClientShell>
           <Nav />
           <main id="main-content">{children}</main>
@@ -41,7 +43,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
               <RoseIcon size={12} /> &copy; {new Date().getFullYear()} — Built with Next.js +
               PostgREST + Supabase
               <span className="footer-sep">|</span>
-              <Link href="/privacy" className="footer-link">Privacy</Link>
+              <Link href="/privacy" className="footer-link">
+                Privacy
+              </Link>
             </div>
           </footer>
         </ClientShell>

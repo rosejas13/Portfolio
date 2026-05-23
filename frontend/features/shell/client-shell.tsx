@@ -1,6 +1,6 @@
 'use client'
 
-import { ThemeProvider } from '@azimuth/ui'
+import { ThemeProvider } from 'azimuth-ui'
 import { ErrorBoundary } from './error-boundary'
 import type { ReactNode } from 'react'
 
