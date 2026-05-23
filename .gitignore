@@ -43,9 +43,11 @@ frontend/test/security/penetration-test.spec.ts
 # Supabase local
 supabase/.temp/
 
-# Personal checklist
+# Personal planning files
+tasks/
 checklist.md
 .checklist/
+.checkpoints/
 .vercel
 .env*.local
 
