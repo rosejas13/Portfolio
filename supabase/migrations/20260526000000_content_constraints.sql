@@ -1,8 +1,5 @@
--- Case study support for the projects table
--- Adds a long-form markdown column for project case studies
-
-ALTER TABLE api.projects ADD COLUMN IF NOT EXISTS case_study text;
-ALTER TABLE api.projects ADD COLUMN IF NOT EXISTS case_study_updated_at timestamptz;
+-- Content length validation constraints
+-- Adds max length checks on text columns that accept user/admin content
 
 ALTER TABLE api.projects DROP CONSTRAINT IF EXISTS case_study_max_length;
 ALTER TABLE api.projects ADD CONSTRAINT case_study_max_length CHECK (char_length(case_study) <= 50000);

@@ -28,23 +28,31 @@ PostgreSQL
 ## What Gets Logged Where
 
 ### Caddy access log (`/var/log/caddy/api.log`)
-- **Every HTTP request**: method, path, status code, duration, client IP, user-agent
+- **Every HTTP request**: method, path (only), status code, size, duration
 - **Rate limit events**: automatic 429 responses logged
-- **Format**: JSON (one object per line — compatible with log aggregators)
+- **Format**: JSON with explicit safe-field selection (see Caddyfile)
 - **Rotation**: 10MB per file, 10 files kept, 30-day retention
-- **NOT logged**: Request bodies, Authorization headers, cookies
+- **NOT logged**: Request bodies, Authorization/JWT headers, query parameters, cookies, client IP, user-agent
 
 ### Database `internal.request_log`
 - **Every PostgREST request**: method, path, role, user_uuid, ip_address, user_agent
 - **Populated by**: `internal.before_request()` (called by PostgREST pre-request hook)
+- **Security hardening**: All text fields sanitized against log injection (control chars stripped). IP validated against format regex — spoofed/invalid IPs stored as `"invalid"`
+- **DDL audit**: Schema changes (CREATE/ALTER/DROP) logged with method=`DDL` (via event trigger)
 - **Queryable via**: `GET /rpc/metrics` (requires admin JWT)
-- **Retention**: 90 days (auto-purged by `internal.cleanup_logs()`)
+- **Retention**: 90 days (auto-purged by `internal.cleanup_logs()` via pg_cron)
 - **NOT logged**: Request bodies, query parameters, JWT tokens
 
 ### Database `internal.error_log`
 - **DB-level exceptions**: error_code, sanitized message, function context
 - **Populated by**: Explicit calls to `internal.log_error()` from triggers/functions
-- **Sanitization**: Emails → `[EMAIL]`, JWTs → `[JWT]`, PII → `[REDACTED]`
+- **Sanitization** (applied in order):
+  - Control characters stripped (log injection prevention)
+  - Emails → `[EMAIL]`
+  - JWTs → `[JWT]`
+  - `"email"` fields → `[REDACTED]`
+  - IP addresses → `[IP]`
+- **Truncation**: 1000 chars max per error message
 - **Retention**: 180 days (auto-purged by `internal.cleanup_logs()`)
 
 ### Frontend Error Reporting
@@ -92,6 +100,14 @@ SELECT * FROM internal.error_log ORDER BY created_at DESC LIMIT 50;
 vercel logs --filter "frontend_error"
 ```
 
+## Long-Term Log Storage
+
+The DB schema now stores 90 days (request_log) and 180 days (error_log). For longer retention:
+
+- **Supabase free tier**: 500MB DB storage holds ~500k log rows. At ~500 requests/day that's ~3 months. Monitor size via Supabase dashboard.
+- **S3/object storage**: Export old logs via a scheduled function and archive to S3-compatible storage (Supabase storage buckets are free for 1GB).
+- **Keep in Supabase DB**: Upgrade to Pro ($25/mo, 8GB DB) for ~5 years of logs.
+
 ## Monitoring Endpoints
 
 | Endpoint | Access | Response |
@@ -137,15 +153,30 @@ vercel logs --filter "frontend_error"
 
 ## Data Retention
 
-| Log | Retention | Purge |
-|---|---|---|
-| Caddy access log | 30 days | File rotation (10MB × 10 files) |
-| DB request_log | 90 days | `internal.cleanup_logs()` |
-| DB error_log | 180 days | `internal.cleanup_logs()` |
-| Vercel logs | Varies by plan | Vercel dashboard |
+| Log | Retention | Purge | Sensitive data |
+|---|---|---|---|---|
+| Caddy access log | 30 days | File rotation (10MB × 10 files) | None — path only, no headers/IP |
+| DB request_log | 90 days | `internal.cleanup_logs()` | IP (hashed after 7 days via `pseudonymize_ips`), user-agent (truncated) |
+| DB error_log | 180 days | `internal.cleanup_logs()` | Error messages (PII redacted, truncated) |
+| Vercel logs | Varies by plan | Vercel dashboard | Error metadata (200-char truncated only) |
 
 ## Run Cleanup
+
+Logs are auto-purged via **pg_cron** (daily at 3 AM UTC). IP addresses are pseudonymized (SHA-256 hashed) after 7 days via a second cron job at 4 AM UTC.
+
+Supabase pre-installs pg_cron; for local Docker, the standard `postgres:16-alpine` image does not include it:
+
 ```bash
-# Manually trigger log cleanup (or set up pg_cron)
+# Manual trigger (works everywhere)
 docker compose exec db psql -U app -d app -c "SELECT internal.cleanup_logs()"
+docker compose exec db psql -U app -d app -c "SELECT internal.pseudonymize_ips()"
+```
+
+### Local pg_cron setup (optional)
+Build a custom postgres image with pg_cron or use `timescale/timescaledb:latest-pg16`. Then the cron jobs created by `012_logging_hardening.sql` run automatically.
+
+### View scheduled jobs
+```sql
+select * from cron.job;
+select * from cron.job_run_details order by start_time desc limit 10;
 ```

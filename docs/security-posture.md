@@ -98,9 +98,42 @@ curl -vI https://your-domain.com
 # https://www.ssllabs.com/ssltest/
 ```
 
-## Compliance Notes
+## Logging Security
 
+### Log Injection Prevention
+All log entries pass through `internal.sanitize_log()` which strips ASCII control characters (0x00-0x1F except tab/newline, 0x7F) that could be used for CRLF injection or log forging. Applied to:
+- request_log: method, path, role, user_agent, ip_address
+- error_log: error_msg, context
+
+### PII Redaction in Error Logs
+`internal.log_error()` applies these transformations before storage:
+1. Control characters stripped (injection prevention)
+2. Email addresses → `[EMAIL]`
+3. JWT tokens → `[JWT]`
+4. `"email"` fields in JSON → `[REDACTED]`
+5. IPv4/IPv6 addresses → `[IP]`
+6. Truncated to 1000 characters
+
+### Request Log Validation
+- IP addresses validated against regex (`internal.is_valid_ip()`) — spoofed or malformed IPs stored as `"invalid"`
+- User-agent truncated to 500 characters
+- Write operations only (POST/PATCH/PUT/DELETE) — reads logged by Caddy
+
+### Data Retention
+| Log | Retention | Method |
+|-----|-----------|--------|
+| Caddy access log | 30 days | File rotation |
+| DB request_log | 90 days | pg_cron / manual `cleanup_logs()` |
+| DB error_log | 180 days | pg_cron / manual `cleanup_logs()` |
+
+### Long-Term Storage
+For retention beyond the built-in limits, export to Supabase storage (free 1GB) or S3-compatible storage via a scheduled function. Upgrade to Supabase Pro ($25/mo, 8GB DB) for ~5 years of logs in-DB.
+
+### Schema Change Audit
+DDL event trigger logs all schema changes to `internal.request_log` with method=`DDL`, capturing the role and user who made the change.
+
+## Compliance Notes
 - **Data minimization**: We only store what's needed (name, email, message for leads)
 - **Retention**: Leads can be manually archived/deleted via admin panel
-- **Logging**: `internal.request_log` captures API access (admin-only view)
+- **Logging**: ```internal.request_log``` captures API access (admin-only view)
 - **Audit**: Schema migrations are versioned in git — every DB change is tracked
