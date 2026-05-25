@@ -73,11 +73,10 @@ test.describe('Prod: XSS via URL params', () => {
 test.describe('Prod: CSP enforcement', () => {
   test('CSP blocks inline script injection on public pages', async ({ page }) => {
     await page.goto('/')
-    let cspBlocked = false
     page.on('console', msg => {
       const text = msg.text()
       if (text.includes('Content-Security-Policy') || text.includes('Refused') || text.includes('EvalError')) {
-        cspBlocked = true
+        // CSP violation detected
       }
     })
     // Trying to execute inline script should be blocked by CSP's script-src (no 'unsafe-inline')

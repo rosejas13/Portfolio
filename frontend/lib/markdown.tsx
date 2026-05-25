@@ -1,11 +1,6 @@
-const CODE_BLOCK = /```(\w*)\n([\s\S]*?)```/g
-const HEADING = /^#{1,3}\s+(.+)$/gm
 const BOLD = /\*\*(.+?)\*\*/g
 const INLINE_CODE = /`(.+?)`/g
 const LINK = /\[([^\]]+)\]\(([^)]+)\)/g
-const LIST_ITEM = /^[-*]\s+(.+)$/gm
-const ORDERED_ITEM = /^\d+\.\s+(.+)$/gm
-const BLOCKQUOTE = /^>\s+(.+)$/gm
 
 function escapeHtml(text: string): string {
   return text
@@ -17,7 +12,6 @@ function escapeHtml(text: string): string {
 function tokenize(text: string): { type: string; content: string; lang?: string }[] {
   const tokens: { type: string; content: string; lang?: string }[] = []
 
-  let lastIndex = 0
   let match: RegExpExecArray | null
 
   const codeBlocks: { index: number; content: string; lang: string; length: number }[] = []
@@ -52,7 +46,10 @@ function renderInline(text: string): string {
   let html = escapeHtml(text)
   html = html.replace(BOLD, '<strong>$1</strong>')
   html = html.replace(INLINE_CODE, '<code>$1</code>')
-  html = html.replace(LINK, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+  html = html.replace(LINK, (_, text: string, url: string) => {
+    const allowed = url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/') || url.startsWith('#') || url.startsWith('mailto:')
+    return `<a href="${allowed ? url : '#'}" target="_blank" rel="noopener noreferrer">${text}</a>`
+  })
   return html
 }
 

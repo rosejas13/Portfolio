@@ -243,7 +243,7 @@ async function tryDevLogin(page: any) {
 }
 
 test.describe('Authentication Flow', () => {
-  test('successful login redirects to admin (dev mode)', async ({ page, browser }) => {
+  test('successful login redirects to admin (dev mode)', async ({ browser }) => {
     const ctx = await browser.newContext({ storageState: undefined })
     const bp = await ctx.newPage()
     const loggedIn = await tryDevLogin(bp)
@@ -252,7 +252,7 @@ test.describe('Authentication Flow', () => {
     await ctx.close()
   })
 
-  test('token cookie is httpOnly and sameSite=strict', async ({ page, browser }) => {
+  test('token cookie is httpOnly and sameSite=strict', async ({ browser }) => {
     const ctx = await browser.newContext({ storageState: undefined })
     const bp = await ctx.newPage()
     const loggedIn = await tryDevLogin(bp)
@@ -266,7 +266,7 @@ test.describe('Authentication Flow', () => {
     await ctx.close()
   })
 
-  test('logged-in user can access /admin/projects', async ({ page, browser }) => {
+  test('logged-in user can access /admin/projects', async ({ browser }) => {
     const ctx = await browser.newContext({ storageState: undefined })
     const bp = await ctx.newPage()
     const loggedIn = await tryDevLogin(bp)

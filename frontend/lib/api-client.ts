@@ -1,4 +1,12 @@
-const API = '/api'
+const API = process.env.NEXT_PUBLIC_API_PROXY ?? '/api'
+
+export function authToken(): string | null {
+  return sessionStorage.getItem('auth_token')
+}
+
+export function setAuthToken(token: string) {
+  sessionStorage.setItem('auth_token', token)
+}
 
 export function csrfToken(): string {
   let t = sessionStorage.getItem('csrf_token')
@@ -10,11 +18,14 @@ export function csrfToken(): string {
 }
 
 function headers(): Record<string, string> {
-  return {
+  const h: Record<string, string> = {
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-Token': csrfToken(),
   }
+  const token = authToken()
+  if (token) h['Authorization'] = `Bearer ${token}`
+  return h
 }
 
 function errMessage(status: number): string {
