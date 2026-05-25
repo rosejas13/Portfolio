@@ -1,10 +1,9 @@
 import type { ReactNode } from 'react'
 import { headers } from 'next/headers'
-import Link from 'next/link'
 import { sora, onest } from '@/lib/design-tokens/fonts'
 import Nav from '@/features/nav/nav'
+import Footer from '@/features/shell/footer'
 import { ClientShell } from '@/features/shell/client-shell'
-import { RoseIcon } from '@/lib/rose-icon'
 import 'azimuth-ui/styles.css'
 import './globals.css'
 
@@ -36,18 +35,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           Skip to content
         </a>
         <ClientShell>
-          <Nav />
+          <header><Nav /></header>
           <main id="main-content">{children}</main>
-          <footer>
-            <div className="container">
-              <RoseIcon size={12} /> &copy; {new Date().getFullYear()} — Built with Next.js +
-              PostgREST + Supabase
-              <span className="footer-sep">|</span>
-              <Link href="/privacy" className="footer-link">
-                Privacy
-              </Link>
-            </div>
-          </footer>
+          <Footer />
         </ClientShell>
       </body>
     </html>

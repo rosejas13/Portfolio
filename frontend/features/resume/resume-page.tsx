@@ -1,4 +1,4 @@
-import { Tag, Text } from 'azimuth-ui'
+import { Stack, Tag, Text } from 'azimuth-ui'
 import { fetchJson } from '@/lib/api-server'
 import type { Skill, Experience, Education, Project as ProjectType } from '@/lib/types'
 import styles from './resume.module.css'
@@ -29,12 +29,24 @@ export default async function ResumePage() {
       <div className="container">
         <div className={styles.header}>
           <div>
-            <h1 className={styles.name}>Jasper Cordova</h1>
-            <p className={styles.title}>{config.hero_tagline || 'Software Engineer'}</p>
-            <div className={styles.contact}>
-              {config.social_email && <span>{config.social_email}</span>}
-              {config.social_github && <span>{config.social_github.replace('https://', '')}</span>}
-            </div>
+            <Text as="h1" variant="display" size="h1" weight="bold">
+              Jasper Cordova
+            </Text>
+            <Text size="h5" color="secondary" className={styles.title}>
+              {config.hero_tagline || 'Software Engineer'}
+            </Text>
+            <Stack direction="horizontal" spacing="lg">
+              {config.social_email && (
+                <Text size="sm" color="muted" as="span">
+                  {config.social_email}
+                </Text>
+              )}
+              {config.social_github && (
+                <Text size="sm" color="muted" as="span">
+                  {config.social_github.replace('https://', '')}
+                </Text>
+              )}
+            </Stack>
           </div>
           <button className="btn btn-primary" onClick={() => window.print()}>
             Download PDF
@@ -42,10 +54,14 @@ export default async function ResumePage() {
         </div>
 
         <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>Skills</h2>
+          <Text as="h2" size="h3" weight="semibold" className={styles.sectionTitle}>
+            Skills
+          </Text>
           {Object.entries(byCategory).map(([cat, items]) => (
             <div key={cat} className={styles.categoryBlock}>
-              <span className={styles.categoryName}>{cat}</span>
+              <Text as="span" size="sm" weight="semibold" color="secondary" className={styles.categoryName}>
+                {cat}
+              </Text>
               <div className={styles.skillTags}>
                 {items.map((s) => (
                   <Tag key={s.id} variant="neutral">{s.name}</Tag>
@@ -57,16 +73,20 @@ export default async function ResumePage() {
 
         {experiences.length > 0 && (
           <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>Experience</h2>
+            <Text as="h2" size="h3" weight="semibold" className={styles.sectionTitle}>
+              Experience
+            </Text>
             {experiences.map((exp) => (
               <div key={exp.id} className={styles.expItem}>
                 <div className={styles.expHeader}>
-                  <h3 className={styles.expRole}>{exp.role}</h3>
-                  <span className={styles.expDate}>
+                  <Text as="h3" size="h5" weight="semibold" className={styles.expRole}>
+                    {exp.role}
+                  </Text>
+                  <Text size="sm" color="muted" as="span" className={styles.expDate}>
                     {exp.start_date} — {exp.current ? 'Present' : exp.end_date}
-                  </span>
+                  </Text>
                 </div>
-                <p className={styles.expCompany}>{exp.company}</p>
+                <Text className={styles.expCompany}>{exp.company}</Text>
                 {exp.highlights && exp.highlights.length > 0 && (
                   <ul className={styles.expHighlights}>
                     {exp.highlights.map((h: string, i: number) => (
@@ -81,16 +101,26 @@ export default async function ResumePage() {
 
         {projects.length > 0 && (
           <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>Projects</h2>
+            <Text as="h2" size="h3" weight="semibold" className={styles.sectionTitle}>
+              Projects
+            </Text>
             {projects.map((p) => (
               <div key={p.id} className={styles.projectItem}>
                 <div className={styles.projectHeader}>
-                  <h3 className={styles.projectName}>{p.title}</h3>
+                  <Text as="h3" size="h5" weight="semibold" className={styles.projectName}>
+                    {p.title}
+                  </Text>
                   {p.tech_stack && p.tech_stack.length > 0 && (
-                    <span className={styles.projectTech}>{p.tech_stack.join(' · ')}</span>
+                    <Text size="sm" color="muted" as="span" className={styles.projectTech}>
+                      {p.tech_stack.join(' · ')}
+                    </Text>
                   )}
                 </div>
-                {p.tagline && <p className={styles.projectTagline}>{p.tagline}</p>}
+                {p.tagline && (
+                  <Text size="sm" color="secondary" className={styles.projectTagline}>
+                    {p.tagline}
+                  </Text>
+                )}
               </div>
             ))}
           </section>
@@ -98,19 +128,23 @@ export default async function ResumePage() {
 
         {education.length > 0 && (
           <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>Education</h2>
+            <Text as="h2" size="h3" weight="semibold" className={styles.sectionTitle}>
+              Education
+            </Text>
             {education.map((e) => (
               <div key={e.id} className={styles.eduItem}>
-                <h3 className={styles.eduSchool}>{e.school}</h3>
+                <Text as="h3" size="h5" weight="semibold" className={styles.eduSchool}>
+                  {e.school}
+                </Text>
                 {[e.degree, e.field].filter(Boolean).length > 0 && (
-                  <p className={styles.eduDetail}>
+                  <Text color="secondary" className={styles.eduDetail}>
                     {[e.degree, e.field].filter(Boolean).join(' in ')}
-                  </p>
+                  </Text>
                 )}
                 {e.start_date && (
-                  <p className={styles.eduDate}>
+                  <Text size="sm" color="muted" className={styles.eduDate}>
                     {e.start_date} — {e.end_date || 'Present'}
-                  </p>
+                  </Text>
                 )}
               </div>
             ))}

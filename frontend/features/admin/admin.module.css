@@ -201,3 +201,17 @@
   font-size: var(--fs-base);
   margin-bottom: var(--space-xs);
 }
+
+.syncCards {
+  margin-bottom: var(--space-xl);
+}
+
+.syncCard {
+  min-width: 200px;
+}
+
+.sectionTitle {
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 2px solid var(--color-border);
+}
