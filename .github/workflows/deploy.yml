@@ -5,6 +5,9 @@ on:
     branches: [master]
     types: [completed]
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
@@ -13,8 +16,8 @@ jobs:
       run:
         working-directory: frontend
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@1d0ff469b7ec7b3d3c04f4b1f9a6721b9a8c5b7 # v4.4.0
         with:
           node-version: 20
           cache: npm
