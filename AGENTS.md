@@ -113,6 +113,17 @@ This project uses **azimuth-ui** from npm. Available components include:
 
 Use these instead of custom CSS where possible. CSS modules should only contain layout rules not handled by azimuth-ui.
 
+## Documentation Classification
+
+| Level | Where | What goes there |
+|---|---|---|
+| **Public** | `docs/` | Sanitized architecture docs, high-level audit summaries, setup guides, design docs. Safe for employers to read on GitHub. |
+| **Local only** | `.checklist/` or keep off disk | Raw audit logs, vulnerability lists with unfixed issues, detailed security test payloads, infrastructure secrets/IDs. Anything that reveals attack surface or past vulnerabilities. |
+
+Rule: if a doc describes **what the system does now** (security posture, logging architecture), it's public. If it describes **what went wrong before** (raw vulnerability list, penetration test methodologies), it stays local.
+
+See `docs/security-audit.md` for the public pattern: high-level test counts, architecture decisions, no raw vulnerability details.
+
 ## Modularity Standards
 
 ### Feature Isolation
