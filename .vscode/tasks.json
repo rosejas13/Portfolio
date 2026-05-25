@@ -22,6 +22,58 @@
           "endsPattern": "Local:"
         }
       }
+    },
+    {
+      "label": "Beads: Show Available Work",
+      "type": "shell",
+      "command": "bd ready",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Beads: Show Issue",
+      "type": "shell",
+      "command": "bd show ${input:issueId}",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Beads: Prime Context",
+      "type": "shell",
+      "command": "bd prime",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Beads: Start Dolt Server",
+      "type": "shell",
+      "command": "bd dolt start",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Beads: Stop Dolt Server",
+      "type": "shell",
+      "command": "bd dolt stop",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "issueId",
+      "type": "promptString",
+      "description": "Issue ID"
     }
   ]
 }

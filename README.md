@@ -49,6 +49,16 @@ Browser ─→ Next.js 15 (SSR + ISR, port 5173 dev / Vercel prod)
 | `npm run build` | `frontend/` | Production build |
 | `npm test` | `frontend/` | Run unit tests (Vitest) |
 | `npm run lint` | `frontend/` | Run ESLint |
+| `npm run typecheck` | `frontend/` | TypeScript check (tsc --noEmit) |
+| `npm run test:e2e` | `frontend/` | Playwright E2E tests (needs dev server) |
+
+### Backend
+
+| Command | Description |
+|---|---|
+| `docker compose exec db psql -U app -d app -f backend/tests/security.sql` | Run SQL security tests |
+| `docker compose exec db psql -U app -d app -c "SELECT internal.cleanup_logs()"` | Manual log cleanup |
+| `docker compose exec caddy cat /var/log/caddy/api.log` | View Caddy access log |
 
 ## Directory Structure
 
@@ -86,3 +96,20 @@ Browser ─→ Next.js 15 (SSR + ISR, port 5173 dev / Vercel prod)
 |---|---|---|
 | Local dev | `http://localhost:5173` | `npm run dev`, Docker backend |
 | Production | `https://jcrose.dev` | Vercel + Supabase |
+
+## CI/CD
+
+### Pipeline
+- **CI** (`.github/workflows/ci.yml`): Runs `tsc --noEmit` → `eslint` → `vitest` → `next build` on every push and PR.
+- **Deploy** (`.github/workflows/deploy.yml`): Deploys to Vercel after CI passes on `master`.
+
+### Branch Protection (Required)
+Deploy runs only on pushes to `master` after CI succeeds. To enforce PR + review:
+
+1. GitHub → Settings → Branches → Add branch protection rule
+2. Branch: `master`
+3. Enable **Require a pull request before merging**
+4. Enable **Require status checks** — select `build` (the CI job name)
+5. Enable **Require branches to be up to date**
+
+This ensures no direct pushes to master bypass CI or skip review.

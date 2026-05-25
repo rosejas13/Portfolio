@@ -1,0 +1,47 @@
+# jcrose.dev — Personal Portfolio
+
+## Stack
+- Frontend: Next.js 15 (App Router), React 19, TypeScript, azimuth-ui components
+- Backend: PostgreSQL 16, PostgREST v12 (auto-REST API), Caddy reverse proxy
+- Auth: JWT (HS256) in dev, Supabase Auth in prod. Dynamic RBAC with RLS
+- Hosting: Vercel (frontend), Supabase (database), Docker (local dev)
+
+## Key architecture
+- Tables in `api` schema become REST endpoints via PostgREST
+- Auth + RBAC + logging lives in `internal` schema
+- Admin panel at `/admin` (moves to subdomain in future)
+- Contact data → DB + Slack notification (documented in privacy policy)
+
+## Core files
+- `frontend/app/layout.tsx` — Root layout with theme injection + CSP nonce
+- `frontend/middleware.ts` — CSP headers, admin auth protection
+- `frontend/lib/markdown.tsx` — Markdown renderer (safe URL scheme validation)
+- `backend/schema/` — All DB schema + migrations, versioned in order
+- `backend/tests/security.sql` — 22 SQL security integration tests
+- `frontend/test/e2e/user-flows.spec.ts` — 27 Playwright E2E tests
+- `frontend/test/security/` — Playwright security tests (CSP, XSS, auth, rate limiting)
+
+## Security
+- CSP: nonce-based script-src (Next.js middleware), `default-src 'none'` on API (Caddy)
+- XSS: URL scheme validation on markdown links (no javascript:/data:/vbscript:)
+- Logs: Caddy logs path-only (no headers/IP). DB logs PII-redacted, injection-protected
+- IP pseudonymization: hashed after 7 days
+- Input validation: CHECK constraints on slug, email, URL, length limits
+
+## Sync infrastructure
+- Tables: internal.sync_sources, internal.sync_runs, internal.sync_state
+- Sources: GitHub (repos), LinkedIn (CSV import), resume_upload
+- Cron: daily at 6 AM UTC via GitHub Actions (.github/workflows/sync.yml)
+- Library: frontend/lib/sync/ — runners, adapters, change detection
+
+## Testing
+- `npm test` — Vitest (63 unit tests)
+- `npm run test:e2e` — Playwright (27 E2E tests, needs dev server)
+- `docker compose exec db psql -U app -d app -f backend/tests/security.sql` — SQL tests
+- `npm run typecheck` — tsc --noEmit (0 errors)
+- `npm run lint` — ESLint (0 errors)
+
+## CI/CD
+- CI: typecheck → lint → test → build (every push/PR)
+- Deploy: runs after CI passes on master (Vercel)
+- Branch protection required (PR + review + CI status check)
