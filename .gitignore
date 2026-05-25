@@ -29,15 +29,16 @@ frontend/.next/
 .DS_Store
 Thumbs.db
 
-# IDE (keep shared settings, ignore personal)
+# IDE / agent
 .vscode/settings.json
+.claude/
 
 # Test results
 backend/tests/results/
 frontend/test-results/
 frontend/playwright-report/
 
-# Security — pen-test methodology stays local
+# Security
 frontend/test/security/penetration-test.spec.ts
 
 # Supabase local
