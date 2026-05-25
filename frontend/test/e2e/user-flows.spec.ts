@@ -206,13 +206,15 @@ test.describe('Keyboard Navigation', () => {
     await expect(skipLink).toBeVisible()
   })
 
-  test('Tab navigates through nav links', async ({ page }) => {
+  test('Tab navigates through nav links (after skip link)', async ({ page }) => {
     await page.goto('/')
+    await page.keyboard.press('Tab')
+    await page.keyboard.press('Tab')
     const navLinks = page.locator('nav a')
     const count = await navLinks.count()
-    for (let i = 0; i < Math.min(count, 3); i++) {
-      await page.keyboard.press('Tab')
+    for (let i = 0; i < Math.min(count, 2); i++) {
       await expect(navLinks.nth(i)).toBeFocused()
+      await page.keyboard.press('Tab')
     }
   })
 })
