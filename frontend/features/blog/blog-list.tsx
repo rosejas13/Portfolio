@@ -19,7 +19,7 @@ export default async function BlogList() {
         {posts.map((p) => (
           <Link key={p.id} href={`/blog/${p.slug}`} className={styles.cardLink}>
             <Card>
-              <Text as="h3" size="h5" weight="semibold">
+              <Text as="h2" size="h5" weight="semibold">
                 {p.title}
               </Text>
               {p.excerpt && (

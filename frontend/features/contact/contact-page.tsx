@@ -129,7 +129,7 @@ export default function ContactPage() {
             <Alert variant="success">Thanks! I&apos;ll get back to you soon.</Alert>
           )}
           {status === 'error' && (
-            <Alert variant="alert" id="contact-error">
+            <Alert variant="alert" id="contact-error" role="alert">
               {error}
             </Alert>
           )}
@@ -174,7 +174,6 @@ export default function ContactPage() {
             <div
               id={turnstileId}
               style={{ marginBlock: '1rem' }}
-              aria-label="Security verification"
             />
             <Button
               type="submit"
@@ -185,6 +184,11 @@ export default function ContactPage() {
             >
               {submitting ? 'Sending...' : 'Send'}
             </Button>
+            <Text size="xs" color="muted" style={{ marginTop: '0.5rem' }}>
+              Your name, email, and message are stored in the database and forwarded to a private Slack
+              channel so I can respond. See the{' '}
+              <a href="/privacy" style={{ textDecoration: 'underline' }}>privacy policy</a>.
+            </Text>
           </form>
         </div>
       </div>

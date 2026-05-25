@@ -39,8 +39,8 @@ export default function AdminSkills() {
           <div className="modal" onClick={e => e.stopPropagation()}>
             <h2>{editing.id ? 'Edit' : 'New'} Skill</h2>
             <form onSubmit={handleSave}>
-              <div className="form-group"><label>Name</label><input value={editing.name || ''} onChange={e => setEditing({...editing, name: e.target.value})} required /></div>
-              <div className="form-group"><label>Category</label><input value={editing.category || ''} onChange={e => setEditing({...editing, category: e.target.value})} /></div>
+              <div className="form-group"><label htmlFor="skill-name">Name</label><input id="skill-name" value={editing.name || ''} onChange={e => setEditing({...editing, name: e.target.value})} required /></div>
+              <div className="form-group"><label htmlFor="skill-category">Category</label><input id="skill-category" value={editing.category || ''} onChange={e => setEditing({...editing, category: e.target.value})} /></div>
               <div className="modal-actions">
                 <button type="button" className="btn btn-secondary" onClick={() => setEditing(null)}>Cancel</button>
                 <button type="submit" className="btn btn-primary">Save</button>

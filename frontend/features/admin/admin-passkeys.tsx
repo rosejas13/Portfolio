@@ -163,8 +163,11 @@ export default function AdminPasskeys() {
           </p>
 
           <div style={{ marginBottom: 16 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={qrCode} alt="TOTP QR Code" style={{ width: 200, height: 200 }} />
+            <img
+              src={qrCode}
+              alt="TOTP QR Code"
+              style={{ width: 200, height: 200 }}
+            />
           </div>
 
           <p className="text-muted fs-13" style={{ marginBottom: 16 }}>

@@ -31,10 +31,10 @@ export default function AdminExperience() {
           <div className="modal" onClick={e => e.stopPropagation()}>
             <h2>{editing.id ? 'Edit' : 'New'} Experience</h2>
             <form onSubmit={handleSave}>
-              <div className="form-group"><label>Company</label><input value={editing.company || ''} onChange={e => setEditing({...editing, company: e.target.value})} required /></div>
-              <div className="form-group"><label>Role</label><input value={editing.role || ''} onChange={e => setEditing({...editing, role: e.target.value})} required /></div>
-              <div className="form-group"><label>Start Date</label><input type="date" value={editing.start_date || ''} onChange={e => setEditing({...editing, start_date: e.target.value})} required /></div>
-              <div className="form-group"><label>End Date</label><input type="date" value={editing.end_date || ''} onChange={e => setEditing({...editing, end_date: e.target.value})} /></div>
+              <div className="form-group"><label htmlFor="exp-company">Company</label><input id="exp-company" value={editing.company || ''} onChange={e => setEditing({...editing, company: e.target.value})} required /></div>
+              <div className="form-group"><label htmlFor="exp-role">Role</label><input id="exp-role" value={editing.role || ''} onChange={e => setEditing({...editing, role: e.target.value})} required /></div>
+              <div className="form-group"><label htmlFor="exp-start">Start Date</label><input id="exp-start" type="date" value={editing.start_date || ''} onChange={e => setEditing({...editing, start_date: e.target.value})} required /></div>
+              <div className="form-group"><label htmlFor="exp-end">End Date</label><input id="exp-end" type="date" value={editing.end_date || ''} onChange={e => setEditing({...editing, end_date: e.target.value})} /></div>
               <div className="form-group"><label><input type="checkbox" checked={editing.current || false} onChange={e => setEditing({...editing, current: e.target.checked, end_date: e.target.checked ? null : editing.end_date})} /> Current</label></div>
               <div className="modal-actions">
                 <button type="button" className="btn btn-secondary" onClick={() => setEditing(null)}>Cancel</button>

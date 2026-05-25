@@ -121,7 +121,7 @@ export function MobileMenu() {
 
       {open && <div className="mobile-drawer-backdrop" onClick={() => setOpen(false)} />}
 
-      <div ref={drawerRef} className={`mobile-drawer${open ? ' open' : ''}`} aria-hidden={!open}>
+      <div ref={drawerRef} className={`mobile-drawer${open ? ' open' : ''}`} role="dialog" aria-modal={open} aria-label="Navigation menu">
         {links.map(l => (
           <Link key={l.href} href={l.href} className="mobile-drawer-link" onClick={() => setOpen(false)}>
             {l.label}

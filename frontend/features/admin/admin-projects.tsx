@@ -30,12 +30,12 @@ export default function AdminProjects() {
           <div className="modal" onClick={e => e.stopPropagation()}>
             <h2>{editing.id ? 'Edit' : 'New'} Project</h2>
             <form onSubmit={handleSave}>
-              <div className="form-group"><label>Title</label><input value={editing.title || ''} onChange={e => setEditing({...editing, title: e.target.value})} required /></div>
-              <div className="form-group"><label>Slug</label><input value={editing.slug || ''} onChange={e => setEditing({...editing, slug: e.target.value})} required /></div>
-              <div className="form-group"><label>Tagline</label><input value={editing.tagline || ''} onChange={e => setEditing({...editing, tagline: e.target.value})} /></div>
-              <div className="form-group"><label>Status</label><select value={editing.status || 'draft'} onChange={e => setEditing({...editing, status: e.target.value})}>
+              <div className="form-group"><label htmlFor="project-title">Title</label><input id="project-title" value={editing.title || ''} onChange={e => setEditing({...editing, title: e.target.value})} required /></div>
+              <div className="form-group"><label htmlFor="project-slug">Slug</label><input id="project-slug" value={editing.slug || ''} onChange={e => setEditing({...editing, slug: e.target.value})} required /></div>
+              <div className="form-group"><label htmlFor="project-tagline">Tagline</label><input id="project-tagline" value={editing.tagline || ''} onChange={e => setEditing({...editing, tagline: e.target.value})} /></div>
+              <div className="form-group"><label htmlFor="project-status">Status</label><select id="project-status" value={editing.status || 'draft'} onChange={e => setEditing({...editing, status: e.target.value})}>
                 <option value="draft">Draft</option><option value="published">Published</option><option value="archived">Archived</option></select></div>
-              <div className="form-group"><label>Case Study (markdown)</label><textarea rows={8} value={editing.case_study || ''} onChange={e => setEditing({...editing, case_study: e.target.value})} /></div>
+              <div className="form-group"><label htmlFor="project-casestudy">Case Study (markdown)</label><textarea id="project-casestudy" rows={8} value={editing.case_study || ''} onChange={e => setEditing({...editing, case_study: e.target.value})} /></div>
               <div className="modal-actions">
                 <button type="button" className="btn btn-secondary" onClick={() => setEditing(null)}>Cancel</button>
                 <button type="submit" className="btn btn-primary">Save</button>

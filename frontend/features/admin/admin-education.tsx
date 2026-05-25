@@ -30,9 +30,9 @@ export default function AdminEducation() {
           <div className="modal" onClick={e => e.stopPropagation()}>
             <h2>{editing.id ? 'Edit' : 'New'} Education</h2>
             <form onSubmit={handleSave}>
-              <div className="form-group"><label>School</label><input value={editing.school || ''} onChange={e => setEditing({...editing, school: e.target.value})} required /></div>
-              <div className="form-group"><label>Degree</label><input value={editing.degree || ''} onChange={e => setEditing({...editing, degree: e.target.value})} /></div>
-              <div className="form-group"><label>Field</label><input value={editing.field || ''} onChange={e => setEditing({...editing, field: e.target.value})} /></div>
+              <div className="form-group"><label htmlFor="edu-school">School</label><input id="edu-school" value={editing.school || ''} onChange={e => setEditing({...editing, school: e.target.value})} required /></div>
+              <div className="form-group"><label htmlFor="edu-degree">Degree</label><input id="edu-degree" value={editing.degree || ''} onChange={e => setEditing({...editing, degree: e.target.value})} /></div>
+              <div className="form-group"><label htmlFor="edu-field">Field</label><input id="edu-field" value={editing.field || ''} onChange={e => setEditing({...editing, field: e.target.value})} /></div>
               <div className="modal-actions">
                 <button type="button" className="btn btn-secondary" onClick={() => setEditing(null)}>Cancel</button>
                 <button type="submit" className="btn btn-primary">Save</button>

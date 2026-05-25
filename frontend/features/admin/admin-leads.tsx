@@ -30,7 +30,7 @@ export default function AdminLeads() {
           <tr key={l.id}>
             <td>{l.name}</td><td>{l.email}</td>
             <td className={styles.leadMessage}>{l.message}</td>
-            <td><select value={l.status} onChange={e => handleStatus(l.id, e.target.value)} className={styles.leadStatusSelect}>
+            <td><select aria-label={`Status for ${l.name}`} value={l.status} onChange={e => handleStatus(l.id, e.target.value)} className={styles.leadStatusSelect}>
               <option value="new">New</option><option value="read">Read</option><option value="replied">Replied</option><option value="archived">Archived</option></select></td>
             <td className={styles.actionCell}>
               <button className="btn btn-danger btn-sm" onClick={() => handleDelete(l.id)}>Del</button>

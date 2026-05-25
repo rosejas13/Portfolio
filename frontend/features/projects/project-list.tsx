@@ -17,7 +17,7 @@ export default async function ProjectList() {
           {projects.map((p) => (
             <Link key={p.id} href={`/projects/${p.slug}`} className={styles.cardLink}>
               <Card>
-                <Text as="h3" size="h5" weight="semibold">
+                <Text as="h2" size="h5" weight="semibold">
                   {p.title}
                 </Text>
                 <Text size="sm" color="secondary">

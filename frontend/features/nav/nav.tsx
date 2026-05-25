@@ -4,7 +4,7 @@ import { ThemeToggle, MobileMenu } from './nav-actions'
 
 export default function Nav() {
   return (
-    <nav className="container">
+    <nav className="container" aria-label="Main">
       <Link href="/" className="logo">
         <RoseIcon size={32} color="#149086" /> Jasper Cordova
       </Link>

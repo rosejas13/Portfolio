@@ -30,10 +30,10 @@ export default function AdminBlog() {
           <div className="modal" onClick={e => e.stopPropagation()}>
             <h2>{editing.id ? 'Edit' : 'New'} Post</h2>
             <form onSubmit={handleSave}>
-              <div className="form-group"><label>Title</label><input value={editing.title || ''} onChange={e => setEditing({...editing, title: e.target.value})} required /></div>
-              <div className="form-group"><label>Slug</label><input value={editing.slug || ''} onChange={e => setEditing({...editing, slug: e.target.value})} required /></div>
-              <div className="form-group"><label>Content</label><textarea value={editing.content || ''} onChange={e => setEditing({...editing, content: e.target.value})} /></div>
-              <div className="form-group"><label>Status</label><select value={editing.status || 'draft'} onChange={e => setEditing({...editing, status: e.target.value})}>
+              <div className="form-group"><label htmlFor="post-title">Title</label><input id="post-title" value={editing.title || ''} onChange={e => setEditing({...editing, title: e.target.value})} required /></div>
+              <div className="form-group"><label htmlFor="post-slug">Slug</label><input id="post-slug" value={editing.slug || ''} onChange={e => setEditing({...editing, slug: e.target.value})} required /></div>
+              <div className="form-group"><label htmlFor="post-content">Content</label><textarea id="post-content" value={editing.content || ''} onChange={e => setEditing({...editing, content: e.target.value})} /></div>
+              <div className="form-group"><label htmlFor="post-status">Status</label><select id="post-status" value={editing.status || 'draft'} onChange={e => setEditing({...editing, status: e.target.value})}>
                 <option value="draft">Draft</option><option value="published">Published</option><option value="archived">Archived</option></select></div>
               <div className="modal-actions">
                 <button type="button" className="btn btn-secondary" onClick={() => setEditing(null)}>Cancel</button>

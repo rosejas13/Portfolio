@@ -52,6 +52,7 @@ export default async function ProjectDetail({ slug }: { slug: string }) {
               className="btn btn-primary"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={`Live site for ${project.title}`}
             >
               Live site
             </a>
@@ -62,6 +63,7 @@ export default async function ProjectDetail({ slug }: { slug: string }) {
               className="btn btn-secondary"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={`Source code for ${project.title}`}
             >
               Source code
             </a>

@@ -16,6 +16,7 @@ const links = [
   { to: '/admin/config', label: 'Site Config' },
   { to: '/admin/metrics', label: 'Metrics' },
   { to: '/admin/security', label: 'Security' },
+  { to: '/admin/sync', label: 'Sync' },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -59,14 +60,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="page">
       <div className="container">
         <div className="sidebar-layout">
-          <aside className="sidebar">
+          <aside className="sidebar" aria-label="Admin navigation">
             <h3 className={styles.sidebarTitle}>Admin Panel</h3>
             <Link href="/" className={styles.backLink}>&larr; Back to site</Link>
             {links.map(l => (
               <Link key={l.to} href={l.to} className={pathname === l.to ? 'active' : ''}>{l.label}</Link>
             ))}
             <hr className={styles.sidebarDivider} />
-            <a href="#" onClick={e => { e.preventDefault(); logout() }} className={styles.logoutLink}>Logout</a>
+            <button onClick={logout} className={styles.logoutLink}>Logout</button>
           </aside>
           <div>{children}</div>
         </div>

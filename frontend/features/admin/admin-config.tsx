@@ -48,8 +48,8 @@ export default function AdminConfig() {
           <div className="modal" onClick={e => e.stopPropagation()}>
             <h2>Edit: {editing.key}</h2>
             <form onSubmit={handleSave}>
-              <div className="form-group"><label>Value (JSON)</label>
-                <textarea value={editValue} onChange={e => setEditValue(e.target.value)} className={styles.configTextarea} /></div>
+              <div className="form-group"><label htmlFor="config-value">Value (JSON)</label>
+                <textarea id="config-value" value={editValue} onChange={e => setEditValue(e.target.value)} className={styles.configTextarea} /></div>
               <div className="modal-actions">
                 <button type="button" className="btn btn-secondary" onClick={() => setEditing(null)}>Cancel</button>
                 <button type="submit" className="btn btn-primary">Save</button>

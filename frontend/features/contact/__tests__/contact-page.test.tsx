@@ -5,6 +5,10 @@ import ContactPage from '../contact-page'
 beforeEach(() => {
   vi.restoreAllMocks()
   sessionStorage.clear()
+  window.turnstile = {
+    render: (_: string, config: { callback: (token: string) => void }) => config.callback('test-token'),
+    reset: vi.fn(),
+  } as unknown as typeof window.turnstile
 })
 
 describe('ContactPage', () => {

@@ -56,11 +56,11 @@ export default function AdminLogin() {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
-            <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+            <input id="email" type="email" autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} required />
           </div>
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+            <input id="password" type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} required />
           </div>
           <button type="submit" className="btn btn-primary w-full" disabled={submitting}>
             {submitting ? 'Signing in...' : 'Sign in'}
