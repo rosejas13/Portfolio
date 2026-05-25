@@ -182,15 +182,22 @@ insert into internal.sync_sources (name, label, description, icon) values
 on conflict (name) do nothing;
 
 -- RPC functions for admin dashboard (callable via PostgREST since internal is in extra_search_path)
-create or replace function api.get_recent_syncs(limit int default 20)
+create or replace function api.get_recent_syncs(max_rows int default 20)
   returns jsonb
   language sql stable security definer set search_path to ''
 as $$
-  select coalesce(jsonb_agg(to_jsonb(r) || jsonb_build_object('source_name', s.label)), '[]'::jsonb)
-  from internal.sync_runs r
-  join internal.sync_sources s on s.id = r.source_id
-  order by r.started_at desc
-  limit greatest(least(limit, 100), 1);
+  select coalesce(
+    (select jsonb_agg(to_jsonb(sub) order by sub.started_at desc)
+     from (
+       select r.*, s.label as source_name
+       from internal.sync_runs r
+       join internal.sync_sources s on s.id = r.source_id
+       order by r.started_at desc
+       limit greatest(least(max_rows, 100), 1)
+     ) sub
+    ),
+    '[]'::jsonb
+  );
 $$;
 
 create or replace function api.get_all_sync_states()

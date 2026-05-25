@@ -19,7 +19,7 @@ export default function AdminSync() {
 
   useEffect(() => {
     Promise.all([
-      get<SyncRunWithSource[]>('/rpc/get_recent_syncs?limit=20'),
+      get<SyncRunWithSource[]>('/rpc/get_recent_syncs?max_rows=20'),
       get<SyncState[]>('/rpc/get_all_sync_states'),
     ]).then(([r, s]) => {
       setRuns(r || [])
